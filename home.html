@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="N Eyes - Dashboard de Monitoramento de Tráfego de Rede em Tempo Real">
+  <title>N Eyes - Dashboard</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- SIDEBAR -->
+    <aside class="sidebar" aria-label="Menu de navegação principal">
+      <header class="sidebar-header">
+        <h1 class="logo">N Eyes</h1>
+        <p class="tagline">Monitoramento de Rede</p>
+      </header>
+
+      <nav class="sidebar-nav">
+        <ul class="nav-menu">
+          <li class="nav-item">
+            <a href="#dashboard" class="nav-link active" aria-label="Ir para Dashboard">
+              <span class="icon">📊</span>
+              <span class="text">Dashboard</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="#devices" class="nav-link" aria-label="Ir para Dispositivos">
+              <span class="icon">🖥️</span>
+              <span class="text">Dispositivos</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="logs.html" class="nav-link" aria-label="Ir para Logs de Atividades">
+              <span class="icon">📋</span>
+              <span class="text">Logs</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="signup.html" class="nav-link" aria-label="Ir para Configurações">
+              <span class="icon">⚙️</span>
+              <span class="text">Configurações</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <footer class="sidebar-footer">
+        <a href="logout-confirm.html" class="btn-logout" aria-label="Fazer logout da plataforma">Sair</a>
+      </footer>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+      <!-- TOP BAR -->
+      <header class="top-bar">
+        <div class="header-info">
+          <h2 class="page-title">Dashboard</h2>
+          <span class="network-status" aria-label="Status da rede: Online">
+            <span class="status-indicator online"></span>
+            Online
+          </span>
+        </div>
+        <div class="header-actions">
+          <button class="btn-refresh" aria-label="Atualizar dados">🔄</button>
+          <button class="btn-notifications" aria-label="Ver notificações">🔔</button>
+          <a href="logout-confirm.html" class="btn-user" aria-label="Fazer logout via menu do usuário">👤</a>
+        </div>
+      </header>
+
+      <section class="dashboard-content">
+        <!-- METRICS CARDS -->
+        <section class="metrics-section" aria-labelledby="metrics-title">
+          <h2 id="metrics-title" class="section-title">Métricas em Tempo Real</h2>
+          
+          <div class="metrics-grid">
+            <!-- Download Card -->
+            <article class="metric-card" id="download-metric">
+              <header class="card-header">
+                <h3 class="card-title">Download Atual</h3>
+                <span class="card-icon">⬇️</span>
+              </header>
+              <div class="card-body">
+                <span class="metric-value">245.8</span>
+                <span class="metric-unit">Mbps</span>
+              </div>
+              <footer class="card-footer">
+                <small class="metric-change positive">+5.2% desde última hora</small>
+              </footer>
+            </article>
+
+            <!-- Upload Card -->
+            <article class="metric-card" id="upload-metric">
+              <header class="card-header">
+                <h3 class="card-title">Upload Atual</h3>
+                <span class="card-icon">⬆️</span>
+              </header>
+              <div class="card-body">
+                <span class="metric-value">128.4</span>
+                <span class="metric-unit">Mbps</span>
+              </div>
+              <footer class="card-footer">
+                <small class="metric-change positive">+2.1% desde última hora</small>
+              </footer>
+            </article>
+
+            <!-- Connected Devices Card -->
+            <article class="metric-card" id="devices-metric">
+              <header class="card-header">
+                <h3 class="card-title">Dispositivos Conectados</h3>
+                <span class="card-icon">🖥️</span>
+              </header>
+              <div class="card-body">
+                <span class="metric-value">47</span>
+                <span class="metric-unit">dispositivos</span>
+              </div>
+              <footer class="card-footer">
+                <small class="metric-change neutral">3 novos desde hoje</small>
+              </footer>
+            </article>
+          </div>
+        </section>
+
+        <!-- TRAFFIC CHART SECTION -->
+        <section class="chart-section" aria-labelledby="traffic-chart-title">
+          <h2 id="traffic-chart-title" class="section-title">Gráfico de Tráfego (Última 1 Hora)</h2>
+          
+          <div class="chart-container">
+            <div id="traffic-chart" class="chart-placeholder">
+              <p class="placeholder-text">Gráfico de tráfego será inserido aqui pela biblioteca Chart.js/Recharts</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- DEVICES TABLE SECTION -->
+        <section class="devices-section" aria-labelledby="devices-table-title">
+          <h2 id="devices-table-title" class="section-title">Dispositivos Recentes</h2>
+          
+          <div class="table-wrapper">
+            <table class="devices-table" role="grid" aria-label="Tabela de dispositivos conectados">
+              <thead>
+                <tr>
+                  <th scope="col">IP Address</th>
+                  <th scope="col">Nome do Dispositivo</th>
+                  <th scope="col">Consumo (Mbps)</th>
+                  <th scope="col">Status</th>
+                  <th scope="col">Ações</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="device-row">
+                  <td class="device-ip">192.168.1.101</td>
+                  <td class="device-name">Desktop-TI-01</td>
+                  <td class="device-bandwidth">45.2</td>
+                  <td class="device-status status-online">Online</td>
+                  <td class="device-actions">
+                    <button class="btn-action" aria-label="Bloquear dispositivo Desktop-TI-01">Bloquear</button>
+                    <button class="btn-action" aria-label="Renomear dispositivo Desktop-TI-01">Renomear</button>
+                  </td>
+                </tr>
+                <tr class="device-row">
+                  <td class="device-ip">192.168.1.102</td>
+                  <td class="device-name">Laptop-Equipe-02</td>
+                  <td class="device-bandwidth">78.5</td>
+                  <td class="device-status status-online">Online</td>
+                  <td class="device-actions">
+                    <button class="btn-action" aria-label="Bloquear dispositivo Laptop-Equipe-02">Bloquear</button>
+                    <button class="btn-action" aria-label="Renomear dispositivo Laptop-Equipe-02">Renomear</button>
+                  </td>
+                </tr>
+                <tr class="device-row">
+                  <td class="device-ip">192.168.1.103</td>
+                  <td class="device-name">Servidor-Web-01</td>
+                  <td class="device-bandwidth">234.8</td>
+                  <td class="device-status status-online">Online</td>
+                  <td class="device-actions">
+                    <button class="btn-action" aria-label="Bloquear dispositivo Servidor-Web-01">Bloquear</button>
+                    <button class="btn-action" aria-label="Renomear dispositivo Servidor-Web-01">Renomear</button>
+                  </td>
+                </tr>
+                <tr class="device-row">
+                  <td class="device-ip">192.168.1.104</td>
+                  <td class="device-name">Impressora-Rede-03</td>
+                  <td class="device-bandwidth">12.3</td>
+                  <td class="device-status status-online">Online</td>
+                  <td class="device-actions">
+                    <button class="btn-action" aria-label="Bloquear dispositivo Impressora-Rede-03">Bloquear</button>
+                    <button class="btn-action" aria-label="Renomear dispositivo Impressora-Rede-03">Renomear</button>
+                  </td>
+                </tr>
+                <tr class="device-row">
+                  <td class="device-ip">192.168.1.105</td>
+                  <td class="device-name">Mobile-Admin-04</td>
+                  <td class="device-bandwidth">28.7</td>
+                  <td class="device-status status-offline">Offline</td>
+                  <td class="device-actions">
+                    <button class="btn-action" aria-label="Bloquear dispositivo Mobile-Admin-04">Bloquear</button>
+                    <button class="btn-action" aria-label="Renomear dispositivo Mobile-Admin-04">Renomear</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

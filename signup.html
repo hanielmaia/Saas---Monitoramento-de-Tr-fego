@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="N Eyes - Cadastro de Novo Usuário">
+  <title>N Eyes - Cadastro de Usuário</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- SIDEBAR -->
+    <aside class="sidebar" aria-label="Menu de navegação principal">
+      <header class="sidebar-header">
+        <h1 class="logo">N Eyes</h1>
+        <p class="tagline">Monitoramento de Rede</p>
+      </header>
+
+      <nav class="sidebar-nav">
+        <ul class="nav-menu">
+          <li class="nav-item">
+            <a href="Teste.html" class="nav-link" aria-label="Ir para Dashboard">
+              <span class="icon">📊</span>
+              <span class="text">Dashboard</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="#devices" class="nav-link" aria-label="Ir para Dispositivos">
+              <span class="icon">🖥️</span>
+              <span class="text">Dispositivos</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="logs.html" class="nav-link" aria-label="Ir para Logs de Atividades">
+              <span class="icon">📋</span>
+              <span class="text">Logs</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="signup.html" class="nav-link active" aria-label="Ir para Configurações">
+              <span class="icon">⚙️</span>
+              <span class="text">Configurações</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <footer class="sidebar-footer">
+        <a href="logout-confirm.html" class="btn-logout" aria-label="Fazer logout da plataforma">Sair</a>
+      </footer>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+      <!-- TOP BAR -->
+      <header class="top-bar">
+        <div class="header-info">
+          <h2 class="page-title">Cadastro de Novo Usuário</h2>
+          <span class="page-subtitle">Adicionar novo administrador ou operador à plataforma</span>
+        </div>
+        <div class="header-actions">
+          <a href="logout-confirm.html" class="btn-user" aria-label="Fazer logout via menu do usuário">👤</a>
+        </div>
+      </header>
+
+      <!-- SIGNUP CONTENT -->
+      <section class="signup-content">
+        <div class="signup-container">
+          <!-- SIGNUP FORM -->
+          <section class="signup-section" aria-labelledby="signup-form-title">
+            <h2 id="signup-form-title" class="section-title">Formulário de Cadastro</h2>
+            
+            <form class="signup-form" id="user-signup-form" aria-label="Formulário de cadastro de novo usuário">
+              <!-- FULL NAME INPUT -->
+              <fieldset class="form-fieldset">
+                <legend class="form-legend">Informações Pessoais</legend>
+                
+                <div class="form-group">
+                  <label for="input-fullname" class="form-label">
+                    Nome Completo
+                    <span class="required" aria-label="campo obrigatório">*</span>
+                  </label>
+                  <input 
+                    type="text" 
+                    id="input-fullname" 
+                    name="fullname" 
+                    class="form-control text-input" 
+                    placeholder="Ex: João da Silva"
+                    required
+                    aria-label="Digite seu nome completo"
+                    aria-required="true"
+                  >
+                  <small class="form-hint">Será exibido no perfil e em logs de atividade</small>
+                </div>
+
+                <!-- EMAIL INPUT -->
+                <div class="form-group">
+                  <label for="input-email" class="form-label">
+                    E-mail
+                    <span class="required" aria-label="campo obrigatório">*</span>
+                  </label>
+                  <input 
+                    type="email" 
+                    id="input-email" 
+                    name="email" 
+                    class="form-control email-input" 
+                    placeholder="ex: joao@empresa.com.br"
+                    required
+                    aria-label="Digite seu endereço de e-mail"
+                    aria-required="true"
+                  >
+                  <small class="form-hint">Será usado para login e recuperação de senha</small>
+                </div>
+              </fieldset>
+
+              <!-- PASSWORD FIELDSET -->
+              <fieldset class="form-fieldset">
+                <legend class="form-legend">Segurança de Acesso</legend>
+
+                <!-- PASSWORD INPUT -->
+                <div class="form-group">
+                  <label for="input-password" class="form-label">
+                    Senha
+                    <span class="required" aria-label="campo obrigatório">*</span>
+                  </label>
+                  <input 
+                    type="password" 
+                    id="input-password" 
+                    name="password" 
+                    class="form-control password-input" 
+                    placeholder="Digite uma senha segura"
+                    required
+                    minlength="8"
+                    aria-label="Digite uma senha com pelo menos 8 caracteres"
+                    aria-required="true"
+                    aria-describedby="password-requirements"
+                  >
+                  <small id="password-requirements" class="form-hint">
+                    Mínimo 8 caracteres: Letra maiúscula, minúscula, número e caractere especial
+                  </small>
+                </div>
+
+                <!-- CONFIRM PASSWORD INPUT -->
+                <div class="form-group">
+                  <label for="input-confirm-password" class="form-label">
+                    Confirmar Senha
+                    <span class="required" aria-label="campo obrigatório">*</span>
+                  </label>
+                  <input 
+                    type="password" 
+                    id="input-confirm-password" 
+                    name="confirm_password" 
+                    class="form-control password-input" 
+                    placeholder="Redigite a senha"
+                    required
+                    aria-label="Confirme sua senha digitando novamente"
+                    aria-required="true"
+                  >
+                </div>
+              </fieldset>
+
+              <!-- PERMISSIONS FIELDSET -->
+              <fieldset class="form-fieldset">
+                <legend class="form-legend">Nível de Acesso</legend>
+
+                <!-- ROLE SELECT -->
+                <div class="form-group">
+                  <label for="select-role" class="form-label">
+                    Permissão/Papel
+                    <span class="required" aria-label="campo obrigatório">*</span>
+                  </label>
+                  <select 
+                    id="select-role" 
+                    name="role" 
+                    class="form-control select-input" 
+                    required
+                    aria-label="Selecionar nível de acesso do usuário"
+                    aria-required="true"
+                    aria-describedby="role-description"
+                  >
+                    <option value="">Selecione uma permissão</option>
+                    <option value="admin">
+                      Admin - Acesso total ao sistema
+                    </option>
+                    <option value="operador">
+                      Operador - Gerenciar dispositivos e logs
+                    </option>
+                    <option value="visualizador">
+                      Visualizador - Apenas visualizar dados
+                    </option>
+                  </select>
+
+                  <div id="role-description" class="role-descriptions">
+                    <details class="role-detail">
+                      <summary class="role-summary">📘 Admin</summary>
+                      <ul class="role-list">
+                        <li>Acesso total ao sistema</li>
+                        <li>Gerenciar usuários</li>
+                        <li>Configurar políticas globais</li>
+                        <li>Acessar todos os logs</li>
+                      </ul>
+                    </details>
+
+                    <details class="role-detail">
+                      <summary class="role-summary">⚙️ Operador</summary>
+                      <ul class="role-list">
+                        <li>Gerenciar dispositivos</li>
+                        <li>Bloquear/Liberar dispositivos</li>
+                        <li>Visualizar logs</li>
+                        <li>Não pode gerenciar usuários</li>
+                      </ul>
+                    </details>
+
+                    <details class="role-detail">
+                      <summary class="role-summary">👁️ Visualizador</summary>
+                      <ul class="role-list">
+                        <li>Apenas visualizar dados</li>
+                        <li>Sem permissão de edição</li>
+                        <li>Ver Dashboard e Logs</li>
+                        <li>Exportar relatórios</li>
+                      </ul>
+                    </details>
+                  </div>
+                </div>
+              </fieldset>
+
+              <!-- CHECKBOX - TERMS -->
+              <fieldset class="form-fieldset">
+                <legend class="form-legend">Termos e Condições</legend>
+
+                <div class="form-group checkbox-group">
+                  <input 
+                    type="checkbox" 
+                    id="input-terms" 
+                    name="terms" 
+                    class="form-control checkbox-input" 
+                    required
+                    aria-label="Aceitar termos de serviço"
+                    aria-required="true"
+                  >
+                  <label for="input-terms" class="checkbox-label">
+                    Concordo com os 
+                    <a href="#terms" class="link-inline">Termos de Serviço</a> 
+                    e 
+                    <a href="#privacy" class="link-inline">Política de Privacidade</a>
+                  </label>
+                </div>
+
+                <div class="form-group checkbox-group">
+                  <input 
+                    type="checkbox" 
+                    id="input-notifications" 
+                    name="notifications" 
+                    class="form-control checkbox-input"
+                    aria-label="Receber notificações por e-mail"
+                  >
+                  <label for="input-notifications" class="checkbox-label">
+                    Desejo receber notificações sobre atualizações e alertas
+                  </label>
+                </div>
+              </fieldset>
+
+              <!-- FORM ACTIONS -->
+              <div class="form-actions">
+                <button type="submit" class="btn-primary btn-submit" aria-label="Criar novo usuário">
+                  Criar Usuário
+                </button>
+                <button type="reset" class="btn-secondary btn-reset" aria-label="Limpar formulário">
+                  Limpar
+                </button>
+                <a href="Teste.html" class="link-secondary" aria-label="Voltar ao Dashboard">
+                  Voltar
+                </a>
+              </div>
+            </form>
+          </section>
+
+          <!-- INFO SIDEBAR -->
+          <aside class="signup-info" aria-labelledby="info-title">
+            <h3 id="info-title" class="info-title">ℹ️ Informações Importantes</h3>
+            
+            <section class="info-section">
+              <h4 class="info-subtitle">Segurança da Senha</h4>
+              <ul class="info-list">
+                <li>Use senhas fortes e únicas</li>
+                <li>Nunca compartilhe sua senha</li>
+                <li>Mude a senha periodicamente</li>
+              </ul>
+            </section>
+
+            <section class="info-section">
+              <h4 class="info-subtitle">Níveis de Acesso</h4>
+              <p class="info-text">
+                Atribua o nível de acesso mínimo necessário para cada usuário seguindo o princípio do menor privilégio.
+              </p>
+            </section>
+
+            <section class="info-section">
+              <h4 class="info-subtitle">Confirmação</h4>
+              <p class="info-text">
+                Após a criação, o usuário receberá um e-mail com instruções de primeiro acesso.
+              </p>
+            </section>
+          </aside>
+        </div>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

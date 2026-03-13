@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="N Eyes - Sistema de Logs de Atividades de Rede">
+  <title>N Eyes - Logs de Atividades</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- SIDEBAR -->
+    <aside class="sidebar" aria-label="Menu de navegação principal">
+      <header class="sidebar-header">
+        <h1 class="logo">N Eyes</h1>
+        <p class="tagline">Monitoramento de Rede</p>
+      </header>
+
+      <nav class="sidebar-nav">
+        <ul class="nav-menu">
+          <li class="nav-item">
+            <a href="Teste.html" class="nav-link" aria-label="Ir para Dashboard">
+              <span class="icon">📊</span>
+              <span class="text">Dashboard</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="#devices" class="nav-link" aria-label="Ir para Dispositivos">
+              <span class="icon">🖥️</span>
+              <span class="text">Dispositivos</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="logs.html" class="nav-link active" aria-label="Ir para Logs de Atividades">
+              <span class="icon">📋</span>
+              <span class="text">Logs</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="signup.html" class="nav-link" aria-label="Ir para Configurações">
+              <span class="icon">⚙️</span>
+              <span class="text">Configurações</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <footer class="sidebar-footer">
+        <a href="logout-confirm.html" class="btn-logout" aria-label="Fazer logout da plataforma">Sair</a>
+      </footer>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+      <!-- TOP BAR -->
+      <header class="top-bar">
+        <div class="header-info">
+          <h2 class="page-title">Logs de Atividades</h2>
+          <span class="page-subtitle">Histórico de eventos e atividades da rede</span>
+        </div>
+        <div class="header-actions">
+          <button class="btn-refresh" aria-label="Atualizar logs">🔄</button>
+          <a href="logout-confirm.html" class="btn-user" aria-label="Fazer logout via menu do usuário">👤</a>
+        </div>
+      </header>
+
+      <!-- LOGS CONTENT -->
+      <section class="logs-content">
+        <!-- FILTERS SECTION -->
+        <section class="filters-section" aria-labelledby="filters-title">
+          <h2 id="filters-title" class="section-title">Filtros de Busca</h2>
+          
+          <form class="filters-form" id="logs-filters-form" aria-label="Formulário de filtros para logs">
+            <div class="filter-group">
+              <label for="filter-search" class="filter-label">Busca por Palavra-chave</label>
+              <input 
+                type="text" 
+                id="filter-search" 
+                name="search" 
+                class="filter-input search-input" 
+                placeholder="Buscar por dispositivo, usuário ou evento..."
+                aria-label="Campo de busca por palavra-chave nos logs"
+              >
+            </div>
+
+            <div class="filter-row">
+              <!-- Date/Time Filter -->
+              <div class="filter-group">
+                <label for="filter-date-start" class="filter-label">Data de Início</label>
+                <input 
+                  type="date" 
+                  id="filter-date-start" 
+                  name="date_start" 
+                  class="filter-input date-input"
+                  aria-label="Data de início para filtrar logs"
+                >
+              </div>
+
+              <div class="filter-group">
+                <label for="filter-date-end" class="filter-label">Data de Fim</label>
+                <input 
+                  type="date" 
+                  id="filter-date-end" 
+                  name="date_end" 
+                  class="filter-input date-input"
+                  aria-label="Data de fim para filtrar logs"
+                >
+              </div>
+
+              <!-- Event Type Filter -->
+              <div class="filter-group">
+                <label for="filter-event-type" class="filter-label">Tipo de Evento</label>
+                <select 
+                  id="filter-event-type" 
+                  name="event_type" 
+                  class="filter-input select-input"
+                  aria-label="Selecionar tipo de evento para filtro"
+                >
+                  <option value="">Todos os Tipos</option>
+                  <option value="conexao">Conexão</option>
+                  <option value="desconexao">Desconexão</option>
+                  <option value="bloqueio">Bloqueio de Dispositivo</option>
+                  <option value="liberacao">Liberação de Dispositivo</option>
+                  <option value="configuracao">Alteração de Configuração</option>
+                  <option value="seguranca">Evento de Segurança</option>
+                  <option value="alerta">Alerta</option>
+                </select>
+              </div>
+
+              <!-- Device Filter -->
+              <div class="filter-group">
+                <label for="filter-device" class="filter-label">Dispositivo</label>
+                <input 
+                  type="text" 
+                  id="filter-device" 
+                  name="device" 
+                  class="filter-input text-input" 
+                  placeholder="Ex: 192.168.1.101 ou Desktop-TI-01"
+                  aria-label="Filtrar por IP ou nome do dispositivo"
+                >
+              </div>
+            </div>
+
+            <div class="filter-actions">
+              <button type="submit" class="btn-primary" aria-label="Aplicar filtros">Aplicar Filtros</button>
+              <button type="reset" class="btn-secondary" aria-label="Limpar todos os filtros">Limpar Filtros</button>
+            </div>
+          </form>
+        </section>
+
+        <!-- LOGS TABLE SECTION -->
+        <section class="logs-table-section" aria-labelledby="logs-table-title">
+          <div class="table-header">
+            <h2 id="logs-table-title" class="section-title">Registros de Atividades</h2>
+            <div class="table-actions">
+              <button class="btn-action btn-export-csv" aria-label="Exportar logs em formato CSV">
+                📥 Exportar CSV
+              </button>
+              <button class="btn-action btn-export-pdf" aria-label="Exportar logs em formato PDF">
+                📄 Exportar PDF
+              </button>
+            </div>
+          </div>
+
+          <div class="table-wrapper">
+            <table class="logs-table" role="grid" aria-label="Tabela de logs de atividades da rede">
+              <thead>
+                <tr>
+                  <th scope="col">Timestamp</th>
+                  <th scope="col">Tipo de Evento</th>
+                  <th scope="col">Origem (IP/Dispositivo)</th>
+                  <th scope="col">Detalhes</th>
+                  <th scope="col">Usuário</th>
+                  <th scope="col">Severidade</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="log-row severity-info">
+                  <td class="log-timestamp">2026-03-13 14:32:45</td>
+                  <td class="log-event">Conexão</td>
+                  <td class="log-origin">192.168.1.106 | Notebook-Dev-05</td>
+                  <td class="log-details">Dispositivo conectado à rede</td>
+                  <td class="log-user">joao.calheiros</td>
+                  <td class="log-severity severity-badge info">ℹ️ Info</td>
+                </tr>
+                <tr class="log-row severity-warning">
+                  <td class="log-timestamp">2026-03-13 14:28:12</td>
+                  <td class="log-event">Tentativa de Bloqueio</td>
+                  <td class="log-origin">192.168.1.103 | Servidor-Web-01</td>
+                  <td class="log-details">Tentativa de bloqueio - Cancelada</td>
+                  <td class="log-user">admin</td>
+                  <td class="log-severity severity-badge warning">⚠️ Aviso</td>
+                </tr>
+                <tr class="log-row severity-error">
+                  <td class="log-timestamp">2026-03-13 14:15:33</td>
+                  <td class="log-event">Evento de Segurança</td>
+                  <td class="log-origin">192.168.1.104 | Impressora-Rede-03</td>
+                  <td class="log-details">Limite de banda excedido: 450 Mbps</td>
+                  <td class="log-user">system</td>
+                  <td class="log-severity severity-badge error">❌ Crítico</td>
+                </tr>
+                <tr class="log-row severity-info">
+                  <td class="log-timestamp">2026-03-13 14:10:22</td>
+                  <td class="log-event">Alteração de Configuração</td>
+                  <td class="log-origin">192.168.1.101 | Desktop-TI-01</td>
+                  <td class="log-details">Limite de banda reduzido para 100 Mbps</td>
+                  <td class="log-user">haniel.maia</td>
+                  <td class="log-severity severity-badge info">ℹ️ Info</td>
+                </tr>
+                <tr class="log-row severity-info">
+                  <td class="log-timestamp">2026-03-13 14:05:00</td>
+                  <td class="log-event">Desconexão</td>
+                  <td class="log-origin">192.168.1.107 | Mobile-User-06</td>
+                  <td class="log-details">Sessão encerrada</td>
+                  <td class="log-user">system</td>
+                  <td class="log-severity severity-badge info">ℹ️ Info</td>
+                </tr>
+                <tr class="log-row severity-warning">
+                  <td class="log-timestamp">2026-03-13 13:58:19</td>
+                  <td class="log-event">Alerta</td>
+                  <td class="log-origin">192.168.1.102 | Laptop-Equipe-02</td>
+                  <td class="log-details">Consumo de banda acima de 50% da capacidade</td>
+                  <td class="log-user">system</td>
+                  <td class="log-severity severity-badge warning">⚠️ Aviso</td>
+                </tr>
+                <tr class="log-row severity-info">
+                  <td class="log-timestamp">2026-03-13 13:45:07</td>
+                  <td class="log-event">Bloqueio de Dispositivo</td>
+                  <td class="log-origin">192.168.1.108 | Teste-IP-07</td>
+                  <td class="log-details">Dispositivo bloqueado por política de segurança</td>
+                  <td class="log-user">kaua.heronides</td>
+                  <td class="log-severity severity-badge warning">⚠️ Aviso</td>
+                </tr>
+                <tr class="log-row severity-info">
+                  <td class="log-timestamp">2026-03-13 13:30:55</td>
+                  <td class="log-event">Liberação de Dispositivo</td>
+                  <td class="log-origin">192.168.1.109 | Teste-IP-08</td>
+                  <td class="log-details">Dispositivo liberado após análise</td>
+                  <td class="log-user">admin</td>
+                  <td class="log-severity severity-badge info">ℹ️ Info</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- PAGINATION -->
+          <div class="pagination">
+            <button class="btn-pagination prev" aria-label="Página anterior">← Anterior</button>
+            <div class="pagination-info">
+              <span>Página <span id="current-page">1</span> de <span id="total-pages">5</span></span>
+            </div>
+            <button class="btn-pagination next" aria-label="Próxima página">Próxima →</button>
+          </div>
+        </section>
+      </section>
+    </main>
+  </div>
+</body>
+</html>
