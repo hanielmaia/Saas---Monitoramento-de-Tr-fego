@@ -11,43 +11,6 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <link rel="icon" href="favicon-32x32.png" type="image/png">
 </head>
-<script>
-const ctx = document.getElementById('trafficChart').getContext('2d');
-new Chart(ctx, {
-  type: 'line',
-  data: {
-    labels: ['14:00', '14:10', '14:20', '14:30', '14:40', '14:50', '15:00'],
-    datasets: [
-      {
-        label: 'Download (Mbps)',
-        data: [180, 220, 195, 260, 240, 280, 245],
-        borderColor: '#9333ea',
-        backgroundColor: 'rgba(147, 51, 234, 0.15)',
-        fill: true,
-        tension: 0.4
-      },
-      {
-        label: 'Upload (Mbps)',
-        data: [90, 110, 105, 130, 120, 140, 128],
-        borderColor: '#22d3ee',
-        backgroundColor: 'rgba(34, 211, 238, 0.15)',
-        fill: true,
-        tension: 0.4
-      }
-    ]
-  },
-  options: {
-    responsive: true,
-    plugins: {
-      legend: { labels: { color: '#8b8fa3', font: { family: 'Rajdhani' } } }
-    },
-    scales: {
-      x: { ticks: { color: '#8b8fa3' }, grid: { color: 'rgba(147,51,234,0.1)' } },
-      y: { ticks: { color: '#8b8fa3' }, grid: { color: 'rgba(147,51,234,0.1)' } }
-    }
-  }
-});
-</script>
 
 <body>
   <div class="app-container">
@@ -67,7 +30,7 @@ new Chart(ctx, {
             </a>
           </li>
           <li class="nav-item">
-            <a href="#devices-metric" class="nav-link" aria-label="Ir para Dispositivos">
+            <a href="#devices-table-title" class="nav-link" aria-label="Ir para Dispositivos">
               <span class="icon">🖥️</span>
               <span class="text">Dispositivos</span>
             </a>
@@ -107,6 +70,85 @@ new Chart(ctx, {
           <button class="btn-refresh" aria-label="Atualizar dados">🔄</button>
           <button class="btn-notifications" aria-label="Ver notificações">🔔</button>
           <a href="logout-confirm.html" class="btn-user" aria-label="Fazer logout via menu do usuário">👤</a>
+
+          <!-- NOTIFICATIONS DROPDOWN -->
+          <div class="notifications-dropdown" id="notifications-dropdown" style="display: none;">
+            <div class="dropdown-header">
+              <h3>Notificações</h3>
+              <button class="close-dropdown" id="close-notifications">×</button>
+            </div>
+            <div class="notifications-list">
+              <div class="notification-item">
+                <div class="notification-icon">⚠️</div>
+                <div class="notification-content">
+                  <p class="notification-title">Alto consumo de largura de banda</p>
+                  <p class="notification-text">Dispositivo 192.168.1.101 excedeu 200 Mbps</p>
+                  <small class="notification-time">Há 2 minutos</small>
+                </div>
+              </div>
+              <div class="notification-item">
+                <div class="notification-icon">🖥️</div>
+                <div class="notification-content">
+                  <p class="notification-title">Novo dispositivo conectado</p>
+                  <p class="notification-text">Laptop-Equipe-05 entrou na rede</p>
+                  <small class="notification-time">Há 15 minutos</small>
+                </div>
+              </div>
+              <div class="notification-item">
+                <div class="notification-icon">🔴</div>
+                <div class="notification-content">
+                  <p class="notification-title">Dispositivo offline</p>
+                  <p class="notification-text">Impressora-Rede-03 desconectada</p>
+                  <small class="notification-time">Há 1 hora</small>
+                </div>
+              </div>
+              <div class="notification-item">
+                <div class="notification-icon">📊</div>
+                <div class="notification-content">
+                  <p class="notification-title">Relatório semanal pronto</p>
+                  <p class="notification-text">Análise de tráfego da semana disponível</p>
+                  <small class="notification-time">Há 2 horas</small>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- USER PROFILE DROPDOWN -->
+          <div class="user-profile-dropdown" id="user-profile-dropdown" style="display: none;">
+            <div class="dropdown-header">
+              <h3>Perfil do Usuário</h3>
+              <button class="close-dropdown" id="close-profile">×</button>
+            </div>
+            <div class="user-profile-content">
+              <div class="user-avatar">
+                <span class="avatar-icon">👤</span>
+              </div>
+              <div class="user-info">
+                <h4 class="user-name">João Calheiros</h4>
+                <p class="user-email">joao.calheiros@empresa.com.br</p>
+                <p class="user-role">Administrador de Rede</p>
+              </div>
+              <div class="user-details">
+                <div class="detail-item">
+                  <span class="detail-label">Empresa:</span>
+                  <span class="detail-value">Tech Solutions Ltda</span>
+                </div>
+                <div class="detail-item">
+                  <span class="detail-label">Último acesso:</span>
+                  <span class="detail-value">Hoje, 15:30</span>
+                </div>
+                <div class="detail-item">
+                  <span class="detail-label">Status:</span>
+                  <span class="detail-value status-online">Online</span>
+                </div>
+              </div>
+              <div class="user-actions">
+                <button class="btn-profile-action">Editar Perfil</button>
+                <button class="btn-profile-action">Configurações</button>
+                <a href="logout-confirm.html" class="btn-logout-small">Sair</a>
+              </div>
+            </div>
+          </div>
         </div>
       </header>
 
@@ -248,3 +290,132 @@ new Chart(ctx, {
 </body>
 
 </html>
+<script>
+const ctx = document.getElementById('trafficChart').getContext('2d');
+let trafficChart = new Chart(ctx, {
+  type: 'line',
+  data: {
+    labels: ['14:00', '14:10', '14:20', '14:30', '14:40', '14:50', '15:00'],
+    datasets: [
+      {
+        label: 'Download (Mbps)',
+        data: [180, 220, 195, 260, 240, 280, 245],
+        borderColor: '#9333ea',
+        backgroundColor: 'rgba(147, 51, 234, 0.15)',
+        fill: true,
+        tension: 0.4
+      },
+      {
+        label: 'Upload (Mbps)',
+        data: [90, 110, 105, 130, 120, 140, 128],
+        borderColor: '#22d3ee',
+        backgroundColor: 'rgba(34, 211, 238, 0.15)',
+        fill: true,
+        tension: 0.4
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: { labels: { color: '#8b8fa3', font: { family: 'Rajdhani' } } }
+    },
+    scales: {
+      x: { ticks: { color: '#8b8fa3' }, grid: { color: 'rgba(147,51,234,0.1)' } },
+      y: { ticks: { color: '#8b8fa3' }, grid: { color: 'rgba(147,51,234,0.1)' } }
+    }
+  }
+});
+
+// Fun��o para gerar dados fict�cios de tr�fego
+function generateTrafficData() {
+  const now = new Date();
+  const currentTime = now.getHours() + ':' + (now.getMinutes() < 10 ? '0' : '') + now.getMinutes();
+
+  // Adiciona novo ponto de tempo
+  trafficChart.data.labels.push(currentTime);
+  if (trafficChart.data.labels.length > 7) {
+    trafficChart.data.labels.shift(); // Remove o primeiro se tiver mais de 7
+  }
+
+  // Gera dados fict�cios para download (entre 150-300 Mbps)
+  const downloadValue = Math.random() * 150 + 150;
+  trafficChart.data.datasets[0].data.push(downloadValue);
+  if (trafficChart.data.datasets[0].data.length > 7) {
+    trafficChart.data.datasets[0].data.shift();
+  }
+
+  // Gera dados fict�cios para upload (entre 50-150 Mbps)
+  const uploadValue = Math.random() * 100 + 50;
+  trafficChart.data.datasets[1].data.push(uploadValue);
+  if (trafficChart.data.datasets[1].data.length > 7) {
+    trafficChart.data.datasets[1].data.shift();
+  }
+
+  // Atualiza o gr�fico
+  trafficChart.update();
+}
+
+// Atualiza o gr�fico a cada 5 segundos
+setInterval(generateTrafficData, 5000);
+// Funções para os dropdowns da top-bar
+document.addEventListener('DOMContentLoaded', function() {
+  // Elementos dos botões
+  const btnRefresh = document.querySelector('.btn-refresh');
+  const btnNotifications = document.querySelector('.btn-notifications');
+  const btnUser = document.querySelector('.btn-user');
+
+  // Elementos dos dropdowns
+  const notificationsDropdown = document.getElementById('notifications-dropdown');
+  const userProfileDropdown = document.getElementById('user-profile-dropdown');
+
+  // Botões de fechar
+  const closeNotifications = document.getElementById('close-notifications');
+  const closeProfile = document.getElementById('close-profile');
+
+  // Função para fechar dropdowns
+  function closeAllDropdowns() {
+    notificationsDropdown.style.display = 'none';
+    userProfileDropdown.style.display = 'none';
+  }
+
+  // Event listener para botão de refresh
+  if (btnRefresh) {
+    btnRefresh.addEventListener('click', function() {
+      location.reload();
+    });
+  }
+
+  // Event listener para botão de notificações
+  if (btnNotifications) {
+    btnNotifications.addEventListener('click', function() {
+      closeAllDropdowns();
+      notificationsDropdown.style.display = notificationsDropdown.style.display === 'block' ? 'none' : 'block';
+    });
+  }
+
+  // Event listener para botão de usuário
+  if (btnUser) {
+    btnUser.addEventListener('click', function(e) {
+      e.preventDefault(); // Previne o link padrão
+      closeAllDropdowns();
+      userProfileDropdown.style.display = userProfileDropdown.style.display === 'block' ? 'none' : 'block';
+    });
+  }
+
+  // Event listeners para fechar dropdowns
+  if (closeNotifications) {
+    closeNotifications.addEventListener('click', closeAllDropdowns);
+  }
+
+  if (closeProfile) {
+    closeProfile.addEventListener('click', closeAllDropdowns);
+  }
+
+  // Fechar dropdowns ao clicar fora deles
+  document.addEventListener('click', function(e) {
+    if (!e.target.closest('.header-actions') && !e.target.closest('.notifications-dropdown') && !e.target.closest('.user-profile-dropdown')) {
+      closeAllDropdowns();
+    }
+  });
+});</script>

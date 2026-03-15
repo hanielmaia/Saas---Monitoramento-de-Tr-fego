@@ -225,8 +225,10 @@
       // Modal version
       if (confirmBtn) {
         confirmBtn.addEventListener('click', function() {
-          // Redirect to login page
-          window.location.href = '/login.html';
+          // Clear any session data and redirect to login page (relative path ensures it works from any folder)
+          sessionStorage.clear();
+          localStorage.clear();
+          window.location.href = 'login.html';
         });
       }
 
@@ -243,7 +245,9 @@
       // Page version
       if (pageConfirmBtn) {
         pageConfirmBtn.addEventListener('click', function() {
-          window.location.href = '/login.html';
+          sessionStorage.clear();
+          localStorage.clear();
+          window.location.href = 'login.html';
         });
       }
     });
