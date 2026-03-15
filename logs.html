@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,6 +10,7 @@
   <link rel="stylesheet" href="logs.css">
   <link rel="icon" href="favicon-32x32.png" type="image/png">
 </head>
+
 <body>
   <div class="app-container">
     <!-- SIDEBAR -->
@@ -57,12 +59,36 @@
       <!-- TOP BAR -->
       <header class="top-bar">
         <div class="header-info">
-          <h2 class="page-title">Logs de Atividades</h2>
+          <h2 class="page-title neon-title">📋 Logs de Atividades</h2>
           <span class="page-subtitle">Histórico de eventos e atividades da rede</span>
         </div>
         <div class="header-actions">
           <button class="btn-refresh" aria-label="Atualizar logs">🔄</button>
-          <a href="logout-confirm.html" class="btn-user" aria-label="Fazer logout via menu do usuário">👤</a>
+          <button class="btn-user" aria-label="Abrir menu de perfil">👤</button>
+
+          <!-- USER PROFILE DROPDOWN -->
+          <div class="user-profile-dropdown" id="user-profile-dropdown" style="display: none;">
+            <div class="dropdown-header">
+              <h3>Perfil do Usuário</h3>
+              <button class="close-dropdown" id="close-profile">×</button>
+            </div>
+            <div class="user-profile-content">
+              <div class="user-avatar">
+                <span class="avatar-icon">👤</span>
+              </div>
+              <div class="user-info">
+                <h4 class="user-name">João Calheiros</h4>
+                <p class="user-email">joao.calheiros@empresa.com.br</p>
+                <p class="user-role">Administrador de Rede</p>
+              </div>
+              <div class="user-actions">
+                <button class="btn-profile-action">📝 Editar Perfil</button>
+                <a href="config.html" class="btn-profile-action"
+                  style="text-decoration: none; display: block; text-align: left;">⚙️ Configurações</a>
+                <a href="logout-confirm.html" class="btn-logout-small">🚪 Sair da conta</a>
+              </div>
+            </div>
+          </div>
         </div>
       </header>
 
@@ -71,53 +97,34 @@
         <!-- FILTERS SECTION -->
         <section class="filters-section" aria-labelledby="filters-title">
           <h2 id="filters-title" class="section-title">Filtros de Busca</h2>
-          
+
           <form class="filters-form" id="logs-filters-form" aria-label="Formulário de filtros para logs">
             <div class="filter-group">
               <label for="filter-search" class="filter-label">Busca por Palavra-chave</label>
-              <input 
-                type="text" 
-                id="filter-search" 
-                name="search" 
-                class="filter-input search-input" 
+              <input type="text" id="filter-search" name="search" class="filter-input search-input"
                 placeholder="Buscar por dispositivo, usuário ou evento..."
-                aria-label="Campo de busca por palavra-chave nos logs"
-              >
+                aria-label="Campo de busca por palavra-chave nos logs">
             </div>
 
             <div class="filter-row">
               <!-- Date/Time Filter -->
               <div class="filter-group">
                 <label for="filter-date-start" class="filter-label">Data de Início</label>
-                <input 
-                  type="date" 
-                  id="filter-date-start" 
-                  name="date_start" 
-                  class="filter-input date-input"
-                  aria-label="Data de início para filtrar logs"
-                >
+                <input type="date" id="filter-date-start" name="date_start" class="filter-input date-input"
+                  aria-label="Data de início para filtrar logs">
               </div>
 
               <div class="filter-group">
                 <label for="filter-date-end" class="filter-label">Data de Fim</label>
-                <input 
-                  type="date" 
-                  id="filter-date-end" 
-                  name="date_end" 
-                  class="filter-input date-input"
-                  aria-label="Data de fim para filtrar logs"
-                >
+                <input type="date" id="filter-date-end" name="date_end" class="filter-input date-input"
+                  aria-label="Data de fim para filtrar logs">
               </div>
 
               <!-- Event Type Filter -->
               <div class="filter-group">
                 <label for="filter-event-type" class="filter-label">Tipo de Evento</label>
-                <select 
-                  id="filter-event-type" 
-                  name="event_type" 
-                  class="filter-input select-input"
-                  aria-label="Selecionar tipo de evento para filtro"
-                >
+                <select id="filter-event-type" name="event_type" class="filter-input select-input"
+                  aria-label="Selecionar tipo de evento para filtro">
                   <option value="">Todos os Tipos</option>
                   <option value="conexao">Conexão</option>
                   <option value="desconexao">Desconexão</option>
@@ -132,14 +139,8 @@
               <!-- Device Filter -->
               <div class="filter-group">
                 <label for="filter-device" class="filter-label">Dispositivo</label>
-                <input 
-                  type="text" 
-                  id="filter-device" 
-                  name="device" 
-                  class="filter-input text-input" 
-                  placeholder="Ex: 192.168.1.101 ou Desktop-TI-01"
-                  aria-label="Filtrar por IP ou nome do dispositivo"
-                >
+                <input type="text" id="filter-device" name="device" class="filter-input text-input"
+                  placeholder="Ex: 192.168.1.101 ou Desktop-TI-01" aria-label="Filtrar por IP ou nome do dispositivo">
               </div>
             </div>
 
@@ -257,5 +258,40 @@
       </section>
     </main>
   </div>
+
+  <!-- DROPDOWN FUNCTIONALITY SCRIPT -->
+  <script>
+    const userProfileBtn = document.querySelector('.header-actions .btn-user');
+    const userProfileDropdown = document.getElementById('user-profile-dropdown');
+    const closeProfileBtn = document.getElementById('close-profile');
+
+    // Toggle profile dropdown
+    userProfileBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isVisible = userProfileDropdown.style.display !== 'none';
+      userProfileDropdown.style.display = isVisible ? 'none' : 'block';
+    });
+
+    // Close dropdown when clicking close button
+    closeProfileBtn.addEventListener('click', () => {
+      userProfileDropdown.style.display = 'none';
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.header-actions') && !e.target.closest('.user-profile-dropdown')) {
+        userProfileDropdown.style.display = 'none';
+      }
+    });
+
+    // Reload page button functionality
+    const reloadBtn = document.querySelector('.btn-refresh');
+    if (reloadBtn) {
+      reloadBtn.addEventListener('click', () => {
+        location.reload();
+      });
+    }
+  </script>
 </body>
+
 </html>

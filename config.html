@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,6 +10,7 @@
   <link rel="stylesheet" href="config.css">
   <link rel="icon" href="favicon-32x32.png" type="image/png">
 </head>
+
 <body>
   <div class="app-container">
     <!-- SIDEBAR -->
@@ -57,11 +59,36 @@
       <!-- TOP BAR -->
       <header class="top-bar">
         <div class="header-info">
-          <h2 class="page-title">Cadastro de Novo Usuário</h2>
-          <span class="page-subtitle">Adicionar novo administrador ou operador à plataforma</span>
+          <h2 class="page-title neon-title">⚙️ Configurações</h2>
+          <span class="page-subtitle">Gerenciar usuários, permissões e configurações do sistema</span>
         </div>
         <div class="header-actions">
-          <a href="logout-confirm.html" class="btn-user" aria-label="Fazer logout via menu do usuário">👤</a>
+          <button class="btn-refresh" aria-label="Recarregar página">🔄</button>
+          <button class="btn-user" aria-label="Abrir menu de perfil">👤</button>
+
+          <!-- USER PROFILE DROPDOWN -->
+          <div class="user-profile-dropdown" id="user-profile-dropdown" style="display: none;">
+            <div class="dropdown-header">
+              <h3>Perfil do Usuário</h3>
+              <button class="close-dropdown" id="close-profile">×</button>
+            </div>
+            <div class="user-profile-content">
+              <div class="user-avatar">
+                <span class="avatar-icon">👤</span>
+              </div>
+              <div class="user-info">
+                <h4 class="user-name">João Calheiros</h4>
+                <p class="user-email">joao.calheiros@empresa.com.br</p>
+                <p class="user-role">Administrador de Rede</p>
+              </div>
+              <div class="user-actions">
+                <button class="btn-profile-action">📝 Editar Perfil</button>
+                <a href="config.html" class="btn-profile-action"
+                  style="text-decoration: none; display: block; text-align: left;">⚙️ Configurações</a>
+                <a href="logout-confirm.html" class="btn-logout-small">🚪 Sair da conta</a>
+              </div>
+            </div>
+          </div>
         </div>
       </header>
 
@@ -71,27 +98,19 @@
           <!-- SIGNUP FORM -->
           <section class="signup-section" aria-labelledby="signup-form-title">
             <h2 id="signup-form-title" class="section-title">Formulário de Cadastro</h2>
-            
+
             <form class="signup-form" id="user-signup-form" aria-label="Formulário de cadastro de novo usuário">
               <!-- FULL NAME INPUT -->
               <fieldset class="form-fieldset">
                 <legend class="form-legend">Informações Pessoais</legend>
-                
+
                 <div class="form-group">
                   <label for="input-fullname" class="form-label">
                     Nome Completo
                     <span class="required" aria-label="campo obrigatório">*</span>
                   </label>
-                  <input 
-                    type="text" 
-                    id="input-fullname" 
-                    name="fullname" 
-                    class="form-control text-input" 
-                    placeholder="Ex: João da Silva"
-                    required
-                    aria-label="Digite seu nome completo"
-                    aria-required="true"
-                  >
+                  <input type="text" id="input-fullname" name="fullname" class="form-control text-input"
+                    placeholder="Ex: João da Silva" required aria-label="Digite seu nome completo" aria-required="true">
                   <small class="form-hint">Será exibido no perfil e em logs de atividade</small>
                 </div>
 
@@ -101,16 +120,9 @@
                     E-mail
                     <span class="required" aria-label="campo obrigatório">*</span>
                   </label>
-                  <input 
-                    type="email" 
-                    id="input-email" 
-                    name="email" 
-                    class="form-control email-input" 
-                    placeholder="ex: joao@empresa.com.br"
-                    required
-                    aria-label="Digite seu endereço de e-mail"
-                    aria-required="true"
-                  >
+                  <input type="email" id="input-email" name="email" class="form-control email-input"
+                    placeholder="ex: joao@empresa.com.br" required aria-label="Digite seu endereço de e-mail"
+                    aria-required="true">
                   <small class="form-hint">Será usado para login e recuperação de senha</small>
                 </div>
               </fieldset>
@@ -125,18 +137,10 @@
                     Senha
                     <span class="required" aria-label="campo obrigatório">*</span>
                   </label>
-                  <input 
-                    type="password" 
-                    id="input-password" 
-                    name="password" 
-                    class="form-control password-input" 
-                    placeholder="Digite uma senha segura"
-                    required
-                    minlength="8"
-                    aria-label="Digite uma senha com pelo menos 8 caracteres"
-                    aria-required="true"
-                    aria-describedby="password-requirements"
-                  >
+                  <input type="password" id="input-password" name="password" class="form-control password-input"
+                    placeholder="Digite uma senha segura" required minlength="8"
+                    aria-label="Digite uma senha com pelo menos 8 caracteres" aria-required="true"
+                    aria-describedby="password-requirements">
                   <small id="password-requirements" class="form-hint">
                     Mínimo 8 caracteres: Letra maiúscula, minúscula, número e caractere especial
                   </small>
@@ -148,16 +152,9 @@
                     Confirmar Senha
                     <span class="required" aria-label="campo obrigatório">*</span>
                   </label>
-                  <input 
-                    type="password" 
-                    id="input-confirm-password" 
-                    name="confirm_password" 
-                    class="form-control password-input" 
-                    placeholder="Redigite a senha"
-                    required
-                    aria-label="Confirme sua senha digitando novamente"
-                    aria-required="true"
-                  >
+                  <input type="password" id="input-confirm-password" name="confirm_password"
+                    class="form-control password-input" placeholder="Redigite a senha" required
+                    aria-label="Confirme sua senha digitando novamente" aria-required="true">
                 </div>
               </fieldset>
 
@@ -171,15 +168,9 @@
                     Permissão/Papel
                     <span class="required" aria-label="campo obrigatório">*</span>
                   </label>
-                  <select 
-                    id="select-role" 
-                    name="role" 
-                    class="form-control select-input" 
-                    required
-                    aria-label="Selecionar nível de acesso do usuário"
-                    aria-required="true"
-                    aria-describedby="role-description"
-                  >
+                  <select id="select-role" name="role" class="form-control select-input" required
+                    aria-label="Selecionar nível de acesso do usuário" aria-required="true"
+                    aria-describedby="role-description">
                     <option value="">Selecione uma permissão</option>
                     <option value="admin">
                       Admin - Acesso total ao sistema
@@ -231,31 +222,19 @@
                 <legend class="form-legend">Termos e Condições</legend>
 
                 <div class="form-group checkbox-group">
-                  <input 
-                    type="checkbox" 
-                    id="input-terms" 
-                    name="terms" 
-                    class="form-control checkbox-input" 
-                    required
-                    aria-label="Aceitar termos de serviço"
-                    aria-required="true"
-                  >
+                  <input type="checkbox" id="input-terms" name="terms" class="checkbox-input" required
+                    aria-label="Aceitar termos de serviço" aria-required="true">
                   <label for="input-terms" class="checkbox-label">
-                    Concordo com os 
-                    <a href="#terms" class="link-inline">Termos de Serviço</a> 
-                    e 
+                    Concordo com os
+                    <a href="#terms" class="link-inline">Termos de Serviço</a>
+                    e
                     <a href="#privacy" class="link-inline">Política de Privacidade</a>
                   </label>
                 </div>
 
                 <div class="form-group checkbox-group">
-                  <input 
-                    type="checkbox" 
-                    id="input-notifications" 
-                    name="notifications" 
-                    class="form-control checkbox-input"
-                    aria-label="Receber notificações por e-mail"
-                  >
+                  <input type="checkbox" id="input-notifications" name="notifications"
+                    class="checkbox-input" aria-label="Receber notificações por e-mail">
                   <label for="input-notifications" class="checkbox-label">
                     Desejo receber notificações sobre atualizações e alertas
                   </label>
@@ -270,7 +249,7 @@
                 <button type="reset" class="btn-secondary btn-reset" aria-label="Limpar formulário">
                   Limpar
                 </button>
-                <a href="Teste.html" class="link-secondary" aria-label="Voltar ao Dashboard">
+                <a href="home.html#dashboard" class="link-secondary" aria-label="Voltar ao Dashboard">
                   Voltar
                 </a>
               </div>
@@ -280,7 +259,7 @@
           <!-- INFO SIDEBAR -->
           <aside class="signup-info" aria-labelledby="info-title">
             <h3 id="info-title" class="info-title">ℹ️ Informações Importantes</h3>
-            
+
             <section class="info-section">
               <h4 class="info-subtitle">Segurança da Senha</h4>
               <ul class="info-list">
@@ -308,5 +287,40 @@
       </section>
     </main>
   </div>
+
+  <!-- DROPDOWN FUNCTIONALITY SCRIPT -->
+  <script>
+    const userProfileBtn = document.querySelector('.header-actions .btn-user');
+    const userProfileDropdown = document.getElementById('user-profile-dropdown');
+    const closeProfileBtn = document.getElementById('close-profile');
+
+    // Toggle profile dropdown
+    userProfileBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isVisible = userProfileDropdown.style.display !== 'none';
+      userProfileDropdown.style.display = isVisible ? 'none' : 'block';
+    });
+
+    // Close dropdown when clicking close button
+    closeProfileBtn.addEventListener('click', () => {
+      userProfileDropdown.style.display = 'none';
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.header-actions') && !e.target.closest('.user-profile-dropdown')) {
+        userProfileDropdown.style.display = 'none';
+      }
+    });
+
+    // Reload page button functionality
+    const reloadBtn = document.querySelector('.btn-refresh');
+    if (reloadBtn) {
+      reloadBtn.addEventListener('click', () => {
+        location.reload();
+      });
+    }
+  </script>
 </body>
+
 </html>
