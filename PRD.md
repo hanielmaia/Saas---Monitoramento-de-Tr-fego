@@ -2,30 +2,38 @@
 ## N Eyes - Saas Monitoramento de Tráfego de Rede
 
 **Versão:** 1.0  
-**Data:** 2026-03-13  
+**Data:** 2026-03-15  
 **Projeto:** N Eyes  
-**Status:** Ativo
+**Status:** Em Desenvolvimento
 
 ---
 
 ## 1. Visão Geral do Produto
 
 ### 1.1 Descrição Executiva
-O **N Eyes** é uma plataforma web SaaS que permite monitorar, analisar e gerenciar o tráfego de rede em tempo real. Oferece insights detalhados sobre o consumo de banda, dispositivos conectados e logs de atividades da rede, proporcionando controle e segurança centralizados.
+O **N Eyes** é uma plataforma web SaaS desenvolvida para monitorar, analisar e diagnosticar o tráfego de rede em tempo real. A plataforma identifica padrões de tráfego saudáveis, lentos ou potencialmente maliciosos, ajudando equipes a detectar problemas de desempenho, quedas de serviço e atividades suspeitas antes que impactem os usuários. Com dashboards intuitivos e métricas detalhadas, o sistema oferece visibilidade completa sobre o comportamento do tráfego e a saúde da aplicação.
 
 ### 1.2 Objetivo Principal
-Fornecer aos administradores de rede uma solução intuitiva e poderosa para:
-- Monitorar tráfego de rede em tempo real
-- Identificar gargalos e anomalias
-- Gerenciar dispositivos conectados
-- Visualizar histórico e logs de atividades
-- Otimizar o desempenho da infraestrutura de rede
+Fornecer uma solução simples e eficiente para observabilidade e análise de tráfego, permitindo que desenvolvedores e empresas monitorem a saúde de suas aplicações, identifiquem anomalias e tomem decisões baseadas em dados.
 
 ---
 
-## 2. Equipe de Desenvolvimento
+## 2. Principais Funcionalidades
 
-### 2.1 Integrantes
+- 📊 Monitoramento de tráfego em tempo real
+- 🛡️ Detecção de tráfego malicioso ou suspeito
+- ⚡ Identificação de lentidão e gargalos
+- 🚨 Alertas de quedas ou instabilidade
+- 📈 Dashboard com métricas e gráficos
+- 🌍 Análise de origem do tráfego
+- 📋 Sistema completo de logs
+- ⚙️ Painel de configurações integrado
+
+---
+
+## 3. Equipe de Desenvolvimento
+
+### 3.1 Integrantes
 A equipe responsável pelo desenvolvimento e entrega deste projeto é composta por profissionais experientes:
 
 | Nome | Área |
@@ -39,25 +47,33 @@ A equipe responsável pelo desenvolvimento e entrega deste projeto é composta p
 
 ---
 
-## 3. Público-Alvo
+## 4. Público-Alvo
 
-### 3.1 Personas Primárias
-- **Administrador de TI**: Profissional responsável pela gestão da infraestrutura de rede
-- **Gerente de Infraestrutura**: Responsável por monitorar e otimizar recursos de rede
-- **Analista de Segurança**: Profissional que monitora anomalias e ameaças
+### 4.1 Personas Primárias
+- **Desenvolvedores:** Profissionais que precisam monitorar a saúde de suas aplicações
+- **Administradores de TI:** Responsáveis pela gestão da infraestrutura de rede
+- **Analistas de Segurança:** Profissionais que monitoram anomalias e ameaças
+- **Gerentes de Infraestrutura:** Responsáveis por otimizar recursos de rede
 
-### 3.2 Características do Público-Alvo
+### 4.2 Características do Público-Alvo
 - Conhecimento técnico intermediário a avançado
-- Necessidade de acesso 24/7
-- Preferência por interfaces intuitivas e responsivas
+- Necessidade de acesso rápido e intuitivo
+- Preferência por interfaces responsivas
 - Exigência de confiabilidade e performance
 
 ---
 
-## 4. Requisitos Funcionais
+## 5. Requisitos Funcionais
 
-### 4.1 Dashboard Principal
-**Descrição:** Página inicial que fornece uma visão holística do status da rede.
+### 5.1 Autenticação (login.html)
+- [ ] Formulário de login com usuário e senha
+- [ ] Validação de credenciais
+- [ ] Redirecionamento para Dashboard após login
+- [ ] Armazenamento seguro de sessão
+- [ ] Botão de logout com confirmação
+
+### 5.2 Dashboard Principal (home.html)
+**Descrição:** Página inicial que fornece uma visão holística do status da rede e dispositivos.
 
 **Funcionalidades:**
 - [ ] Exibição de status geral da rede (Online/Offline)
@@ -65,31 +81,28 @@ A equipe responsável pelo desenvolvimento e entrega deste projeto é composta p
   - Download Atual (Mbps)
   - Upload Atual (Mbps)
   - Dispositivos Conectados (quantidade)
-- [ ] Gráfico de tráfego em tempo real (última 1 hora)
+- [ ] Gráfico de tráfego em tempo real com Chart.js (última 1 hora)
 - [ ] Tabela de dispositivos recentes com:
   - Endereço IP
   - Nome do Dispositivo
   - Consumo de Banda (Mbps)
   - Status (Online/Offline)
+- [ ] Navegação via sidebar para outras seções
 
-### 4.2 Módulo de Dispositivos
+### 5.3 Módulo de Dispositivos (home.html#devices-metric)
 **Descrição:** Gerenciamento e monitoramento de todos os dispositivos da rede.
 
 **Funcionalidades:**
 - [ ] Lista completa de dispositivos conectados
-- [ ] Filtros por tipo de dispositivo, status e grupo
+- [ ] Filtros por tipo de dispositivo e status
 - [ ] Informações detalhadas:
   - IP e MAC Address
   - Tipo de dispositivo
   - Banda utilizada (download/upload)
   - Tempo de conexão
-  - Localização na rede
-- [ ] Ações:
-  - Bloquear/desbloquear dispositivo
-  - Definir limites de banda
-  - Renomear dispositivo
+  - Status de atividade
 
-### 4.3 Sistema de Logs
+### 5.4 Sistema de Logs (logs.html)
 **Descrição:** Registro detalhado de todas as atividades e eventos da rede.
 
 **Funcionalidades:**
@@ -97,120 +110,164 @@ A equipe responsável pelo desenvolvimento e entrega deste projeto é composta p
 - [ ] Logs de alterações nas configurações
 - [ ] Logs de eventos de segurança
 - [ ] Filtros avançados:
-  - Por data/hora
+  - Por data/hora de início e fim
   - Por tipo de evento
-  - Por dispositivo
-  - Por usuário
-- [ ] Exportação de logs (CSV, PDF)
-- [ ] Busca em tempo real
+  - Busca por palavra-chave (dispositivo, usuário, evento)
+- [ ] Atualização de logs em tempo real
+- [ ] Interface responsiva com tabelas filtráveis
 
-### 4.4 Painel de Configurações
-**Descrição:** Central de gerenciamento de preferências e políticas.
+### 5.5 Painel de Configurações (config.html)
+**Descrição:** Central de gerenciamento de preferências e settings da aplicação.
 
 **Funcionalidades:**
 - [ ] Configurações de usuário:
-  - Perfil
-  - Preferências de tema
-  - Notificações
-- [ ] Configurações de rede:
-  - IP da rede
-  - Limites de banda globais
-  - Políticas de acesso
-- [ ] Gerenciamento de usuários:
-  - Criar/editar/remover usuários
-  - Definir permissões (Admin, Operador, Visualizador)
-  - Histórico de atividades
-- [ ] Alertas e notificações:
-  - Configurar gatilhos
-  - Canais de notificação (Email, SMS)
-  - Limites críticos
+  - Perfil do usuário
+  - Preferências de interface
+  - Tema (claro/escuro)
+- [ ] Cadastro de novos usuários
+- [ ] Gerenciamento de permissões
+- [ ] Configurações de notificações
+- [ ] Políticas de rede
+
+### 5.6 Confirmação de Logout (logout-confirm.html)
+- [ ] Formulário de confirmação de logout
+- [ ] Botões de Confirmar e Cancelar
+- [ ] Mensagem de despedida
 
 ---
 
-## 5. Requisitos Não-Funcionais
+## 6. Requisitos Não-Funcionais
 
-### 5.1 Performance
-- Carregamento da página em menos de 2 segundos
+### 6.1 Performance
+- Carregamento da página em menos de 3 segundos
 - Atualização de dados em tempo real (máximo 5 segundos)
-- Suporte para até 10,000 dispositivos simultâneos
 - Gráficos responsivos sem travamentos
+- Suporte para múltiplos navegadores modernos
 
-### 5.2 Segurança
-- Autenticação por JWT com refresh tokens
-- Criptografia TLS 1.3 para todas as comunicações
-- Validação de entrada em todos os endpoints
+### 6.2 Segurança
+- Validação de entrada em todos os formulários
 - Proteção contra CSRF e XSS
-- Rate limiting para prevenção de ataques
+- Armazenamento seguro de sessão
+- Comunicação HTTPS em produção
 
-### 5.3 Escalabilidade
-- Arquitetura baseada em microsserviços
-- Suporte a múltiplas instâncias de API
-- Cache distribuído (Redis)
-- Banco de dados com replicação
-
-### 5.4 Disponibilidade
-- SLA de 99.9% uptime
-- Backup automático diário
-- Recuperação de desastres em máximo 1 hora
-- Monitoramento 24/7
-
-### 5.5 Responsividade
+### 6.3 Responsividade
 - Interface otimizada para Desktop (1920x1080+)
 - Suporte a tablets (1024x768+)
-- Design mobile-first para telas pequenas
-- Testes em browsers modernos (Chrome, Firefox, Safari, Edge)
+- Design responsivo para telas variadas
+- Compatibilidade com navegadores modernos (Chrome, Firefox, Safari, Edge)
+
+### 6.4 Acessibilidade
+- Suporte a leitores de tela
+- Labels e aria-labels em formulários e botões
+- Navegação por teclado
+- Contraste adequado de cores
+
+### 6.5 Disponibilidade
+- Backup dos dados regularmente
+- Recuperação em caso de falhas
+- Monitoramento contínuo da aplicação
 
 ---
 
-## 6. Fluxo de Usuário
+## 7. Fluxo de Usuário
 
-### 6.1 Fluxo de Autenticação
-1. Usuário acessa a plataforma
-2. Insere credenciais (email/senha)
+### 7.1 Fluxo de Autenticação
+1. Usuário acessa a plataforma (login.html)
+2. Insere credenciais (usuário/senha)
 3. Sistema valida credenciais
-4. Token JWT é gerado
-5. Usuário é redirecionado para Dashboard
+4. Usuário é redirecionado para Dashboard (home.html)
 
-### 6.2 Fluxo de Monitoramento em Tempo Real
+### 7.2 Fluxo Principal de Uso
+1. Usuário faz login na plataforma
+2. Dashboard é carregado com métricas em tempo real
+3. Usuário pode navegar entre seções via sidebar:
+   - Dashboard (visualizar métricas)
+   - Dispositivos (gerenciar dispositivos conectados)
+   - Logs (consultrar histórico de atividades)
+   - Configurações (ajustar preferências)
+4. Em qualquer seção, usuário pode fazer logout via botão "Sair"
+
+### 7.3 Fluxo de Análise de Tráfego
 1. Usuário acessa Dashboard
-2. Sistema se conecta ao servidor de dados via WebSocket
-3. Métricas são atualizadas a cada 5 segundos
-4. Gráfico é atualizado incrementalmente
-5. Alertas aparecem se limiares são ultrapassados
-
-### 6.3 Fluxo de Gerenciamento de Dispositivos
-1. Usuário navega para "Dispositivos"
-2. Lista todos os dispositivos conectados
-3. Usuário seleciona um dispositivo
-4. Detalhes e opções aparecem
-5. Usuário pode bloquear, configurar ou renomear
+2. Visualiza métricas em tempo real (Download, Upload, Dispositivos)
+3. Consulta gráfico de tráfego com dados da última hora
+4. Identifica dispositivos com maior consumo
+5. Pode acessar Logs para investigar atividades suspeitas
 
 ---
 
-## 7. Arquitetura Técnica
+## 8. Stack Técnico
 
-### 7.1 Stack Frontend
-- **Framework:** React 18+
-- **Estilização:** TailwindCSS
-- **UI Icons:** Lucide Icons
-- **Gráficos:** Chart.js ou Recharts
-- **Estado:** Redux Toolkit ou Zustand
-- **HTTP Client:** Axios
-- **Autenticação:** JWT
-- **WebSocket:** Socket.io
+### 8.1 Frontend
+- **Linguagem:** HTML5, CSS3, JavaScript
+- **Framework CSS:** Bootstrap 5.3.2
+- **Gráficos:** Chart.js
+- **Ícones:** Emoji/Unicode Symbols
+- **Compatibilidade:** Chrome, Firefox, Safari, Edge (versões recentes)
 
-### 7.2 Stack Backend
-- **Linguagem:** Node.js + Express (ou Python/FastAPI)
-- **Banco de Dados:** PostgreSQL
-- **Cache:** Redis
-- **Message Broker:** RabbitMQ ou Kafka
-- **Autenticação:** JWT
-- **Logging:** ELK Stack
+### 8.2 Arquitetura Frontend
+- Estrutura baseada em páginas HTML distintas:
+  - login.html - Autenticação
+  - home.html - Dashboard e Dispositivos
+  - logs.html - Sistema de Logs
+  - config.html - Configurações
+  - logout-confirm.html - Confirmação de logout
+- Arquivos CSS separados por página para melhor organização
+- Componentes reutilizáveis (sidebar, top bar, formulários)
 
-### 7.3 Infraestrutura
-- **Cloud:** AWS ou Azure
-- **Containerização:** Docker
-- **Orquestração:** Kubernetes
-- **CI/CD:** GitHub Actions ou GitLab CI
-- **Monitoramento:** Prometheus + Grafana
+### 8.3 Padrões e Boas Práticas
+- Uso de semantic HTML (header, nav, main, aside, section)
+- Atributos ARIA para acessibilidade
+- Classes CSS descritivas e consistentes
+- Design responsivo com media queries
 
+### 8.4 Dados e Comunicação
+- Integração com API backend (a ser definida)
+- Armazenamento de sessão via localStorage/sessionStorage
+- Gráficos em tempo real com atualização via API ou WebSocket
+
+---
+
+## 9. Tecnologias e Dependências
+
+Dependências principais:
+- Bootstrap 5.3.2 (via CDN)
+- Chart.js (via CDN)
+- Ícones Emoji nativo do navegador
+
+---
+
+## 10. Timeline e Milestones
+
+| Fase | Descrição | Status |
+|------|-----------|--------|
+| 1. Estrutura Base | Criar páginas HTML e estilos CSS | Em Progresso |
+| 2. Dashboard | Implementar dashboard com métricas | Em Progresso |
+| 3. Sistema de Logs | Desenvolver página de logs com filtros | Planejado |
+| 4. Configurações | Implementar painel de configurações | Planejado |
+| 5. Backend | Integração com API de dados | Planejado |
+| 6. Testes | Testes de funcionalidade e performance | Planejado |
+| 7. Deploy | Lançamento em produção | Planejado |
+
+---
+
+## 11. Critérios de Sucesso
+
+- ✅ Interface consistente em todas as páginas
+- ✅ Responsividade em diferentes resoluções
+- ✅ Acesso rápido às principais métricas
+- ✅ Dashboard intuitivo e de fácil uso
+- ✅ Sistema de logs funcional e filtrável
+- ✅ Suporte a múltiplos navegadores modernos
+- ✅ Documentação clara do código
+- ✅ Conformidade com padrões de acessibilidade WCAG
+
+---
+
+## 12. Notas e Considerações
+
+- Priorize a experiência do usuário com interfaces simples e claras
+- Mantenha consistência visual em todas as páginas
+- Documente mudanças significativas no código
+- Teste regularmente em diferentes navegadores e resoluções
+- Implemente melhorias de performance conforme necessário
