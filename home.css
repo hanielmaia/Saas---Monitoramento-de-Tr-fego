@@ -181,6 +181,8 @@ body::before {
 }
 /* ── Top Bar ── */
 .top-bar {
+  position: relative;
+  z-index: 2000;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -599,4 +601,267 @@ body::before {
   .devices-table {
     font-size: 0.8rem;
   }
+}
+/* 
+   DROPDOWNS - NOTIFICATIONS & USER PROFILE
+    */
+.notifications-dropdown,
+.user-profile-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  width: 350px;
+  background: var(--bg-glass-strong);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid var(--border-subtle);
+  border-radius: 0.5rem;
+  box-shadow: var(--glow-purple);
+  z-index: 1000;
+  animation: dropdown-fade-in 0.3s ease-out;
+}
+
+.dropdown-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.dropdown-header h3 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--neon-purple-light);
+}
+
+.close-dropdown {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.close-dropdown:hover {
+  background: rgba(147, 51, 234, 0.1);
+  color: var(--neon-purple-light);
+}
+
+/*  Notifications Dropdown  */
+.notifications-list {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.notification-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--border-subtle);
+  transition: background 0.2s ease;
+}
+
+.notification-item:hover {
+  background: rgba(147, 51, 234, 0.05);
+}
+
+.notification-item:last-child {
+  border-bottom: none;
+}
+
+.notification-icon {
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+
+.notification-content {
+  flex: 1;
+}
+
+.notification-title {
+  margin: 0 0 0.25rem 0;
+  font-weight: 600;
+  color: var(--text-primary);
+  font-size: 0.9rem;
+}
+
+.notification-text {
+  margin: 0 0 0.25rem 0;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  line-height: 1.4;
+}
+
+.notification-time {
+  color: var(--text-muted);
+  font-size: 0.75rem;
+}
+
+/*  User Profile Dropdown  */
+.user-profile-content {
+  padding: 1.25rem;
+}
+
+.user-avatar {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.avatar-icon {
+  font-size: 3rem;
+  display: inline-block;
+}
+
+.user-info {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.user-name {
+  margin: 0 0 0.25rem 0;
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--neon-purple-light);
+}
+
+.user-email {
+  margin: 0 0 0.25rem 0;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+.user-role {
+  margin: 0;
+  color: var(--neon-cyan);
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.user-details {
+  margin-bottom: 1.5rem;
+}
+
+.detail-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.detail-item:last-child {
+  border-bottom: none;
+}
+
+.detail-label {
+  font-weight: 500;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+.detail-value {
+  font-weight: 600;
+  color: var(--text-primary);
+  font-size: 0.85rem;
+}
+
+.status-online {
+  color: var(--neon-green);
+}
+
+.user-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.btn-profile-action {
+  padding: 0.75rem;
+  background: rgba(147, 51, 234, 0.1);
+  border: 1px solid var(--border-subtle);
+  border-radius: 0.375rem;
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-profile-action:hover {
+  background: rgba(147, 51, 234, 0.2);
+  border-color: var(--neon-purple);
+  box-shadow: 0 0 10px rgba(147, 51, 234, 0.3);
+}
+
+.btn-logout-small {
+  padding: 0.75rem;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 0.375rem;
+  color: var(--neon-red);
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-decoration: none;
+  text-align: center;
+  transition: all 0.2s ease;
+}
+
+.btn-logout-small:hover {
+  background: rgba(239, 68, 68, 0.2);
+  box-shadow: 0 0 10px rgba(239, 68, 68, 0.3);
+}
+
+/*  Animations  */
+@keyframes dropdown-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/*  Responsive  */
+@media (max-width: 768px) {
+  .notifications-dropdown,
+  .user-profile-dropdown {
+    width: 300px;
+    right: -10px;
+  }
+
+  .notification-item {
+    padding: 0.75rem 1rem;
+  }
+
+  .user-profile-content {
+    padding: 1rem;
+  }
+}
+
+/* Ajuste de posicionamento dos dropdowns */
+.notifications-dropdown {
+  right: 80px; /* Ajusta para aparecer ao lado do botão de notificações */
+  top: calc(100% + 0.4rem);
+}
+
+.user-profile-dropdown {
+  right: 40px; /* Ajusta para aparecer ao lado do botão de perfil */
+  top: calc(100% + 0.4rem);
 }
