@@ -6,8 +6,49 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="N Eyes - Dashboard de Monitoramento de Tráfego de Rede em Tempo Real">
   <title>N Eyes - Dashboard</title>
-  <link rel="stylesheet" href="styles.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="home.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="icon" href="favicon-32x32.png" type="image/png">
 </head>
+<script>
+const ctx = document.getElementById('trafficChart').getContext('2d');
+new Chart(ctx, {
+  type: 'line',
+  data: {
+    labels: ['14:00', '14:10', '14:20', '14:30', '14:40', '14:50', '15:00'],
+    datasets: [
+      {
+        label: 'Download (Mbps)',
+        data: [180, 220, 195, 260, 240, 280, 245],
+        borderColor: '#9333ea',
+        backgroundColor: 'rgba(147, 51, 234, 0.15)',
+        fill: true,
+        tension: 0.4
+      },
+      {
+        label: 'Upload (Mbps)',
+        data: [90, 110, 105, 130, 120, 140, 128],
+        borderColor: '#22d3ee',
+        backgroundColor: 'rgba(34, 211, 238, 0.15)',
+        fill: true,
+        tension: 0.4
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: { labels: { color: '#8b8fa3', font: { family: 'Rajdhani' } } }
+    },
+    scales: {
+      x: { ticks: { color: '#8b8fa3' }, grid: { color: 'rgba(147,51,234,0.1)' } },
+      y: { ticks: { color: '#8b8fa3' }, grid: { color: 'rgba(147,51,234,0.1)' } }
+    }
+  }
+});
+</script>
+
 <body>
   <div class="app-container">
     <!-- SIDEBAR -->
@@ -124,13 +165,11 @@
 
         <!-- TRAFFIC CHART SECTION -->
         <section class="chart-section" aria-labelledby="traffic-chart-title">
-          <h2 id="traffic-chart-title" class="section-title">Gráfico de Tráfego (Última 1 Hora)</h2>
+          <h2 id="traffic-chart-title" class="section-title"><strong>Gráfico de Tráfego (Última 1 Hora)</strong></h2>
 
           <div class="chart-container">
-            <div id="traffic-chart" class="chart-placeholder">
-              <p class="placeholder-text">Gráfico de tráfego será inserido aqui pela biblioteca Chart.js/Recharts</p>
-            </div>
-          </div>
+            <canvas id="trafficChart" role="img" aria-label="Gráfico de linhas mostrando o tráfego de download e upload ao longo do tempo"></canvas>
+
         </section>
 
         <!-- DEVICES TABLE SECTION -->
