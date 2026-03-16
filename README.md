@@ -8,7 +8,7 @@ Com dashboards intuitivos e métricas detalhadas, o sistema oferece visibilidade
 
 Este projeto foi desenvolvido como trabalho acadêmico para a disciplina de Desenvolvimento Web, com o objetivo de aplicar conceitos de construção de aplicações web, monitoramento de dados e criação de interfaces interativas.
 
-## Principais funcionalidades
+## 🎯 Principais funcionalidades
 
 📊 Monitoramento de tráfego em tempo real
 
