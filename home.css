@@ -364,7 +364,7 @@ body::before {
   animation-delay: 400ms;
 }
 .chart-container {
-  min-height: 16rem;
+  min-height: 10rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -464,8 +464,8 @@ body::before {
 }
 .status-online::before {
   content: '';
-  width: 6px;
-  height: 6px;
+  width:5px;
+  height: 5px;
   border-radius: 50%;
   background: var(--neon-green);
 }
@@ -864,4 +864,10 @@ body::before {
 .user-profile-dropdown {
   right: 40px; /* Ajusta para aparecer ao lado do botão de perfil */
   top: calc(100% + 0.4rem);
+}
+
+#trafficChart {
+  width: 100% !important;
+  max-width: 2100px;
+  height: 300px !important;
 }
