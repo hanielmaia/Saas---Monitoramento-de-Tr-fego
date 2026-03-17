@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="N Eyes - Dispositivos Conectados">
+  <title>N Eyes - Dispositivos Conectados</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="home.css">
+  <link rel="icon" href="favicon-32x32.png" type="image/png">
+</head>
+
+<body>
+  <div class="app-container">
+    <!-- SIDEBAR -->
+    <aside class="sidebar" aria-label="Menu de navegação principal">
+      <header class="sidebar-header">
+        <h1 class="logo">N Eyes</h1>
+        <p class="tagline">Monitoramento de Rede</p>
+      </header>
+
+      <nav class="sidebar-nav">
+        <ul class="nav-menu">
+          <li class="nav-item">
+            <a href="home.html" class="nav-link" aria-label="Ir para Dashboard">
+              <span class="icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chart-no-axes-combined-icon lucide-chart-no-axes-combined"><path d="M12 16v5"/><path d="M16 14v7"/><path d="M20 10v11"/><path d="m22 3-8.646 8.646a.5.5 0 0 1-.708 0L9.354 8.354a.5.5 0 0 0-.707 0L2 15"/><path d="M4 18v3"/><path d="M8 14v7"/></svg>
+              </span>
+
+              <span class="text">Dashboard</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="#devices-table-title" class="nav-link active" aria-label="Ir para Dispositivos">
+              <span class="icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-monitor-cog-icon lucide-monitor-cog"><path d="M12 17v4"/><path d="m14.305 7.53.923-.382"/><path d="m15.228 4.852-.923-.383"/><path d="m16.852 3.228-.383-.924"/><path d="m16.852 8.772-.383.923"/><path d="m19.148 3.228.383-.924"/><path d="m19.53 9.696-.382-.924"/><path d="m20.772 4.852.924-.383"/><path d="m20.772 7.148.924.383"/><path d="M22 13v2a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7"/><path d="M8 21h8"/><circle cx="18" cy="6" r="3"/></svg>
+              </span>
+              <span class="text">Dispositivos</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="logs.html" class="nav-link" aria-label="Ir para Logs de Atividades">
+              <span class="icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-database-icon lucide-database"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5V19A9 3 0 0 0 21 19V5"/><path d="M3 12A9 3 0 0 0 21 12"/></svg>
+              </span>
+
+              <span class="text">Logs</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="config.html" class="nav-link" aria-label="Ir para Configurações">
+              <span class="icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-settings-icon lucide-settings"><path d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915"/><circle cx="12" cy="12" r="3"/></svg>
+              </span>
+
+              <span class="text">Configurações</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <footer class="sidebar-footer">
+        <a href="logout-confirm.html" class="btn-logout" aria-label="Fazer logout da plataforma">Sair</a>
+      </footer>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+      <!-- TOP BAR -->
+      <header class="top-bar">
+        <div class="header-info">
+          <h2 class="page-title">Dispositivos Conectados</h2>
+          <span class="network-status" aria-label="Status da rede: Online">
+            <span class="status-indicator online"></span>
+            Online
+          </span>
+        </div>
+        <div class="header-actions">
+          <button class="btn-refresh" aria-label="Atualizar dados"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-refresh-ccw-icon lucide-refresh-ccw"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/><path d="M16 16h5v5"/></svg></button>
+          <button class="btn-notifications" aria-label="Ver notificações"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-bell-icon lucide-bell"><path d="M10.268 21a2 2 0 0 0 3.464 0"/><path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"/></svg></button>
+          <a href="logout-confirm.html" class="btn-user" aria-label="Fazer logout via menu do usuário"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user-round-icon lucide-user-round"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></svg></a>
+        </div>
+      </header>
+
+      <section class="dashboard-content">
+        <!-- DEVICES TABLE SECTION -->
+        <section class="devices-section" aria-labelledby="devices-table-title">
+          <h2 id="devices-table-title" class="section-title">Dispositivos Conectados</h2>
+
+          <div class="table-wrapper">
+            <table class="devices-table" role="grid" aria-label="Tabela de dispositivos conectados">
+              <thead>
+                <tr>
+                  <th scope="col">IP Address</th>
+                  <th scope="col">Nome do Dispositivo</th>
+                  <th scope="col">Consumo (Mbps)</th>
+                  <th scope="col">Status</th>
+                  <th scope="col">Ações</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="device-row">
+                  <td class="device-ip">192.168.1.101</td>
+                  <td class="device-name">Desktop-TI-01</td>
+                  <td class="device-bandwidth">45.2</td>
+                  <td class="device-status status-online">Online</td>
+                  <td class="device-actions">
+                    <th>
+                        <button class="btn-action btn-action-block" aria-label="Bloquear dispositivo Laptop-Equipe-02">Bloquear</button>
+                        <button class="btn-action btn-action-rename" aria-label="Renomear dispositivo Laptop-Equipe-02">Renomear</button>
+                    </th>
+                  </td>
+                </tr>
+                <tr class="device-row">
+                  <td class="device-ip">192.168.1.102</td>
+                  <td class="device-name">Laptop-Equipe-02</td>
+                  <td class="device-bandwidth">78.5</td>
+                  <td class="device-status status-online">Online</td>
+                  <td class="device-actions">
+                    <th>
+                        <button class="btn-action btn-action-block" aria-label="Bloquear dispositivo Laptop-Equipe-02">Bloquear</button>
+                        <button class="btn-action btn-action-rename" aria-label="Renomear dispositivo Laptop-Equipe-02">Renomear</button>
+                    </th>
+                  </td>
+                </tr>
+                <tr class="device-row">
+                  <td class="device-ip">192.168.1.103</td>
+                  <td class="device-name">Servidor-Web-01</td>
+                  <td class="device-bandwidth">234.8</td>
+                  <td class="device-status status-online">Online</td>
+                  <td class="device-actions">
+                    <th>
+                        <button class="btn-action btn-action-block" aria-label="Bloquear dispositivo Servidor-Web-01">Bloquear</button>
+                        <button class="btn-action btn-action-rename" aria-label="Renomear dispositivo Servidor-Web-01">Renomear</button>
+                    </th>
+                  </td>
+                </tr>
+                <tr class="device-row">
+                  <td class="device-ip">192.168.1.104</td>
+                  <td class="device-name">Impressora-Rede-03</td>
+                  <td class="device-bandwidth">12.3</td>
+                  <td class="device-status status-online">Online</td>
+                  <td class="device-actions">
+                    <th>
+                        <button class="btn-action btn-action-block" aria-label="Bloquear dispositivo Impressora-Rede-03">Bloquear</button>
+                        <button class="btn-action btn-action-rename" aria-label="Renomear dispositivo Impressora-Rede-03">Renomear</button>
+                    </th>
+                  </td>
+                </tr>
+                <tr class="device-row">
+                  <td class="device-ip">192.168.1.105</td>
+                  <td class="device-name">Mobile-Admin-04</td>
+                  <td class="device-bandwidth">28.7</td>
+                  <td class="device-status status-offline">Offline</td>
+                  <td class="device-actions">
+                    <th>
+                        <button class="btn-action btn-action-block" aria-label="Bloquear dispositivo Mobile-Admin-04">Bloquear</button>
+                        <button class="btn-action btn-action-rename" aria-label="Renomear dispositivo Mobile-Admin-04">Renomear</button>
+                    </th>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </section>
+    </main>
+  </div>
+</body>
+
+</html>
