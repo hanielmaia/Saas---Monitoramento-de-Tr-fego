@@ -5,7 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="N Eyes - Confirmação de Saída">
   <title>N Eyes - Confirmar Saída</title>
-  <link rel="stylesheet" href="styles.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="logout-confirm.css">
+  <link rel="icon" href="favicon-32x32.png" type="image/png">
 </head>
 <body>
   <div class="app-container">
@@ -91,7 +93,11 @@
                 </a>
               </li>
               <li class="nav-item">
+<<<<<<< HEAD
                 <a href="home.html#devices" class="nav-link" aria-hidden="true">
+=======
+                <a href="home.html#devices-metric" class="nav-link" aria-hidden="true">
+>>>>>>> main
                   <span class="icon">🖥️</span>
                   <span class="text">Dispositivos</span>
                 </a>
@@ -223,8 +229,10 @@
       // Modal version
       if (confirmBtn) {
         confirmBtn.addEventListener('click', function() {
-          // Redirect to login page
-          window.location.href = '/login.html';
+          // Clear any session data and redirect to login page (relative path ensures it works from any folder)
+          sessionStorage.clear();
+          localStorage.clear();
+          window.location.href = 'login.html';
         });
       }
 
@@ -241,7 +249,9 @@
       // Page version
       if (pageConfirmBtn) {
         pageConfirmBtn.addEventListener('click', function() {
-          window.location.href = '/login.html';
+          sessionStorage.clear();
+          localStorage.clear();
+          window.location.href = 'login.html';
         });
       }
     });
