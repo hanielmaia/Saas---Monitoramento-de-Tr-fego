@@ -92,7 +92,7 @@
                 <p class="user-role">Administrador de Rede</p>
               </div>
               <div class="user-actions">
-                <button class="btn-profile-action"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user-pen-icon lucide-user-pen"><path d="M11.5 15H7a4 4 0 0 0-4 4v2"/><path d="M21.378 16.626a1 1 0 0 0-3.004-3.004l-4.01 4.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z"/><circle cx="10" cy="7" r="4"/></svg>  Editar Perfil</button>
+                <a href="edit-profile.html" class="btn-profile-action" style="text-decoration: none; display: block; text-align: center;"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user-pen-icon lucide-user-pen"><path d="M11.5 15H7a4 4 0 0 0-4 4v2"/><path d="M21.378 16.626a1 1 0 0 0-3.004-3.004l-4.01 4.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z"/><circle cx="10" cy="7" r="4"/></svg>  Editar Perfil</a>
                 <a href="config.html" class="btn-profile-action"
                   <a href="config.html" class="btn-profile-action" style="text-decoration: none; display: block; text-align: center;" ><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-settings-icon lucide-settings"><path d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915"/><circle cx="12" cy="12" r="3"/></svg> Configurações</a>
                 <a href="logout-confirm.html" class="btn-logout-small"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-log-out-icon lucide-log-out"><path d="m16 17 5-5-5-5"/><path d="M21 12H9"/><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/></svg> Sair da conta</a>
@@ -252,6 +252,238 @@
                   <td class="log-user">admin</td>
                   <td class="log-severity severity-badge info">ℹ️ Info</td>
                 </tr>
+                <tr class="log-row severity-warning">
+                  <td class="log-timestamp">2026-03-13 13:15:22</td>
+                  <td class="log-event">Alerta</td>
+                  <td class="log-origin">192.168.1.110 | Tablet-Vendas-01</td>
+                  <td class="log-details">Tráfego suspeito detectado</td>
+                  <td class="log-user">system</td>
+                  <td class="log-severity severity-badge warning">⚠️ Aviso</td>
+                </tr>
+                <tr class="log-row severity-error">
+                  <td class="log-timestamp">2026-03-13 13:05:10</td>
+                  <td class="log-event">Evento de Segurança</td>
+                  <td class="log-origin">192.168.1.111 | Servidor-BD-02</td>
+                  <td class="log-details">Múltiplas tentativas de acesso falhadas</td>
+                  <td class="log-user">system</td>
+                  <td class="log-severity severity-badge error">❌ Crítico</td>
+                </tr>
+                <tr class="log-row severity-info">
+                  <td class="log-timestamp">2026-03-13 12:55:45</td>
+                  <td class="log-event">Conexão</td>
+                  <td class="log-origin">192.168.1.112 | Console-Admin-01</td>
+                  <td class="log-details">Sessão de administrador iniciada</td>
+                  <td class="log-user">maria.silva</td>
+                  <td class="log-severity severity-badge info">ℹ️ Info</td>
+                </tr>
+                <tr class="log-row severity-warning">
+                  <td class="log-timestamp">2026-03-13 12:45:33</td>
+                  <td class="log-event">Bloqueio de Dispositivo</td>
+                  <td class="log-origin">192.168.1.113 | Teste-IP-09</td>
+                  <td class="log-details">Dispositivo bloqueado por inatividade</td>
+                  <td class="log-user">admin</td>
+                  <td class="log-severity severity-badge warning">⚠️ Aviso</td>
+                </tr>
+                <tr class="log-row severity-info">
+                  <td class="log-timestamp">2026-03-13 12:35:20</td>
+                  <td class="log-event">Alteração de Configuração</td>
+                  <td class="log-origin">192.168.1.114 | Desktop-RH-01</td>
+                  <td class="log-details">Limite de banda atualizado para 150 Mbps</td>
+                  <td class="log-user">haniel.maia</td>
+                  <td class="log-severity severity-badge info">ℹ️ Info</td>
+                </tr>
+                <tr class="log-row severity-info">
+                  <td class="log-timestamp">2026-03-13 12:25:08</td>
+                  <td class="log-event">Desconexão</td>
+                  <td class="log-origin">192.168.1.115 | Mobile-User-07</td>
+                  <td class="log-details">Dispositivo desconectado</td>
+                  <td class="log-user">system</td>
+                  <td class="log-severity severity-badge info">ℹ️ Info</td>
+                </tr>
+                <tr class="log-row severity-warning">
+                  <td class="log-timestamp">2026-03-13 12:15:42</td>
+                  <td class="log-event">Alerta</td>
+                  <td class="log-origin">192.168.1.116 | Impressora-Admin-02</td>
+                  <td class="log-details">Consumo anormal de banda detectado</td>
+                  <td class="log-user">system</td>
+                  <td class="log-severity severity-badge warning">⚠️ Aviso</td>
+                </tr>
+                <tr class="log-row severity-info">
+                  <td class="log-timestamp">2026-03-13 12:05:15</td>
+                  <td class="log-event">Conexão</td>
+                  <td class="log-origin">192.168.1.117 | Notebook-Dev-06</td>
+                  <td class="log-details">Dispositivo conectado com sucesso</td>
+                  <td class="log-user">joao.calheiros</td>
+                  <td class="log-severity severity-badge info">ℹ️ Info</td>
+                </tr>
+                <tr class="log-row severity-error">
+                  <td class="log-timestamp">2026-03-13 11:55:30</td>
+                  <td class="log-event">Evento de Segurança</td>
+                  <td class="log-origin">192.168.1.118 | Teste-IP-10</td>
+                  <td class="log-details">Tentativa de bypass de segurança bloqueada</td>
+                  <td class="log-user">system</td>
+                  <td class="log-severity severity-badge error">❌ Crítico</td>
+                </tr>
+                <tr class="log-row severity-info">
+                  <td class="log-timestamp">2026-03-13 11:45:22</td>
+                  <td class="log-event">Liberação de Dispositivo</td>
+                  <td class="log-origin">192.168.1.119 | Teste-IP-11</td>
+                  <td class="log-details">Dispositivo desbloqueado por administrador</td>
+                  <td class="log-user">admin</td>
+                  <td class="log-severity severity-badge info">ℹ️ Info</td>
+                </tr>
+                <tr class="log-row severity-warning">
+                  <td class="log-timestamp">2026-03-13 11:35:10</td>
+                  <td class="log-event">Alerta</td>
+                  <td class="log-origin">192.168.1.120 | Desktop-Financeiro-01</td>
+                  <td class="log-details">Acesso a recursos críticos detectado</td>
+                  <td class="log-user">system</td>
+                  <td class="log-severity severity-badge warning">⚠️ Aviso</td>
+                </tr>
+                <tr class="log-row severity-info">
+                  <td class="log-timestamp">2026-03-13 11:25:45</td>
+                  <td class="log-event">Alteração de Configuração</td>
+                  <td class="log-origin">192.168.1.121 | Laptop-Diretoria-01</td>
+                  <td class="log-details">Prioridade de tráfego alterada</td>
+                  <td class="log-user">maria.silva</td>
+                  <td class="log-severity severity-badge info">ℹ️ Info</td>
+                </tr>
+                <tr class="log-row severity-info">
+                  <td class="log-timestamp">2026-03-13 11:15:33</td>
+                  <td class="log-event">Desconexão</td>
+                  <td class="log-origin">192.168.1.122 | Mobile-User-08</td>
+                  <td class="log-details">Usuário desconectado</td>
+                  <td class="log-user">system</td>
+                  <td class="log-severity severity-badge info">ℹ️ Info</td>
+                </tr>
+                <tr class="log-row severity-warning">
+                  <td class="log-timestamp">2026-03-13 11:05:55</td>
+                  <td class="log-event">Bloqueio de Dispositivo</td>
+                  <td class="log-origin">192.168.1.123 | Teste-IP-12</td>
+                  <td class="log-details">Dispositivo bloqueado por comportamento anormal</td>
+                  <td class="log-user">kaua.heronides</td>
+                  <td class="log-severity severity-badge warning">⚠️ Aviso</td>
+                </tr>
+                <tr class="log-row severity-error">
+                  <td class="log-timestamp">2026-03-13 10:55:20</td>
+                  <td class="log-event">Evento de Segurança</td>
+                  <td class="log-origin">192.168.1.124 | Servidor-VPN-01</td>
+                  <td class="log-details">Certificado SSL expirado - Ação requerida</td>
+                  <td class="log-user">system</td>
+                  <td class="log-severity severity-badge error">❌ Crítico</td>
+                </tr>
+                <tr class="log-row severity-info">
+                  <td class="log-timestamp">2026-03-13 10:45:12</td>
+                  <td class="log-event">Conexão</td>
+                  <td class="log-origin">192.168.1.125 | Workstation-01</td>
+                  <td class="log-details">Estação de trabalho conectada</td>
+                  <td class="log-user">joao.calheiros</td>
+                  <td class="log-severity severity-badge info">ℹ️ Info</td>
+                </tr>
+                <tr class="log-row severity-warning">
+                  <td class="log-timestamp">2026-03-13 10:35:44</td>
+                  <td class="log-event">Alerta</td>
+                  <td class="log-origin">192.168.1.126 | Scanner-Rede-01</td>
+                  <td class="log-details">Atividade de scanning detectada</td>
+                  <td class="log-user">system</td>
+                  <td class="log-severity severity-badge warning">⚠️ Aviso</td>
+                </tr>
+                <tr class="log-row severity-info">
+                  <td class="log-timestamp">2026-03-13 10:25:30</td>
+                  <td class="log-event">Liberação de Dispositivo</td>
+                  <td class="log-origin">192.168.1.127 | Teste-IP-13</td>
+                  <td class="log-details">Dispositivo permitido após verificação</td>
+                  <td class="log-user">admin</td>
+                  <td class="log-severity severity-badge info">ℹ️ Info</td>
+                </tr>
+                <tr class="log-row severity-info">
+                  <td class="log-timestamp">2026-03-13 10:15:18</td>
+                  <td class="log-event">Alteração de Configuração</td>
+                  <td class="log-origin">192.168.1.128 | Router-Principal-01</td>
+                  <td class="log-details">Regras de firewall atualizadas</td>
+                  <td class="log-user">haniel.maia</td>
+                  <td class="log-severity severity-badge info">ℹ️ Info</td>
+                </tr>
+                <tr class="log-row severity-info">
+                  <td class="log-timestamp">2026-03-13 10:05:05</td>
+                  <td class="log-event">Desconexão</td>
+                  <td class="log-origin">192.168.1.129 | Mobile-User-09</td>
+                  <td class="log-details">Dispositivo desconectado da rede</td>
+                  <td class="log-user">system</td>
+                  <td class="log-severity severity-badge info">ℹ️ Info</td>
+                </tr>
+                <tr class="log-row severity-warning">
+                  <td class="log-timestamp">2026-03-13 09:55:40</td>
+                  <td class="log-event">Alerta</td>
+                  <td class="log-origin">192.168.1.130 | Laptop-Equipe-03</td>
+                  <td class="log-details">Padrão anormal de uso detectado</td>
+                  <td class="log-user">system</td>
+                  <td class="log-severity severity-badge warning">⚠️ Aviso</td>
+                </tr>
+                <tr class="log-row severity-error">
+                  <td class="log-timestamp">2026-03-13 09:45:25</td>
+                  <td class="log-event">Evento de Segurança</td>
+                  <td class="log-origin">192.168.1.131 | Teste-IP-14</td>
+                  <td class="log-details">Malware suspeito bloqueado</td>
+                  <td class="log-user">system</td>
+                  <td class="log-severity severity-badge error">❌ Crítico</td>
+                </tr>
+                <tr class="log-row severity-info">
+                  <td class="log-timestamp">2026-03-13 09:35:12</td>
+                  <td class="log-event">Conexão</td>
+                  <td class="log-origin">192.168.1.132 | Notebook-Dev-07</td>
+                  <td class="log-details">Novo dispositivo adicionado à rede</td>
+                  <td class="log-user">joao.calheiros</td>
+                  <td class="log-severity severity-badge info">ℹ️ Info</td>
+                </tr>
+                <tr class="log-row severity-warning">
+                  <td class="log-timestamp">2026-03-13 09:25:50</td>
+                  <td class="log-event">Bloqueio de Dispositivo</td>
+                  <td class="log-origin">192.168.1.133 | Teste-IP-15</td>
+                  <td class="log-details">Dispositivo bloqueado por violação de política</td>
+                  <td class="log-user">admin</td>
+                  <td class="log-severity severity-badge warning">⚠️ Aviso</td>
+                </tr>
+                <tr class="log-row severity-info">
+                  <td class="log-timestamp">2026-03-13 09:15:35</td>
+                  <td class="log-event">Alteração de Configuração</td>
+                  <td class="log-origin">192.168.1.134 | Desktop-Marketing-01</td>
+                  <td class="log-details">Política de acesso modificada</td>
+                  <td class="log-user">maria.silva</td>
+                  <td class="log-severity severity-badge info">ℹ️ Info</td>
+                </tr>
+                <tr class="log-row severity-info">
+                  <td class="log-timestamp">2026-03-13 09:05:20</td>
+                  <td class="log-event">Desconexão</td>
+                  <td class="log-origin">192.168.1.135 | Mobile-User-10</td>
+                  <td class="log-details">Sessão finalizada automaticamente</td>
+                  <td class="log-user">system</td>
+                  <td class="log-severity severity-badge info">ℹ️ Info</td>
+                </tr>
+                <tr class="log-row severity-warning">
+                  <td class="log-timestamp">2026-03-13 08:55:45</td>
+                  <td class="log-event">Alerta</td>
+                  <td class="log-origin">192.168.1.136 | Servidor-Mail-01</td>
+                  <td class="log-details">Limite de conexões simultâneas atingido</td>
+                  <td class="log-user">system</td>
+                  <td class="log-severity severity-badge warning">⚠️ Aviso</td>
+                </tr>
+                <tr class="log-row severity-info">
+                  <td class="log-timestamp">2026-03-13 08:45:30</td>
+                  <td class="log-event">Liberação de Dispositivo</td>
+                  <td class="log-origin">192.168.1.137 | Teste-IP-16</td>
+                  <td class="log-details">Dispositivo liberado com novo perfil de segurança</td>
+                  <td class="log-user">admin</td>
+                  <td class="log-severity severity-badge info">ℹ️ Info</td>
+                </tr>
+                <tr class="log-row severity-error">
+                  <td class="log-timestamp">2026-03-13 08:35:15</td>
+                  <td class="log-event">Evento de Segurança</td>
+                  <td class="log-origin">192.168.1.138 | Teste-IP-17</td>
+                  <td class="log-details">Ataque DDoS mitigado com sucesso</td>
+                  <td class="log-user">system</td>
+                  <td class="log-severity severity-badge error">❌ Crítico</td>
+                </tr>
               </tbody>
             </table>
           </div>
@@ -301,6 +533,88 @@
         location.reload();
       });
     }
+
+    // ════════════════════════════════════════════════════════════════════════════════════════════════
+    // PAGINATION FUNCTIONALITY
+    // ════════════════════════════════════════════════════════════════════════════════════════════════
+    
+    const logsPerPage = 8;
+    let currentPage = 1;
+    const logRows = document.querySelectorAll('.logs-table tbody tr');
+    const totalPages = Math.ceil(logRows.length / logsPerPage);
+    
+    // Set total pages in the UI
+    document.getElementById('total-pages').textContent = totalPages;
+    
+    function displayPage(pageNumber) {
+      const startIndex = (pageNumber - 1) * logsPerPage;
+      const endIndex = startIndex + logsPerPage;
+      
+      // Hide all rows
+      logRows.forEach(row => {
+        row.style.display = 'none';
+      });
+      
+      // Show rows for current page
+      for (let i = startIndex; i < endIndex && i < logRows.length; i++) {
+        logRows[i].style.display = 'table-row';
+      }
+      
+      // Update current page display
+      currentPage = pageNumber;
+      document.getElementById('current-page').textContent = currentPage;
+      
+      // Update button states
+      updatePaginationButtons();
+    }
+    
+    function updatePaginationButtons() {
+      const prevBtn = document.querySelector('.btn-pagination.prev');
+      const nextBtn = document.querySelector('.btn-pagination.next');
+      
+      // Disable prev button on first page
+      if (currentPage === 1) {
+        prevBtn.disabled = true;
+        prevBtn.style.opacity = '0.5';
+        prevBtn.style.cursor = 'not-allowed';
+      } else {
+        prevBtn.disabled = false;
+        prevBtn.style.opacity = '1';
+        prevBtn.style.cursor = 'pointer';
+      }
+      
+      // Disable next button on last page
+      if (currentPage === totalPages) {
+        nextBtn.disabled = true;
+        nextBtn.style.opacity = '0.5';
+        nextBtn.style.cursor = 'not-allowed';
+      } else {
+        nextBtn.disabled = false;
+        nextBtn.style.opacity = '1';
+        nextBtn.style.cursor = 'pointer';
+      }
+    }
+    
+    // Get pagination buttons
+    const prevBtn = document.querySelector('.btn-pagination.prev');
+    const nextBtn = document.querySelector('.btn-pagination.next');
+    
+    // Previous page button
+    prevBtn.addEventListener('click', () => {
+      if (currentPage > 1) {
+        displayPage(currentPage - 1);
+      }
+    });
+    
+    // Next page button
+    nextBtn.addEventListener('click', () => {
+      if (currentPage < totalPages) {
+        displayPage(currentPage + 1);
+      }
+    });
+    
+    // Initialize: display first page
+    displayPage(1);
   </script>
 </body>
 

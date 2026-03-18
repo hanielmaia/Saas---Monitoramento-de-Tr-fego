@@ -80,7 +80,7 @@
         <div class="header-actions">
           <button class="btn-refresh" aria-label="Atualizar dados"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-refresh-ccw-icon lucide-refresh-ccw"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/><path d="M16 16h5v5"/></svg></button>
           <button class="btn-notifications" aria-label="Ver notificações"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-bell-icon lucide-bell"><path d="M10.268 21a2 2 0 0 0 3.464 0"/><path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"/></svg></button>
-          <a href="logout-confirm.html" class="btn-user" aria-label="Fazer logout via menu do usuário"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user-round-icon lucide-user-round"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></svg></a>
+          <button class="btn-user" aria-label="Abrir menu de perfil"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user-round-icon lucide-user-round"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></svg></button>
 
           <!-- NOTIFICATIONS DROPDOWN -->
           <div class="notifications-dropdown" id="notifications-dropdown" style="display: none;">
@@ -157,7 +157,7 @@
                 </div>
               </div>
              <div class="user-actions">
-                <button class="btn-profile-action"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user-pen-icon lucide-user-pen"><path d="M11.5 15H7a4 4 0 0 0-4 4v2"/><path d="M21.378 16.626a1 1 0 0 0-3.004-3.004l-4.01 4.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z"/><circle cx="10" cy="7" r="4"/></svg>  Editar Perfil</button>
+                <a href="edit-profile.html" class="btn-profile-action" style="text-decoration: none; display: block; text-align: center;"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user-pen-icon lucide-user-pen"><path d="M11.5 15H7a4 4 0 0 0-4 4v2"/><path d="M21.378 16.626a1 1 0 0 0-3.004-3.004l-4.01 4.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z"/><circle cx="10" cy="7" r="4"/></svg>  Editar Perfil</a>
                 <a href="config.html" class="btn-profile-action" style="text-decoration: none; display: block; text-align: center;"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-settings-icon lucide-settings"><path d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915"/><circle cx="12" cy="12" r="3"/></svg> Configurações</a>
                 <a href="logout-confirm.html" class="btn-logout-small"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-log-out-icon lucide-log-out"><path d="m16 17 5-5-5-5"/><path d="M21 12H9"/><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/></svg> Sair da conta</a>
               </div>
@@ -234,9 +234,17 @@
 
           <div class="chart-container">
             <canvas id="trafficChart" role="img" aria-label="Gráfico de linhas mostrando o tráfego de download e upload ao longo do tempo"></canvas>
-
+          </div>
         </section>
 
+        <!-- MALICIOUS TRAFFIC CHART SECTION -->
+        <section class="chart-section" aria-labelledby="malicious-traffic-chart-title">
+          <h2 id="malicious-traffic-chart-title" class="section-title"><strong>🚨 Tráfego Malicioso (Última 1 Hora)</strong></h2>
+
+          <div class="chart-container">
+            <canvas id="maliciousTrafficChart" role="img" aria-label="Gráfico de linhas mostrando o tráfego malicioso detectado ao longo do tempo"></canvas>
+          </div>
+        </section>
 
       </section>
     </main>
@@ -293,37 +301,111 @@ let trafficChart = new Chart(ctx, {
   }
 });
 
-// Fun��o para gerar dados fict�cios de tr�fego
 function generateTrafficData() {
   const now = new Date();
   const currentTime = now.getHours() + ':' + (now.getMinutes() < 10 ? '0' : '') + now.getMinutes();
 
-  // Adiciona novo ponto de tempo
   trafficChart.data.labels.push(currentTime);
   if (trafficChart.data.labels.length > 7) {
-    trafficChart.data.labels.shift(); // Remove o primeiro se tiver mais de 7
+    trafficChart.data.labels.shift();
   }
 
-  // Gera dados fict�cios para download (entre 150-300 Mbps)
   const downloadValue = Math.random() * 150 + 150;
   trafficChart.data.datasets[0].data.push(downloadValue);
   if (trafficChart.data.datasets[0].data.length > 7) {
     trafficChart.data.datasets[0].data.shift();
   }
 
-  // Gera dados fict�cios para upload (entre 50-150 Mbps)
   const uploadValue = Math.random() * 100 + 50;
   trafficChart.data.datasets[1].data.push(uploadValue);
   if (trafficChart.data.datasets[1].data.length > 7) {
     trafficChart.data.datasets[1].data.shift();
   }
 
-  // Atualiza o gr�fico
   trafficChart.update();
 }
 
-// Atualiza o gr�fico a cada 5 segundos
+// Atualiza o gráfico a cada 5 segundos
 setInterval(generateTrafficData, 5000);
+
+// ── MALICIOUS TRAFFIC CHART ──
+const ctxMalicious = document.getElementById('maliciousTrafficChart').getContext('2d');
+let maliciousTrafficChart = new Chart(ctxMalicious, {
+  type: 'line',
+  data: {
+    labels: ['14:00', '14:10', '14:20', '14:30', '14:40', '14:50', '15:00'],
+    datasets: [
+      {
+        label: 'Tentativas Bloqueadas',
+        data: [12, 18, 8, 24, 15, 31, 22],
+        borderColor: '#ef4444',
+        backgroundColor: 'rgba(239, 68, 68, 0.15)',
+        fill: true,
+        tension: 0.4
+      },
+      {
+        label: 'IPs Suspeitos',
+        data: [3, 5, 2, 7, 4, 9, 6],
+        borderColor: '#facc15',
+        backgroundColor: 'rgba(250, 204, 21, 0.15)',
+        fill: true,
+        tension: 0.4
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        labels: {
+          color: '#8b8fa3',
+          font: { family: 'Rajdhani', size: 12 }
+        }
+      }
+    },
+    scales: {
+      x: {
+        ticks: { color: '#8b8fa3', font: { family: 'Rajdhani', size: 11 } },
+        grid: { color: 'rgba(147,51,234,0.1)' }
+      },
+      y: {
+        ticks: { color: '#8b8fa3', font: { family: 'Rajdhani', size: 11 } },
+        grid: { color: 'rgba(147,51,234,0.1)' }
+      }
+    }
+  }
+});
+
+function generateMaliciousTrafficData() {
+  const now = new Date();
+  const currentTime = now.getHours() + ':' + (now.getMinutes() < 10 ? '0' : '') + now.getMinutes();
+
+  maliciousTrafficChart.data.labels.push(currentTime);
+  if (maliciousTrafficChart.data.labels.length > 7) {
+    maliciousTrafficChart.data.labels.shift();
+  }
+
+  // Tentativas bloqueadas (0-35)
+  const blockedAttempts = Math.floor(Math.random() * 35);
+  maliciousTrafficChart.data.datasets[0].data.push(blockedAttempts);
+  if (maliciousTrafficChart.data.datasets[0].data.length > 7) {
+    maliciousTrafficChart.data.datasets[0].data.shift();
+  }
+
+  // IPs suspeitos (0-10)
+  const suspiciousIPs = Math.floor(Math.random() * 10);
+  maliciousTrafficChart.data.datasets[1].data.push(suspiciousIPs);
+  if (maliciousTrafficChart.data.datasets[1].data.length > 7) {
+    maliciousTrafficChart.data.datasets[1].data.shift();
+  }
+
+  maliciousTrafficChart.update();
+}
+
+// Atualiza o gráfico malicioso a cada 5 segundos
+setInterval(generateMaliciousTrafficData, 5000);
+
 // Funções para os dropdowns da top-bar
 document.addEventListener('DOMContentLoaded', function() {
   // Elementos dos botões

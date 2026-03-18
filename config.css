@@ -994,6 +994,114 @@ body::after {
   }
 }
 
+/* ══════════════════════════════════════
+   CONFIGURATION SECTIONS
+   ══════════════════════════════════════ */
+.config-section {
+  margin-top: 2.5rem;
+  padding: 2rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: 0.75rem;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  animation: fade-in-up 0.6s ease-out both;
+}
+
+.config-section .section-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 1.5rem;
+  letter-spacing: 0.05em;
+  font-family: var(--font-display);
+}
+
+.system-config-form,
+.security-policies-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* ── Range Input ── */
+.range-input {
+  width: 100%;
+  height: 6px;
+  border-radius: 3px;
+  background: linear-gradient(to right, var(--neon-green), var(--neon-purple));
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+  cursor: pointer;
+}
+
+.range-input::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #1a1a1a;
+  border: 2px solid #333333;
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(147, 51, 234, 0.3);
+  transition: all 0.3s ease;
+}
+
+.range-input::-webkit-slider-thumb:hover {
+  background: #2a2a2a;
+  box-shadow: 0 0 15px rgba(147, 51, 234, 0.5);
+  transform: scale(1.1);
+}
+
+.range-input::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #1a1a1a;
+  border: 2px solid #333333;
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(147, 51, 234, 0.3);
+  transition: all 0.3s ease;
+}
+
+.range-input::-moz-range-thumb:hover {
+  background: #2a2a2a;
+  box-shadow: 0 0 15px rgba(147, 51, 234, 0.5);
+  transform: scale(1.1);
+}
+
+.range-input::-moz-range-track {
+  background: transparent;
+  border: none;
+}
+
+/* Range value display */
+#threshold-value,
+#retention-value {
+  display: inline-block;
+  color: var(--neon-purple-light);
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-left: 0.5rem;
+}
+
+/* ── Select Input ── */
+.select-input {
+  appearance: none;
+  padding-right: 2.5rem;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%23a855f7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>');
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 1.25rem;
+  padding-right: 2.5rem;
+}
+
+.select-input:focus {
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%239333ea" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>');
+}
+
 @media (max-width: 480px) {
   .main-content {
     padding: 1rem;
