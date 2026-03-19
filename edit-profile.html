@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="N Eyes - Editar Perfil">
+  <title>N Eyes - Editar Perfil</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="edit-profile.css">
+  <link rel="icon" href="favicon-32x32.png" type="image/png">
+</head>
+<body>
+  <div class="app-container">
+    <!-- SIDEBAR -->
+    <aside class="sidebar" aria-label="Menu de navegação principal">
+      <header class="sidebar-header">
+        <h1 class="logo">N Eyes</h1>
+        <p class="tagline">Monitoramento de Rede</p>
+      </header>
+
+      <nav class="sidebar-nav">
+        <ul class="nav-menu">
+          <li class="nav-item">
+            <a href="home.html" class="nav-link" aria-label="Ir para Dashboard">
+              <span class="icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chart-no-axes-combined-icon lucide-chart-no-axes-combined"><path d="M12 16v5"/><path d="M16 14v7"/><path d="M20 10v11"/><path d="m22 3-8.646 8.646a.5.5 0 0 1-.708 0L9.354 8.354a.5.5 0 0 0-.707 0L2 15"/><path d="M4 18v3"/><path d="M8 14v7"/></svg>
+              </span>
+              <span class="text">Dashboard</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="devices.html" class="nav-link" aria-label="Ir para Dispositivos">
+              <span class="icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-monitor-cog-icon lucide-monitor-cog"><path d="M12 17v4"/><path d="m14.305 7.53.923-.382"/><path d="m15.228 4.852-.923-.383"/><path d="m16.852 3.228-.383-.924"/><path d="m16.852 8.772-.383.923"/><path d="m19.148 3.228.383-.924"/><path d="m19.53 9.696-.382-.924"/><path d="m20.772 4.852.924-.383"/><path d="m20.772 7.148.924.383"/><path d="M22 13v2a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7"/><path d="M8 21h8"/><circle cx="18" cy="6" r="3"/></svg>
+              </span>
+              <span class="text">Dispositivos</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="logs.html" class="nav-link" aria-label="Ir para Logs de Atividades">
+              <span class="icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-database-icon lucide-database"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5V19A9 3 0 0 0 21 19V5"/><path d="M3 12A9 3 0 0 0 21 12"/></svg>
+              </span>
+              <span class="text">Logs</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="config.html" class="nav-link" aria-label="Ir para Configurações">
+              <span class="icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-settings-icon lucide-settings"><path d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915"/><circle cx="12" cy="12" r="3"/></svg>
+              </span>
+              <span class="text">Configurações</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <footer class="sidebar-footer">
+        <a href="logout-confirm.html" class="btn-logout" aria-label="Fazer logout da plataforma">Sair</a>
+      </footer>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+      <!-- TOP BAR -->
+      <header class="top-bar">
+        <div class="header-info">
+          <h2 class="page-title">👤 Meu Perfil</h2>
+          <span class="page-subtitle">Editar informações pessoais e preferências</span>
+        </div>
+        <div class="header-actions">
+          <button class="btn-refresh" aria-label="Recarregar página"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-refresh-ccw-icon lucide-refresh-ccw"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/><path d="M16 16h5v5"/></svg></button>
+          <button class="btn-user" aria-label="Abrir menu de perfil"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user-icon lucide-user"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></button>
+
+          <!-- USER PROFILE DROPDOWN -->
+          <div class="user-profile-dropdown" id="user-profile-dropdown" style="display: none;">
+            <div class="dropdown-header">
+              <h3>Perfil do Usuário</h3>
+              <button class="close-dropdown" id="close-profile">×</button>
+            </div>
+            <div class="user-profile-content">
+              <div class="user-avatar">
+                <span class="avatar-icon">👤</span>
+              </div>
+              <div class="user-info">
+                <h4 class="user-name">João Calheiros</h4>
+                <p class="user-email">joao.calheiros@empresa.com.br</p>
+                <p class="user-role">Administrador de Rede</p>
+              </div>
+              <div class="user-actions">
+                <a href="edit-profile.html" class="btn-profile-action" style="text-decoration: none; display: block; text-align: center;"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user-pen-icon lucide-user-pen"><path d="M11.5 15H7a4 4 0 0 0-4 4v2"/><path d="M21.378 16.626a1 1 0 0 0-3.004-3.004l-4.01 4.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z"/><circle cx="10" cy="7" r="4"/></svg>  Editar Perfil</a>
+                <a href="config.html" class="btn-profile-action" style="text-decoration: none; display: block; text-align: center;"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-settings-icon lucide-settings"><path d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915"/><circle cx="12" cy="12" r="3"/></svg> Configurações</a>
+                <a href="logout-confirm.html" class="btn-logout-small"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-log-out-icon lucide-log-out"><path d="m16 17 5-5-5-5"/><path d="M21 12H9"/><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/></svg> Sair da conta</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- PROFILE CONTENT -->
+      <section class="profile-content">
+        <div class="profile-container">
+          <!-- PROFILE AVATAR SECTION -->
+          <section class="profile-header-section" aria-labelledby="profile-avatar-title">
+            <div class="profile-avatar-container">
+              <div class="profile-avatar-large">
+                <span class="avatar-icon-large">👤</span>
+              </div>
+              <div class="profile-header-info">
+                <h3 id="profile-avatar-title" class="profile-user-name">João Calheiros</h3>
+                <p class="profile-user-role">Administrador de Rede</p>
+                <p class="profile-user-email">joao.calheiros@empresa.com.br</p>
+              </div>
+            </div>
+          </section>
+
+          <!-- PROFILE FORM -->
+          <section class="profile-form-section" aria-labelledby="profile-form-title">
+            <h2 id="profile-form-title" class="section-title">Editar Perfil</h2>
+            <form class="profile-form" id="user-profile-form" aria-label="Formulário de edição de perfil">
+              <!-- PERSONAL INFORMATION FIELDSET -->
+              <fieldset class="form-fieldset">
+                <legend class="form-legend">Informações Pessoais</legend>
+
+                <!-- FULL NAME INPUT -->
+                <div class="form-group">
+                  <label for="profile-fullname" class="form-label">
+                    Nome Completo
+                    <span class="required" aria-label="campo obrigatório">*</span>
+                  </label>
+                  <input type="text" id="profile-fullname" name="fullname" class="form-control text-input"
+                    placeholder="Ex: João da Silva" value="João Calheiros" required
+                    aria-label="Digite seu nome completo" aria-required="true">
+                  <small class="form-hint">Será exibido no seu perfil</small>
+                </div>
+
+                <!-- EMAIL INPUT -->
+                <div class="form-group">
+                  <label for="profile-email" class="form-label">
+                    E-mail
+                    <span class="required" aria-label="campo obrigatório">*</span>
+                  </label>
+                  <input type="email" id="profile-email" name="email" class="form-control email-input"
+                    placeholder="seu.email@empresa.com.br" value="joao.calheiros@empresa.com.br" required
+                    aria-label="Digite seu endereço de e-mail" aria-required="true">
+                  <small class="form-hint">Usado para login e recuperação de senha</small>
+                </div>
+              </fieldset>
+
+              <!-- SECURITY FIELDSET -->
+              <fieldset class="form-fieldset">
+                <legend class="form-legend">Segurança e Senha</legend>
+
+                <!-- CURRENT PASSWORD INPUT -->
+                <div class="form-group">
+                  <label for="profile-current-password" class="form-label">
+                    Senha Atual
+                    <span class="required" aria-label="campo obrigatório">*</span>
+                  </label>
+                  <input type="password" id="profile-current-password" name="current_password" 
+                    class="form-control password-input" placeholder="Digite sua senha atual"
+                    aria-label="Digite sua senha atual para confirmar alterações" aria-required="true">
+                  <small class="form-hint">Necessário para confirmar alterações de segurança</small>
+                </div>
+
+                <!-- NEW PASSWORD INPUT -->
+                <div class="form-group">
+                  <label for="profile-new-password" class="form-label">
+                    Nova Senha (opcional)
+                  </label>
+                  <input type="password" id="profile-new-password" name="new_password" 
+                    class="form-control password-input" placeholder="Deixe em branco para manter a atual"
+                    minlength="8" aria-label="Digite uma nova senha com pelo menos 8 caracteres">
+                  <small class="form-hint">Mínimo 8 caracteres: Letra maiúscula, minúscula, número e caractere especial</small>
+                </div>
+
+                <!-- CONFIRM NEW PASSWORD INPUT -->
+                <div class="form-group">
+                  <label for="profile-confirm-password" class="form-label">
+                    Confirmar Nova Senha
+                  </label>
+                  <input type="password" id="profile-confirm-password" name="confirm_password"
+                    class="form-control password-input" placeholder="Confirme a nova senha">
+                  <small class="form-hint">Deixe em branco se não deseja alterar a senha</small>
+                </div>
+              </fieldset>
+
+              <!-- PREFERENCES FIELDSET -->
+              <fieldset class="form-fieldset">
+                <legend class="form-legend">Preferências</legend>
+
+                <!-- NOTIFICATIONS CHECKBOX -->
+                <div class="form-group checkbox-group">
+                  <input type="checkbox" id="profile-email-notifications" name="email_notifications" 
+                    class="checkbox-input" checked aria-label="Receber notificações por e-mail">
+                  <label for="profile-email-notifications" class="checkbox-label">
+                    Receber notificações importantes por e-mail
+                  </label>
+                </div>
+
+                <!-- ALERTS CHECKBOX -->
+                <div class="form-group checkbox-group">
+                  <input type="checkbox" id="profile-email-alerts" name="email_alerts" 
+                    class="checkbox-input" checked aria-label="Receber alertas de segurança">
+                  <label for="profile-email-alerts" class="checkbox-label">
+                    Receber alertas de segurança e atividades suspeitas
+                  </label>
+                </div>
+
+                <!-- UPDATES CHECKBOX -->
+                <div class="form-group checkbox-group">
+                  <input type="checkbox" id="profile-email-updates" name="email_updates" 
+                    class="checkbox-input" aria-label="Receber atualizações do sistema">
+                  <label for="profile-email-updates" class="checkbox-label">
+                    Receber informações sobre atualizações do sistema
+                  </label>
+                </div>
+              </fieldset>
+
+              <!-- FORM ACTIONS -->
+              <div class="form-actions">
+                <button type="submit" class="btn-primary btn-submit" aria-label="Salvar alterações">
+                  Salvar Alterações
+                </button>
+                <button type="reset" class="btn-secondary btn-reset" aria-label="Descartar alterações">
+                  Cancelar
+                </button>
+              </div>
+            </form>
+          </section>
+
+          <!-- ACCOUNT INFORMATION SECTION -->
+          <section class="account-info-section" aria-labelledby="account-info-title">
+            <h2 id="account-info-title" class="section-title">Informações da Conta</h2>
+            
+            <div class="info-grid">
+              <div class="info-card">
+                <h3 class="info-card-title">Status da Conta</h3>
+                <p class="info-card-value status-active">✓ Ativa</p>
+                <small class="info-card-hint">Sua conta está ativa e funcionando normalmente</small>
+              </div>
+
+              <div class="info-card">
+                <h3 class="info-card-title">Nível de Acesso</h3>
+                <p class="info-card-value role-badge">Administrador de Rede</p>
+                <small class="info-card-hint">Acesso total ao sistema</small>
+              </div>
+
+              <div class="info-card">
+                <h3 class="info-card-title">Último Acesso</h3>
+                <p class="info-card-value">18 de Março, 2026 - 14:30</p>
+                <small class="info-card-hint">Seu último login no sistema</small>
+              </div>
+
+              <div class="info-card">
+                <h3 class="info-card-title">Data de Cadastro</h3>
+                <p class="info-card-value">03 de Janeiro, 2025</p>
+                <small class="info-card-hint">Quando sua conta foi criada</small>
+              </div>
+            </div>
+          </section>
+
+          <!-- SECURITY TIPS SECTION -->
+          <aside class="profile-info" aria-labelledby="security-tips-title">
+            <h3 id="security-tips-title" class="info-title"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shield-check-icon lucide-shield-check"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg> Dicas de Segurança</h3>
+            
+            <section class="info-section">
+              <h4 class="info-subtitle">Protegendo Sua Conta</h4>
+              <ul class="info-list">
+                <li>Use uma senha única e complexa</li>
+                <li>Mude sua senha regularmente</li>
+                <li>Nunca compartilhe sua senha com ninguém</li>
+                <li>Faça logout em dispositivos não confiáveis</li>
+              </ul>
+            </section>
+
+            <section class="info-section">
+              <h4 class="info-subtitle">Notificações</h4>
+              <p class="info-text">
+                Ative as notificações de segurança para ser informado sobre acessos não usuais à sua conta.
+              </p>
+            </section>
+
+            <section class="info-section">
+              <h4 class="info-subtitle">Gerenciamento de Sessão</h4>
+              <p class="info-text">
+                Se notar atividade suspeita, altere sua senha imediatamente e entre em contato com o suporte.
+              </p>
+            </section>
+          </aside>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- DROPDOWN AND FORM FUNCTIONALITY SCRIPT -->
+  <script>
+    const btnRefresh = document.querySelector('.btn-refresh');
+    const btnUser = document.querySelector('.btn-user');
+    const userProfileDropdown = document.getElementById('user-profile-dropdown');
+    const closeProfile = document.getElementById('close-profile');
+    const profileForm = document.getElementById('user-profile-form');
+
+    // Refresh button functionality
+    if (btnRefresh) {
+      btnRefresh.addEventListener('click', function() {
+        location.reload();
+      });
+    }
+
+    // User profile button toggle
+    if (btnUser) {
+      btnUser.addEventListener('click', function(e) {
+        e.preventDefault();
+        userProfileDropdown.style.display = userProfileDropdown.style.display === 'block' ? 'none' : 'block';
+      });
+    }
+
+    // Close profile dropdown
+    if (closeProfile) {
+      closeProfile.addEventListener('click', function() {
+        userProfileDropdown.style.display = 'none';
+      });
+    }
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function(e) {
+      if (!e.target.closest('.header-actions') && !e.target.closest('.user-profile-dropdown')) {
+        userProfileDropdown.style.display = 'none';
+      }
+    });
+
+    // Profile form submission
+    if (profileForm) {
+      profileForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const newPassword = document.getElementById('profile-new-password').value;
+        const confirmPassword = document.getElementById('profile-confirm-password').value;
+        
+        // Validate password confirmation if new password is provided
+        if (newPassword && newPassword !== confirmPassword) {
+          alert('As novas senhas não coincidem. Por favor, tente novamente.');
+          return;
+        }
+        
+        // Simulated form submission
+        alert('Alterações salvadas com sucesso!');
+        // In a real application, send data to server via fetch/axios
+      });
+    }
+  </script>
+</body>
+</html>
