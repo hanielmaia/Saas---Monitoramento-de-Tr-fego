@@ -65,7 +65,7 @@
       <!-- TOP BAR -->
       <header class="top-bar">
         <div class="header-info">
-          <h2 class="page-title neon-title">⚙️ Configurações do Sistema</h2>
+          <h2 class="page-title neon-title"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-settings-icon lucide-settings"><path d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915"/><circle cx="12" cy="12" r="3"/></svg> Configurações do Sistema</h2>
           <span class="page-subtitle">Gerenciar políticas de segurança, monitoramento de rede e retenção de dados</span>
         </div>
         <div class="header-actions">
@@ -101,7 +101,7 @@
       <section class="signup-content">
         <div class="signup-container">
           <section class="config-section">
-            <h2 class="section-title">⚙️ Configurações do Sistema</h2>
+            <h2 class="section-title"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-settings-icon lucide-settings"><path d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915"/><circle cx="12" cy="12" r="3"/></svg> Configurações do Sistema</h2>
             <form class="system-config-form">
               <!-- Network Monitoring -->
               <fieldset class="form-fieldset">
@@ -196,7 +196,7 @@
 
           <!-- SECURITY POLICIES SECTION -->
           <section class="config-section">
-            <h2 class="section-title">🔐 Políticas de Segurança</h2>
+            <h2 class="section-title"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-fingerprint-pattern-icon lucide-fingerprint-pattern"><path d="M12 10a2 2 0 0 0-2 2c0 1.02-.1 2.51-.26 4"/><path d="M14 13.12c0 2.38 0 6.38-1 8.88"/><path d="M17.29 21.02c.12-.6.43-2.3.5-3.02"/><path d="M2 12a10 10 0 0 1 18-6"/><path d="M2 16h.01"/><path d="M21.8 16c.2-2 .131-5.354 0-6"/><path d="M5 19.5C5.5 18 6 15 6 12a6 6 0 0 1 .34-2"/><path d="M8.65 22c.21-.66.45-1.32.57-2"/><path d="M9 6.8a6 6 0 0 1 9 5.2v2"/></svg> Políticas de Segurança</h2>
             <form class="security-policies-form">
               <!-- Password Policy -->
               <fieldset class="form-fieldset">
@@ -260,7 +260,7 @@
               </fieldset>
 
               <div class="form-actions">
-                <button type="submit" class="btn-primary btn-submit">Aplicar Políticas</button>
+                <button type="submit" class="btn-primary btn-submit" >Aplicar Políticas</button>
                 <button type="reset" class="btn-secondary btn-reset">Cancelar</button>
               </div>
             </form>
@@ -270,8 +270,42 @@
     </main>
   </div>
 
+  <!-- CUSTOM MODAL -->
+  <style>
+    @keyframes modal-backdrop-in { from { opacity:0 } to { opacity:1 } }
+    @keyframes modal-card-in { from { opacity:0; transform:scale(.88) translateY(16px) } to { opacity:1; transform:scale(1) translateY(0) } }
+    @keyframes checkmark-pop { 0%{transform:scale(0) rotate(-30deg);opacity:0} 70%{transform:scale(1.25) rotate(4deg)} 100%{transform:scale(1) rotate(0);opacity:1} }
+    #custom-modal.is-open { animation: modal-backdrop-in .22s ease forwards }
+    #custom-modal.is-open .modal-card { animation: modal-card-in .28s cubic-bezier(.34,1.56,.64,1) forwards }
+    #custom-modal.is-open .modal-check { animation: checkmark-pop .4s cubic-bezier(.34,1.56,.64,1) .1s both }
+  </style>
+  <div id="custom-modal" style="display:none; position:fixed; inset:0; z-index:10000; align-items:center; justify-content:center; background:rgba(15,14,23,0.75); backdrop-filter:blur(6px);">
+    <div class="modal-card" style="background:#1a1730; border:1px solid rgba(147,51,234,0.45); border-radius:14px; padding:2rem 2.4rem; max-width:380px; width:90%; box-shadow:0 0 30px rgba(147,51,234,0.35), 0 0 80px rgba(147,51,234,0.1); font-family:'Rajdhani',sans-serif; text-align:center;">
+      <div class="modal-check" style="font-size:2.2rem; margin-bottom:.6rem;">&#10003;</div>
+      <p id="custom-modal-msg" style="color:#e0ddef; font-size:1.1rem; font-weight:500; margin:0 0 1.5rem;"></p>
+      <button id="custom-modal-ok" style="background:linear-gradient(135deg,#9333ea,#22d3ee); border:none; border-radius:8px; color:#fff; font-family:'Orbitron',monospace; font-size:.85rem; font-weight:700; letter-spacing:.08em; padding:.65rem 2rem; cursor:pointer; transition:opacity .2s;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">OK</button>
+    </div>
+  </div>
+
   <!-- CONFIGURATION FORMS FUNCTIONALITY SCRIPT -->
   <script>
+    function showModal(msg) {
+      const modal = document.getElementById('custom-modal');
+      document.getElementById('custom-modal-msg').textContent = msg;
+      modal.style.display = 'flex';
+      // força reflow para a animação rodar toda vez
+      modal.classList.remove('is-open');
+      void modal.offsetWidth;
+      modal.classList.add('is-open');
+      document.getElementById('custom-modal-ok').focus();
+    }
+    document.getElementById('custom-modal-ok').addEventListener('click', () => {
+      document.getElementById('custom-modal').style.display = 'none';
+    });
+    document.getElementById('custom-modal').addEventListener('click', (e) => {
+      if (e.target === e.currentTarget) e.currentTarget.style.display = 'none';
+    });
+
     // Range Input Dynamic Value Display
     const alertThresholdInput = document.getElementById('alert-threshold');
     const thresholdValueDisplay = document.getElementById('threshold-value');
@@ -293,7 +327,7 @@
     if (systemConfigForm) {
       systemConfigForm.addEventListener('submit', (e) => {
         e.preventDefault();
-        alert('Configurações do sistema salvas com sucesso!');
+        showModal('Configurações do sistema salvas com sucesso!');
         // In a real app, send data to server via fetch/axios
       });
     }
@@ -301,7 +335,7 @@
     if (securityPoliciesForm) {
       securityPoliciesForm.addEventListener('submit', (e) => {
         e.preventDefault();
-        alert('Políticas de segurança aplicadas com sucesso!');
+        showModal('Políticas de segurança aplicadas com sucesso!');
         // In a real app, send data to server via fetch/axios
       });
     }

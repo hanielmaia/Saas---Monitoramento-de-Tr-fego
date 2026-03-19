@@ -717,7 +717,7 @@ body::after {
 
 /* ── Form Actions ── */
 .form-actions {
-  display: flex;
+  display: contents;
   align-items: center;
   gap: 0.75rem;
   padding-top: 0.5rem;
