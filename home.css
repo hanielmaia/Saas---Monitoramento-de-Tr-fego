@@ -481,6 +481,18 @@ body::before {
   border-radius: 50%;
   background: var(--neon-red);
 }
+.status-blocked {
+  background: rgba(250, 204, 21, 0.1);
+  color: var(--neon-yellow);
+  border: 1px solid rgba(250, 204, 21, 0.2);
+}
+.status-blocked::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--neon-yellow);
+}
 /* Action buttons */
 .device-actions {
   display: flex;

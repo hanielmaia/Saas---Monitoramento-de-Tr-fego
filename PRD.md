@@ -1,8 +1,8 @@
 # Product Requirement Document (PRD)
 ## N Eyes - Saas Monitoramento de Tráfego de Rede
 
-**Versão:** 1.0  
-**Data:** 2026-03-15  
+**Versão:** 1.1  
+**Data:** 2026-03-18  
 **Projeto:** N Eyes  
 **Status:** Em Desenvolvimento
 
@@ -89,18 +89,27 @@ A equipe responsável pelo desenvolvimento e entrega deste projeto é composta p
   - Status (Online/Offline)
 - [ ] Navegação via sidebar para outras seções
 
-### 5.3 Módulo de Dispositivos (home.html#devices-metric)
-**Descrição:** Gerenciamento e monitoramento de todos os dispositivos da rede.
+### 5.3 Módulo de Dispositivos (devices.html)
+**Descrição:** Página dedicada ao gerenciamento e monitoramento de todos os dispositivos da rede.
 
 **Funcionalidades:**
-- [ ] Lista completa de dispositivos conectados
+- [x] Tabela com 15 dispositivos conectados (Desktop, Laptop, Servidor, Impressora, Mobile, Câmera IP, Switch, VoIP, NAS, Firewall)
+- [x] Informações exibidas por dispositivo:
+  - Endereço IP (192.168.1.101–115)
+  - Nome do dispositivo
+  - Consumo de banda (Mbps)
+  - Status (Online / Offline / Bloqueado)
+- [x] Botão **Bloquear/Desbloquear** funcional:
+  - Modal de confirmação estilizado com ícones contextuais (🔒/🔓 via Lucide SVG)
+  - Alterna status para "Bloqueado" (amarelo) e reverte ao original
+  - Texto do botão atualiza dinamicamente
+- [x] Botão **Renomear** funcional:
+  - Modal com campo de texto pré-preenchido com o nome atual
+  - Validação de campo vazio
+  - Suporte a Enter para confirmar e Escape para cancelar
+  - Atualiza o nome na tabela e os aria-labels dos botões
 - [ ] Filtros por tipo de dispositivo e status
-- [ ] Informações detalhadas:
-  - IP e MAC Address
-  - Tipo de dispositivo
-  - Banda utilizada (download/upload)
-  - Tempo de conexão
-  - Status de atividade
+- [ ] Informações adicionais detalhadas (MAC Address, tempo de conexão)
 
 ### 5.4 Sistema de Logs (logs.html)
 **Descrição:** Registro detalhado de todas as atividades e eventos da rede.
@@ -120,14 +129,25 @@ A equipe responsável pelo desenvolvimento e entrega deste projeto é composta p
 **Descrição:** Central de gerenciamento de preferências e settings da aplicação.
 
 **Funcionalidades:**
-- [ ] Configurações de usuário:
-  - Perfil do usuário
-  - Preferências de interface
-  - Tema (claro/escuro)
+- [x] Configurações de monitoramento de rede:
+  - Limiar de alerta (slider percentual)
+  - Frequência de varredura (1min a 1h)
+  - Quarentena automática de dispositivos suspeitos
+- [x] Política de rede:
+  - Faixa de IP permitida (CIDR)
+  - Portas monitoradas
+- [x] Retenção de dados:
+  - Período de retenção de logs (7 dias a 1 ano)
+  - Arquivamento automático
+- [x] Políticas de segurança:
+  - Política de senhas (comprimento mínimo, maiúsculas, números, caracteres especiais)
+  - Sessões de usuário (duração máxima, tentativas de login, 2FA)
+- [x] Modais customizados estilizados (substituem alert() nativo) com animações suaves:
+  - Fade-in do backdrop com blur
+  - Entrada do card com efeito elástico (scale + translateY)
+  - Animação de pop no ícone de confirmação
 - [ ] Cadastro de novos usuários
 - [ ] Gerenciamento de permissões
-- [ ] Configurações de notificações
-- [ ] Políticas de rede
 
 ### 5.6 Confirmação de Logout (logout-confirm.html)
 - [ ] Formulário de confirmação de logout
@@ -202,15 +222,18 @@ A equipe responsável pelo desenvolvimento e entrega deste projeto é composta p
 - **Linguagem:** HTML5, CSS3, JavaScript
 - **Framework CSS:** Bootstrap 5.3.2
 - **Gráficos:** Chart.js
-- **Ícones:** Emoji/Unicode Symbols
+- **Ícones:** Lucide Icons (SVG inline) + Emoji complementar
 - **Compatibilidade:** Chrome, Firefox, Safari, Edge (versões recentes)
 
 ### 8.2 Arquitetura Frontend
 - Estrutura baseada em páginas HTML distintas:
   - login.html - Autenticação
-  - home.html - Dashboard e Dispositivos
+  - register.html - Cadastro de novos usuários
+  - home.html - Dashboard principal
+  - devices.html - Gerenciamento de dispositivos
   - logs.html - Sistema de Logs
-  - config.html - Configurações
+  - config.html - Configurações do sistema e políticas de segurança
+  - edit-profile.html - Edição de perfil do usuário
   - logout-confirm.html - Confirmação de logout
 - Arquivos CSS separados por página para melhor organização
 - Componentes reutilizáveis (sidebar, top bar, formulários)
@@ -233,7 +256,8 @@ A equipe responsável pelo desenvolvimento e entrega deste projeto é composta p
 Dependências principais:
 - Bootstrap 5.3.2 (via CDN)
 - Chart.js (via CDN)
-- Ícones Emoji nativo do navegador
+- Lucide Icons (SVG inline)
+- Google Fonts: Orbitron + Rajdhani
 
 ---
 
@@ -241,13 +265,14 @@ Dependências principais:
 
 | Fase | Descrição | Status |
 |------|-----------|--------|
-| 1. Estrutura Base | Criar páginas HTML e estilos CSS | Em Progresso |
+| 1. Estrutura Base | Criar páginas HTML e estilos CSS | Concluído |
 | 2. Dashboard | Implementar dashboard com métricas | Em Progresso |
-| 3. Sistema de Logs | Desenvolver página de logs com filtros | Planejado |
-| 4. Configurações | Implementar painel de configurações | Planejado |
-| 5. Backend | Integração com API de dados | Planejado |
-| 6. Testes | Testes de funcionalidade e performance | Planejado |
-| 7. Deploy | Lançamento em produção | Planejado |
+| 3. Dispositivos | Página dedicada com tabela, bloqueio e renomear | Concluído |
+| 4. Sistema de Logs | Desenvolver página de logs com filtros | Em Progresso |
+| 5. Configurações | Painel de configs e políticas de segurança com modais animados | Concluído |
+| 6. Backend | Integração com API de dados | Planejado |
+| 7. Testes | Testes de funcionalidade e performance | Planejado |
+| 8. Deploy | Lançamento em produção | Planejado |
 
 ---
 
