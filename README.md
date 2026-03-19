@@ -4,7 +4,6 @@ Plataforma web de monitoramento de tráfego de rede com foco em visualização o
 
 O projeto foi desenvolvido como trabalho acadêmico para a disciplina de Desenvolvimento Web e apresenta uma interface SaaS voltada para cenários de observabilidade de rede, com navegação entre dashboard, dispositivos, logs, configurações e perfil do usuário.
 
-![Preview da aplicação](preview.png)
 
 ## Visão geral
 
