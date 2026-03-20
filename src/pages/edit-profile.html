@@ -293,60 +293,90 @@
     </main>
   </div>
 
-  <!-- DROPDOWN AND FORM FUNCTIONALITY SCRIPT -->
   <script>
+    const API = 'http://localhost:3000/api';
+    const token = localStorage.getItem('neyes_token');
+    const user = JSON.parse(localStorage.getItem('neyes_user') || '{}');
+
+    // Preencher campos com dados do usuário logado
+    if (user.name) {
+      document.getElementById('profile-fullname').value = user.name;
+      document.querySelector('.profile-user-name')  && (document.querySelector('.profile-user-name').textContent = user.name);
+      document.querySelector('.user-name') && (document.querySelector('.user-name').textContent = user.name);
+    }
+    if (user.email) {
+      document.getElementById('profile-email').value = user.email;
+      document.querySelector('.profile-user-email') && (document.querySelector('.profile-user-email').textContent = user.email);
+      document.querySelector('.user-email') && (document.querySelector('.user-email').textContent = user.email);
+    }
+    if (user.role) {
+      const roleLabel = user.role === 'ADMIN' ? 'Administrador' : 'Usuário';
+      document.querySelector('.user-role') && (document.querySelector('.user-role').textContent = roleLabel);
+      document.querySelector('.profile-user-role') && (document.querySelector('.profile-user-role').textContent = roleLabel);
+    }
+
     const btnRefresh = document.querySelector('.btn-refresh');
     const btnUser = document.querySelector('.btn-user');
     const userProfileDropdown = document.getElementById('user-profile-dropdown');
     const closeProfile = document.getElementById('close-profile');
     const profileForm = document.getElementById('user-profile-form');
 
-    // Refresh button functionality
-    if (btnRefresh) {
-      btnRefresh.addEventListener('click', function() {
-        location.reload();
-      });
-    }
+    if (btnRefresh) btnRefresh.addEventListener('click', () => location.reload());
 
-    // User profile button toggle
     if (btnUser) {
-      btnUser.addEventListener('click', function(e) {
+      btnUser.addEventListener('click', (e) => {
         e.preventDefault();
         userProfileDropdown.style.display = userProfileDropdown.style.display === 'block' ? 'none' : 'block';
       });
     }
 
-    // Close profile dropdown
-    if (closeProfile) {
-      closeProfile.addEventListener('click', function() {
-        userProfileDropdown.style.display = 'none';
-      });
-    }
+    if (closeProfile) closeProfile.addEventListener('click', () => { userProfileDropdown.style.display = 'none'; });
 
-    // Close dropdown when clicking outside
-    document.addEventListener('click', function(e) {
-      if (!e.target.closest('.header-actions') && !e.target.closest('.user-profile-dropdown')) {
-        userProfileDropdown.style.display = 'none';
-      }
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.header-actions')) userProfileDropdown.style.display = 'none';
     });
 
-    // Profile form submission
     if (profileForm) {
-      profileForm.addEventListener('submit', function(e) {
+      profileForm.addEventListener('submit', async (e) => {
         e.preventDefault();
-        
+        const btn = profileForm.querySelector('.btn-submit');
         const newPassword = document.getElementById('profile-new-password').value;
         const confirmPassword = document.getElementById('profile-confirm-password').value;
-        
-        // Validate password confirmation if new password is provided
+
         if (newPassword && newPassword !== confirmPassword) {
-          alert('As novas senhas não coincidem. Por favor, tente novamente.');
+          alert('As novas senhas não coincidem.');
           return;
         }
-        
-        // Simulated form submission
-        alert('Alterações salvadas com sucesso!');
-        // In a real application, send data to server via fetch/axios
+
+        btn.disabled = true;
+        btn.textContent = 'Salvando...';
+
+        const body = {
+          name: document.getElementById('profile-fullname').value.trim(),
+          email: document.getElementById('profile-email').value.trim(),
+        };
+        const currentPassword = document.getElementById('profile-current-password').value;
+        if (currentPassword) body.currentPassword = currentPassword;
+        if (newPassword) body.newPassword = newPassword;
+
+        try {
+          const res = await fetch(`${API}/users/me`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+            body: JSON.stringify(body),
+          });
+          const data = await res.json();
+          if (!res.ok) throw new Error(data.error || 'Erro ao salvar.');
+
+          // Atualizar localStorage com novos dados
+          localStorage.setItem('neyes_user', JSON.stringify({ ...user, ...data.user }));
+          alert('Perfil atualizado com sucesso!');
+          location.reload();
+        } catch (err) {
+          alert(err.message);
+          btn.disabled = false;
+          btn.textContent = 'Salvar Alterações';
+        }
       });
     }
   </script>

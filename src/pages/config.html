@@ -321,22 +321,80 @@
     }
 
     // Form submissions
+    const API = 'http://localhost:3000/api';
+    const token = localStorage.getItem('neyes_token');
+
+    // Carregar configurações salvas do banco ao abrir a página
+    async function loadSettings() {
+      if (!token) return;
+      try {
+        const res = await fetch(`${API}/settings`, { headers: { 'Authorization': `Bearer ${token}` } });
+        if (!res.ok) return;
+        const s = await res.json();
+        if (s.alert_threshold) { alertThresholdInput.value = s.alert_threshold; thresholdValueDisplay.textContent = s.alert_threshold + '%'; }
+        if (s.scan_frequency) document.getElementById('scan-frequency').value = s.scan_frequency;
+        if (s.auto_quarantine !== undefined) document.getElementById('auto-quarantine').checked = s.auto_quarantine === 'true';
+        if (s.allowed_ip_range) document.getElementById('allowed-ip-range').value = s.allowed_ip_range;
+        if (s.monitored_ports) document.getElementById('monitored-ports').value = s.monitored_ports;
+        if (s.log_retention) document.getElementById('log-retention').value = s.log_retention;
+        if (s.auto_archive !== undefined) document.getElementById('auto-archive').checked = s.auto_archive === 'true';
+        if (s.min_password_length) document.getElementById('min-password-length').value = s.min_password_length;
+        if (s.uppercase_required !== undefined) document.getElementById('uppercase-required').checked = s.uppercase_required === 'true';
+        if (s.numbers_required !== undefined) document.getElementById('numbers-required').checked = s.numbers_required === 'true';
+        if (s.special_chars_required !== undefined) document.getElementById('special-chars-required').checked = s.special_chars_required === 'true';
+      } catch {}
+    }
+    loadSettings();
+
     const systemConfigForm = document.querySelector('.system-config-form');
     const securityPoliciesForm = document.querySelector('.security-policies-form');
 
     if (systemConfigForm) {
-      systemConfigForm.addEventListener('submit', (e) => {
+      systemConfigForm.addEventListener('submit', async (e) => {
         e.preventDefault();
-        showModal('Configurações do sistema salvas com sucesso!');
-        // In a real app, send data to server via fetch/axios
+        const btn = systemConfigForm.querySelector('.btn-submit');
+        btn.disabled = true; btn.textContent = 'Salvando...';
+        try {
+          const res = await fetch(`${API}/settings`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+            body: JSON.stringify({
+              alert_threshold: document.getElementById('alert-threshold').value,
+              scan_frequency: document.getElementById('scan-frequency').value,
+              auto_quarantine: document.getElementById('auto-quarantine').checked,
+              allowed_ip_range: document.getElementById('allowed-ip-range').value,
+              monitored_ports: document.getElementById('monitored-ports').value,
+              log_retention: document.getElementById('log-retention').value,
+              auto_archive: document.getElementById('auto-archive').checked,
+            }),
+          });
+          if (!res.ok) throw new Error((await res.json()).error);
+          showModal('Configurações do sistema salvas com sucesso!');
+        } catch (err) { alert(err.message); }
+        btn.disabled = false; btn.textContent = 'Salvar Configurações';
       });
     }
 
     if (securityPoliciesForm) {
-      securityPoliciesForm.addEventListener('submit', (e) => {
+      securityPoliciesForm.addEventListener('submit', async (e) => {
         e.preventDefault();
-        showModal('Políticas de segurança aplicadas com sucesso!');
-        // In a real app, send data to server via fetch/axios
+        const btn = securityPoliciesForm.querySelector('.btn-submit');
+        btn.disabled = true; btn.textContent = 'Salvando...';
+        try {
+          const res = await fetch(`${API}/settings`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+            body: JSON.stringify({
+              min_password_length: document.getElementById('min-password-length').value,
+              uppercase_required: document.getElementById('uppercase-required').checked,
+              numbers_required: document.getElementById('numbers-required').checked,
+              special_chars_required: document.getElementById('special-chars-required').checked,
+            }),
+          });
+          if (!res.ok) throw new Error((await res.json()).error);
+          showModal('Políticas de segurança aplicadas com sucesso!');
+        } catch (err) { alert(err.message); }
+        btn.disabled = false; btn.textContent = 'Salvar Políticas';
       });
     }
   </script>
@@ -373,6 +431,17 @@
         location.reload();
       });
     }
+  </script>
+
+  <script>
+    (function () {
+      const raw = localStorage.getItem('neyes_user');
+      if (!raw) return;
+      const user = JSON.parse(raw);
+      document.querySelectorAll('.user-name').forEach(el => el.textContent = user.name || el.textContent);
+      document.querySelectorAll('.user-email').forEach(el => el.textContent = user.email || el.textContent);
+      document.querySelectorAll('.user-role').forEach(el => el.textContent = user.role === 'ADMIN' ? 'Administrador' : 'Usuário');
+    })();
   </script>
 </body>
 </html>
