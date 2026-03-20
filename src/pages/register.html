@@ -16,20 +16,22 @@
       <p>Crie sua conta</p>
     </section>
 
-    <form class="login-form" action="home.html#dashboard" method="get" aria-label="Formulário de cadastro">
+    <form class="login-form" id="registerForm" aria-label="Formulário de cadastro" novalidate>
       <div>
         <label for="fullname">Nome completo</label>
-        <input type="text" id="fullname" name="fullname" placeholder="Digite seu nome" required>
+        <input type="text" id="fullname" name="fullname" placeholder="Digite seu nome" required autocomplete="name">
       </div>
       <div>
         <label for="email">E-mail</label>
-        <input type="email" id="email" name="email" placeholder="Digite seu e-mail" required>
+        <input type="email" id="email" name="email" placeholder="Digite seu e-mail" required autocomplete="email">
       </div>
       <div>
         <label for="password">Senha</label>
-        <input type="password" id="password" name="password" placeholder="Crie uma senha" required>
+        <input type="password" id="password" name="password" placeholder="Crie uma senha (mín. 6 caracteres)" required autocomplete="new-password" minlength="6">
       </div>
-      <button type="submit">Cadastrar</button>
+      <div id="registerError" class="login-error" role="alert" style="display:none;"></div>
+      <div id="registerSuccess" class="login-success" role="status" style="display:none;"></div>
+      <button type="submit" id="registerBtn">Cadastrar</button>
 
       <p class="login-help">
         Já tem conta? <a href="login.html">Faça login</a> para acessar o painel.
@@ -38,5 +40,47 @@
 
     <p class="login-footer">Painel de monitoramento de rede N Eyes</p>
   </main>
+
+  <script>
+    const API = 'http://localhost:3000/api';
+
+    document.getElementById('registerForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = document.getElementById('registerBtn');
+      const errorEl = document.getElementById('registerError');
+      const successEl = document.getElementById('registerSuccess');
+      const name = document.getElementById('fullname').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+
+      btn.disabled = true;
+      btn.textContent = 'Cadastrando...';
+      errorEl.style.display = 'none';
+      successEl.style.display = 'none';
+
+      try {
+        const res = await fetch(`${API}/auth/register`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, email, password }),
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+          throw new Error(data.error || 'Erro ao criar conta.');
+        }
+
+        successEl.textContent = 'Conta criada! Redirecionando para o login...';
+        successEl.style.display = 'block';
+        setTimeout(() => { window.location.href = 'login.html'; }, 1500);
+      } catch (err) {
+        errorEl.textContent = err.message;
+        errorEl.style.display = 'block';
+        btn.disabled = false;
+        btn.textContent = 'Cadastrar';
+      }
+    });
+  </script>
 </body>
 </html>

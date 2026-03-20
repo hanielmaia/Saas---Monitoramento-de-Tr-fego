@@ -17,16 +17,17 @@
       <p>Acesso ao Sistema</p>
     </section>
 
-    <form class="login-form" action="home.html#dashboard" method="get" aria-label="Formulário de login">
+    <form class="login-form" id="loginForm" aria-label="Formulário de login" novalidate>
       <div>
-        <label for="username">Usuário</label>
-        <input type="text" id="username" name="username" placeholder="Digite seu usuário" required>
+        <label for="email">E-mail</label>
+        <input type="email" id="email" name="email" placeholder="Digite seu e-mail" required autocomplete="email">
       </div>
       <div>
         <label for="password">Senha</label>
-        <input type="password" id="password" name="password" placeholder="Digite sua senha" required>
+        <input type="password" id="password" name="password" placeholder="Digite sua senha" required autocomplete="current-password">
       </div>
-      <button type="submit">Entrar</button>
+      <div id="loginError" class="login-error" role="alert" style="display:none;"></div>
+      <button type="submit" id="loginBtn">Entrar</button>
     </form>
 
       <p class="login-help">
@@ -35,5 +36,44 @@
 
     <p class="login-footer">Painel de monitoramento de rede N Eyes</p>
   </main>
+
+  <script>
+    const API = 'http://localhost:3000/api';
+
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = document.getElementById('loginBtn');
+      const errorEl = document.getElementById('loginError');
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+
+      btn.disabled = true;
+      btn.textContent = 'Entrando...';
+      errorEl.style.display = 'none';
+
+      try {
+        const res = await fetch(`${API}/auth/login`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password }),
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+          throw new Error(data.error || 'Erro ao fazer login.');
+        }
+
+        localStorage.setItem('neyes_token', data.token);
+        localStorage.setItem('neyes_user', JSON.stringify(data.user));
+        window.location.href = 'home.html';
+      } catch (err) {
+        errorEl.textContent = err.message;
+        errorEl.style.display = 'block';
+        btn.disabled = false;
+        btn.textContent = 'Entrar';
+      }
+    });
+  </script>
 </body>
 </html>

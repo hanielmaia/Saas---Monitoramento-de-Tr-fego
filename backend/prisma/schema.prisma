@@ -1,0 +1,127 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String    @id @default(uuid())
+  name         String
+  email        String    @unique
+  passwordHash String    @map("password_hash")
+  role         Role      @default(USER)
+  createdAt    DateTime  @default(now()) @map("created_at")
+  updatedAt    DateTime  @updatedAt @map("updated_at")
+
+  sessions     Session[]
+  logs         Log[]
+
+  @@map("users")
+}
+
+model Session {
+  id        String   @id @default(uuid())
+  userId    String   @map("user_id")
+  token     String   @unique
+  expiresAt DateTime @map("expires_at")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+model Device {
+  id             String       @id @default(uuid())
+  ip             String
+  hostname       String
+  macAddress     String?      @map("mac_address")
+  bandwidthUsage Float        @default(0) @map("bandwidth_usage")
+  status         DeviceStatus @default(ONLINE)
+  blocked        Boolean      @default(false)
+  createdAt      DateTime     @default(now()) @map("created_at")
+  updatedAt      DateTime     @updatedAt @map("updated_at")
+
+  logs Log[]
+
+  @@map("devices")
+}
+
+model Log {
+  id        String    @id @default(uuid())
+  deviceId  String?   @map("device_id")
+  userId    String?   @map("user_id")
+  eventType EventType @map("event_type")
+  severity  Severity  @default(INFO)
+  message   String
+  createdAt DateTime  @default(now()) @map("created_at")
+
+  device Device? @relation(fields: [deviceId], references: [id], onDelete: SetNull)
+  user   User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@map("logs")
+}
+
+model Setting {
+  id                  String   @id @default(uuid())
+  alertThreshold      Int      @default(80) @map("alert_threshold")
+  scanFrequency       Int      @default(5) @map("scan_frequency")
+  quarantineEnabled   Boolean  @default(false) @map("quarantine_enabled")
+  allowedIpRange      String   @default("192.168.1.0/24") @map("allowed_ip_range")
+  monitoredPorts      String   @default("80,443,22,3306") @map("monitored_ports")
+  retentionDays       Int      @default(30) @map("retention_days")
+  autoArchive         Boolean  @default(true) @map("auto_archive")
+  minPasswordLength   Int      @default(8) @map("min_password_length")
+  requireUppercase    Boolean  @default(true) @map("require_uppercase")
+  requireNumbers      Boolean  @default(true) @map("require_numbers")
+  requireSpecialChars Boolean  @default(false) @map("require_special_chars")
+  maxSessionDuration  Int      @default(480) @map("max_session_duration")
+  maxLoginAttempts    Int      @default(5) @map("max_login_attempts")
+  twoFactorEnabled    Boolean  @default(false) @map("two_factor_enabled")
+  updatedAt           DateTime @updatedAt @map("updated_at")
+
+  @@map("settings")
+}
+
+model TrafficSample {
+  id             String   @id @default(uuid())
+  capturedAt     DateTime @default(now()) @map("captured_at")
+  downloadMbps   Float    @map("download_mbps")
+  uploadMbps     Float    @map("upload_mbps")
+  suspiciousScore Float   @default(0) @map("suspicious_score")
+
+  @@map("traffic_samples")
+}
+
+enum Role {
+  ADMIN
+  USER
+}
+
+enum DeviceStatus {
+  ONLINE
+  OFFLINE
+  BLOCKED
+}
+
+enum EventType {
+  CONNECTION
+  DISCONNECTION
+  BLOCK
+  UNBLOCK
+  RENAME
+  LOGIN
+  LOGOUT
+  CONFIG_CHANGE
+  SECURITY_ALERT
+}
+
+enum Severity {
+  INFO
+  WARNING
+  ERROR
+  CRITICAL
+}
