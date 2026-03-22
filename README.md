@@ -9,7 +9,7 @@ O projeto foi desenvolvido como trabalho acadêmico para a disciplina de Desenvo
 
 O N Eyes foi pensado para centralizar, em uma única interface, informações importantes sobre o comportamento da rede. A proposta da aplicação é permitir que o usuário acompanhe indicadores de tráfego, visualize dispositivos ativos, consulte registros de eventos e ajuste políticas operacionais em um painel com linguagem visual consistente.
 
-Atualmente, este repositório representa o front-end estático da solução, com interações locais em JavaScript e dados simulados para demonstrar a experiência do produto.
+O projeto conta hoje com backend próprio em Node.js, API REST com autenticação via JWT, banco de dados PostgreSQL gerenciado pelo Prisma ORM e integração real entre frontend e backend nos fluxos de autenticação, configurações e perfil de usuário.
 
 ## O que a aplicação entrega hoje
 
@@ -19,33 +19,40 @@ Atualmente, este repositório representa o front-end estático da solução, com
 - 🔔 Central de notificações e menu de perfil no topo da interface
 - 🖥️ Página de dispositivos com tabela detalhada e ações de bloqueio/desbloqueio e renomeação
 - 📜 Página de logs com filtros visuais, paginação e organização dos registros
-- ⚙️ Painel administrativo com parâmetros de monitoramento, retenção e políticas de segurança
-- 📝 Tela de edição de perfil do usuário
-- 📁 Fluxos de login, cadastro e confirmação de logout
+- ⚙️ Painel administrativo com parâmetros de monitoramento, retenção e políticas de segurança — integrado à API
+- 📝 Tela de edição de perfil do usuário — integrada à API
+- 📁 Fluxos de login, cadastro e confirmação de logout — integrados à API com JWT e sessões reais
 
 ## Estrutura das telas
 
 ### 1. Autenticação
 
-- `login.html`: acesso ao sistema
-- `register.html`: criação de conta
-- `logout-confirm.html`: confirmação de encerramento de sessão
+- `login.html`: acesso ao sistema — autentica via `POST /api/auth/login` e armazena o token em `localStorage`
+- `register.html`: criação de conta — envia dados para `POST /api/auth/register`
+- `logout-confirm.html`: confirmação de encerramento de sessão — invalida o token no banco via `POST /api/auth/logout`
 
 ### 2. Operação e monitoramento
 
 - `home.html`: dashboard principal com indicadores e visão geral da rede
 - `devices.html`: gestão dos dispositivos conectados
 - `logs.html`: consulta de eventos e registros operacionais
-- `config.html`: configurações administrativas da plataforma
-- `edit-profile.html`: atualização de dados do usuário
+- `config.html`: configurações administrativas da plataforma — lê e salva via `GET/PUT /api/settings`
+- `edit-profile.html`: atualização de dados do usuário — integrada via `PUT /api/users/me`
 
 ## Principais recursos por módulo
+
+### Autenticação e sessão
+
+- Registro e login com validação de senha via bcrypt
+- Emissão de JWT com expiração de 8 horas
+- Sessão persistida no banco de dados para permitir logout real (invalidação de token)
+- Todas as rotas protegidas verificam o token via middleware
 
 ### Dashboard
 
 - Exibe status geral da rede
 - Apresenta métricas principais de tráfego
-- Mostra gráfico com comportamento de uso
+- Mostra gráficos com comportamento de uso e tráfego suspeito
 - Reúne alertas e atalhos para ações rápidas
 
 ### Dispositivos
@@ -62,33 +69,98 @@ Atualmente, este repositório representa o front-end estático da solução, com
 
 ### Configurações
 
-- Centraliza parâmetros de monitoramento de rede
-- Define regras de retenção de logs
-- Reúne políticas de segurança e sessão
+- Centraliza parâmetros de monitoramento de rede (limiar de alerta, frequência de varredura, quarentena, CIDR, portas)
+- Define regras de retenção de logs e arquivamento automático
+- Reúne políticas de segurança e sessão (senha, 2FA, tentativas de login, duração de sessão)
+- Persiste todas as configurações no banco de dados via API
 - Utiliza modais personalizados para feedback de ações
 
 ## Tecnologias utilizadas
 
-- HTML5
-- CSS3
-- JavaScript
+### Frontend
+- HTML5, CSS3, JavaScript
 - Bootstrap 5.3.2
 - Chart.js
 - Lucide Icons
+- Google Fonts (Orbitron, Rajdhani)
+
+### Backend
+- Node.js
+- Express.js
+- Prisma ORM
+- PostgreSQL
+- JSON Web Tokens (JWT)
+- bcrypt
+
+## Estrutura do repositório
+
+```
+├── src/
+│   ├── pages/       # Páginas HTML da interface
+│   ├── styles/      # Arquivos CSS por página
+│   └── public/      # Arquivos públicos estáticos
+└── backend/
+    ├── prisma/      # Schema e migrations do banco de dados
+    └── src/
+        ├── config/        # Configuração do Prisma
+        ├── controllers/   # Lógica de cada rota
+        ├── middlewares/   # Autenticação JWT
+        ├── routes/        # Definição das rotas da API
+        └── services/      # Regras de negócio
+```
 
 ## Como executar
 
-Como o projeto é estático, não há etapa obrigatória de build.
+### Pré-requisitos
 
-1. Clone ou baixe este repositório.
-2. Abra a pasta do projeto no VS Code.
-3. Inicie pela página `login.html` em um navegador.
+- Node.js instalado
+- PostgreSQL em execução
+- Variáveis de ambiente configuradas no arquivo `backend/.env`:
 
-Se preferir uma navegação local mais prática, utilize a extensão Live Server no VS Code para abrir o projeto com recarregamento automático.
+```env
+DATABASE_URL=postgresql://usuario:senha@localhost:5432/n_eyes_db
+JWT_SECRET=sua_chave_secreta
+PORT=3000
+```
+
+### Backend
+
+```bash
+cd backend
+npm install
+npm run prisma:migrate   # cria as tabelas no banco
+npm run dev              # inicia o servidor com hot-reload
+```
+
+O servidor sobe em `http://localhost:3000`. A rota `GET /api/health` confirma que está ativo.
+
+### Frontend
+
+Com o backend em execução, o próprio Express serve o frontend. Acesse `http://localhost:3000` no navegador e você será redirecionado para a tela de login.
+
+Se preferir abrir o frontend separadamente sem o backend, utilize a extensão Live Server no VS Code e inicie pelo arquivo `src/pages/login.html`.
+
+## Scripts disponíveis (backend)
+
+| Script | Descrição |
+|--------|-----------|
+| `npm run dev` | Inicia o servidor com nodemon (hot-reload) |
+| `npm start` | Inicia o servidor em modo produção |
+| `npm stop` | Encerra o processo na porta 3000 |
+| `npm run status` | Verifica se o servidor está respondendo |
+| `npm run prisma:generate` | Gera o Prisma Client |
+| `npm run prisma:migrate` | Executa as migrations no banco |
 
 ## Status do projeto
 
-O projeto está em fase de desenvolvimento do front-end. A interface já demonstra os principais fluxos do produto, mas ainda depende de integração com backend para funcionalidades como autenticação real, persistência de dados, atualização em tempo real e gerenciamento completo de usuários.
+O backend está implementado e integrado aos fluxos de autenticação, configurações e perfil de usuário. As páginas de dispositivos e logs ainda operam com dados simulados no frontend, aguardando a implementação das rotas correspondentes na API.
+
+Próximos passos:
+
+- Integrar a página de dispositivos com a API real
+- Implementar os endpoints de logs com filtros
+- Conectar o dashboard aos dados de `traffic_samples`
+- Implementar a verificação de 2FA
 
 ## Objetivo acadêmico
 
@@ -98,6 +170,7 @@ Este trabalho foi criado para aplicar conceitos de:
 - organização de fluxos de navegação
 - experiência do usuário em sistemas administrativos
 - visualização de dados e monitoramento operacional
+- desenvolvimento de APIs REST com autenticação e persistência de dados
 
 ## Equipe
 
