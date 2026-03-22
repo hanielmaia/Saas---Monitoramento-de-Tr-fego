@@ -379,6 +379,16 @@
         }
       });
     }
+
+    // ── CARREGAR PERFIL DINÂMICO ────────────────────────────────────────────────────────
+    (function () {
+      const raw = localStorage.getItem('neyes_user');
+      if (!raw) return;
+      const user = JSON.parse(raw);
+      document.querySelectorAll('.user-name').forEach(el => el.textContent = user.name || el.textContent);
+      document.querySelectorAll('.user-email').forEach(el => el.textContent = user.email || el.textContent);
+      document.querySelectorAll('.user-role').forEach(el => el.textContent = user.role === 'ADMIN' ? 'Administrador' : 'Usuário');
+    })();
   </script>
 </body>
 </html>
