@@ -1,8 +1,8 @@
 # Product Requirement Document (PRD)
 ## N Eyes - Saas Monitoramento de Tráfego de Rede
 
-**Versão:** 1.1  
-**Data:** 2026-03-18  
+**Versão:** 1.2  
+**Data:** 2026-03-22  
 **Projeto:** N Eyes  
 **Status:** Em Desenvolvimento
 
@@ -65,29 +65,35 @@ A equipe responsável pelo desenvolvimento e entrega deste projeto é composta p
 
 ## 5. Requisitos Funcionais
 
-### 5.1 Autenticação (login.html)
-- [ ] Formulário de login com usuário e senha
-- [ ] Validação de credenciais
-- [ ] Redirecionamento para Dashboard após login
-- [ ] Armazenamento seguro de sessão
-- [ ] Botão de logout com confirmação
+### 5.1 Autenticação
+**Endpoint:** `POST /api/auth/login` | `POST /api/auth/register` | `GET /api/auth/me` | `POST /api/auth/logout`
+
+- [x] Registro de novo usuário com nome, e-mail e senha
+- [x] Login com e-mail e senha — retorna JWT + dados do usuário
+- [x] Validação de credenciais via bcrypt
+- [x] Emissão de JWT com expiração de 8h (assinado com `JWT_SECRET`)
+- [x] Sessão persistida na tabela `sessions` (token + `expires_at`)
+- [x] Middleware de autenticação via Bearer token em todas as rotas protegidas
+- [x] Logout que invalida o token no banco de dados
+- [x] `GET /api/auth/me` retorna perfil do usuário autenticado
+- [x] Frontend armazena token e dados em `localStorage` (`neyes_token`, `neyes_user`)
+- [x] Formulário de login (login.html) com redirecionamento para home.html
+- [x] Tela de confirmação de logout (logout-confirm.html) com limpeza do localStorage
 
 ### 5.2 Dashboard Principal (home.html)
 **Descrição:** Página inicial que fornece uma visão holística do status da rede e dispositivos.
 
 **Funcionalidades:**
-- [ ] Exibição de status geral da rede (Online/Offline)
-- [ ] Cards com métricas em tempo real:
+- [x] Exibição de status geral da rede (Online/Offline)
+- [x] Cards com métricas em tempo real:
   - Download Atual (Mbps)
   - Upload Atual (Mbps)
   - Dispositivos Conectados (quantidade)
-- [ ] Gráfico de tráfego em tempo real com Chart.js (última 1 hora)
-- [ ] Tabela de dispositivos recentes com:
-  - Endereço IP
-  - Nome do Dispositivo
-  - Consumo de Banda (Mbps)
-  - Status (Online/Offline)
-- [ ] Navegação via sidebar para outras seções
+- [x] Dois gráficos de linha com Chart.js: tráfego geral e tráfego malicioso
+- [x] Dropdown de notificações na top bar
+- [x] Dropdown de perfil do usuário populado a partir do `localStorage`
+- [x] Navegação via sidebar para todas as seções
+- [ ] Tabela de dispositivos recentes com IP, nome, banda e status
 
 ### 5.3 Módulo de Dispositivos (devices.html)
 **Descrição:** Página dedicada ao gerenciamento e monitoramento de todos os dispositivos da rede.
@@ -109,50 +115,65 @@ A equipe responsável pelo desenvolvimento e entrega deste projeto é composta p
   - Suporte a Enter para confirmar e Escape para cancelar
   - Atualiza o nome na tabela e os aria-labels dos botões
 - [ ] Filtros por tipo de dispositivo e status
-- [ ] Informações adicionais detalhadas (MAC Address, tempo de conexão)
+- [ ] Integração com API (dados reais do banco)
+- [ ] MAC Address e tempo de conexão
 
 ### 5.4 Sistema de Logs (logs.html)
 **Descrição:** Registro detalhado de todas as atividades e eventos da rede.
 
 **Funcionalidades:**
-- [ ] Logs de conexão/desconexão de dispositivos
-- [ ] Logs de alterações nas configurações
-- [ ] Logs de eventos de segurança
-- [ ] Filtros avançados:
-  - Por data/hora de início e fim
-  - Por tipo de evento
-  - Busca por palavra-chave (dispositivo, usuário, evento)
-- [ ] Atualização de logs em tempo real
-- [ ] Interface responsiva com tabelas filtráveis
+- [x] Interface com tabela de logs e filtros visuais
+- [x] Filtros por palavra-chave, intervalo de datas e tipo de evento
+- [x] Botões de exportação CSV e PDF (UI implementada)
+- [ ] Integração com API para dados reais
+- [ ] Atualização em tempo real
+
+**Tipos de eventos suportados pelo schema:** `CONNECTION`, `DISCONNECTION`, `BLOCK`, `UNBLOCK`, `RENAME`, `LOGIN`, `LOGOUT`, `CONFIG_CHANGE`, `SECURITY_ALERT`  
+**Severidades:** `INFO`, `WARNING`, `ERROR`, `CRITICAL`
 
 ### 5.5 Painel de Configurações (config.html)
-**Descrição:** Central de gerenciamento de preferências e settings da aplicação.
+**Endpoint:** `GET /api/settings` | `PUT /api/settings`
+
+**Descrição:** Central de gerenciamento de preferências e settings — persiste no banco de dados (modelo singleton).
 
 **Funcionalidades:**
-- [x] Configurações de monitoramento de rede:
-  - Limiar de alerta (slider percentual)
-  - Frequência de varredura (1min a 1h)
-  - Quarentena automática de dispositivos suspeitos
-- [x] Política de rede:
-  - Faixa de IP permitida (CIDR)
-  - Portas monitoradas
-- [x] Retenção de dados:
-  - Período de retenção de logs (7 dias a 1 ano)
-  - Arquivamento automático
-- [x] Políticas de segurança:
-  - Política de senhas (comprimento mínimo, maiúsculas, números, caracteres especiais)
-  - Sessões de usuário (duração máxima, tentativas de login, 2FA)
-- [x] Modais customizados estilizados (substituem alert() nativo) com animações suaves:
+- [x] Seção **Monitoramento de Rede:**
+  - Limiar de alerta de banda (slider 0–100%, default 80%)
+  - Frequência de varredura (1min a 1h, default 5min)
+  - Quarentena automática de dispositivos suspeitos (toggle, default off)
+  - Faixa de IP permitida em CIDR (default `192.168.1.0/24`)
+  - Portas monitoradas separadas por vírgula (default `80,443,22,3306`)
+  - Período de retenção de logs (7 dias a 1 ano, default 30 dias)
+  - Arquivamento automático de logs expirados (toggle, default on)
+- [x] Seção **Políticas de Segurança:**
+  - Comprimento mínimo de senha (default 8)
+  - Exigir letra maiúscula (default on)
+  - Exigir número (default on)
+  - Exigir caractere especial (default off)
+  - Duração máxima de sessão em minutos (default 480 = 8h)
+  - Máximo de tentativas de login (default 5)
+  - Autenticação de dois fatores — 2FA (toggle, default off)
+- [x] Modais customizados estilizados (substituem `alert()` nativo) com animações suaves:
   - Fade-in do backdrop com blur
   - Entrada do card com efeito elástico (scale + translateY)
   - Animação de pop no ícone de confirmação
-- [ ] Cadastro de novos usuários
-- [ ] Gerenciamento de permissões
+- [x] Integração real com backend via `GET/PUT /api/settings`
+- [ ] Gerenciamento de usuários e permissões
 
-### 5.6 Confirmação de Logout (logout-confirm.html)
-- [ ] Formulário de confirmação de logout
-- [ ] Botões de Confirmar e Cancelar
-- [ ] Mensagem de despedida
+### 5.6 Edição de Perfil (edit-profile.html)
+**Endpoint:** `PUT /api/users/me`
+
+- [x] Formulário para atualizar nome, e-mail e senha
+- [x] Integração real com backend — persiste no banco de dados
+- [x] Token JWT enviado no header Authorization
+
+### 5.7 Confirmação de Logout (logout-confirm.html)
+**Endpoint:** `POST /api/auth/logout`
+
+- [x] Tela de confirmação antes do logout
+- [x] Chama API para invalidar o token no banco
+- [x] Limpa `localStorage` (`neyes_token`, `neyes_user`) após logout
+- [x] Botões de Confirmar e Cancelar
 
 ---
 
@@ -218,65 +239,221 @@ A equipe responsável pelo desenvolvimento e entrega deste projeto é composta p
 
 ## 8. Stack Técnico
 
-### 8.1 Frontend
-- **Linguagem:** HTML5, CSS3, JavaScript
-- **Framework CSS:** Bootstrap 5.3.2
-- **Gráficos:** Chart.js
-- **Ícones:** Lucide Icons (SVG inline) + Emoji complementar
-- **Compatibilidade:** Chrome, Firefox, Safari, Edge (versões recentes)
+### 8.1 Backend
+| Categoria | Tecnologia | Versão |
+|-----------|------------|--------|
+| Runtime | Node.js | — |
+| Framework | Express.js | ^5.2.1 |
+| ORM | Prisma | ^7.5.0 |
+| Autenticação | JSON Web Tokens (`jsonwebtoken`) | ^9.0.3 |
+| Hash de senha | `bcrypt` | ^6.0.0 |
+| Variáveis de ambiente | `dotenv` | ^17.3.1 |
+| CORS | `cors` | ^2.8.6 |
+| Dev server | `nodemon` | ^3.1.14 |
 
-### 8.2 Arquitetura Frontend
-- Estrutura baseada em páginas HTML distintas:
-  - login.html - Autenticação
-  - register.html - Cadastro de novos usuários
-  - home.html - Dashboard principal
-  - devices.html - Gerenciamento de dispositivos
-  - logs.html - Sistema de Logs
-  - config.html - Configurações do sistema e políticas de segurança
-  - edit-profile.html - Edição de perfil do usuário
-  - logout-confirm.html - Confirmação de logout
-- Arquivos CSS separados por página para melhor organização
-- Componentes reutilizáveis (sidebar, top bar, formulários)
+### 8.2 Banco de Dados
+- **PostgreSQL** via Prisma ORM
+- String de conexão padrão: `postgresql://postgres:neyes2026@localhost:5432/n_eyes_db`
+- Configurável via variável `DATABASE_URL` no `.env`
 
-### 8.3 Padrões e Boas Práticas
-- Uso de semantic HTML (header, nav, main, aside, section)
-- Atributos ARIA para acessibilidade
-- Classes CSS descritivas e consistentes
-- Design responsivo com media queries
+### 8.3 Variáveis de Ambiente (`.env`)
+| Variável | Descrição | Fallback |
+|----------|-----------|----------|
+| `DATABASE_URL` | String de conexão PostgreSQL | `postgresql://postgres:neyes2026@localhost:5432/n_eyes_db` |
+| `JWT_SECRET` | Chave de assinatura do JWT | Nenhum — lança erro se ausente |
+| `PORT` | Porta do servidor HTTP | `3000` |
 
-### 8.4 Dados e Comunicação
-- Integração com API backend (a ser definida)
-- Armazenamento de sessão via localStorage/sessionStorage
-- Gráficos em tempo real com atualização via API ou WebSocket
+### 8.4 Scripts NPM (backend)
+| Script | Comando | Descrição |
+|--------|---------|-----------|
+| `npm run dev` | `nodemon src/server.js` | Servidor com auto-restart |
+| `npm start` | `node src/server.js` | Servidor em produção |
+| `npm stop` | `npx kill-port 3000` | Encerra a porta 3000 |
+| `npm run status` | HTTP check em `:3000/api/health` | Verifica se o servidor está ativo |
+| `npm run prisma:generate` | Gera o Prisma Client | — |
+| `npm run prisma:migrate` | Executa as migrations | — |
+
+### 8.5 Frontend
+| Categoria | Tecnologia |
+|-----------|------------|
+| Markup | HTML5 semântico |
+| Estilização | CSS3 customizado + Bootstrap 5.3.2 (CDN) |
+| Scripting | JavaScript vanilla (inline nas páginas) |
+| Gráficos | Chart.js (CDN) |
+| Ícones | Lucide Icons (SVG inline) |
+| Fontes | Rajdhani, Orbitron (Google Fonts) |
+| Estado | `localStorage` (`neyes_token`, `neyes_user`) |
+
+### 8.6 Arquitetura Geral
+```
+Browser (HTML/CSS/JS Vanilla)
+        │
+        │  HTTP REST (JSON)
+        ▼
+Express.js (Node.js)
+  ├── Middleware: CORS, JSON parser, auth (JWT)
+  ├── Rotas: /api/auth, /api/users, /api/settings, /api/health
+  ├── Serve arquivos estáticos em /src
+  └── Controllers → Services
+        │
+        │  Prisma ORM
+        ▼
+   PostgreSQL
+```
+
+### 8.7 Padrões e Boas Práticas
+- Arquitetura em camadas: Routes → Controllers → Services → Prisma
+- Senhas nunca armazenadas em texto puro (bcrypt)
+- Sessões invalidadas no banco ao fazer logout (token stateful)
+- HTML semântico com atributos ARIA para acessibilidade
+- CSS separado por página para melhor organização
+- Sidebar e top bar reutilizados em todas as páginas internas
 
 ---
 
-## 9. Tecnologias e Dependências
+## 9. Banco de Dados — Modelo de Dados
 
-Dependências principais:
-- Bootstrap 5.3.2 (via CDN)
-- Chart.js (via CDN)
+### 9.1 Tabela `users`
+| Coluna | Tipo | Notas |
+|--------|------|-------|
+| `id` | UUID | PK |
+| `name` | String | — |
+| `email` | String | Único |
+| `password_hash` | String | Hash bcrypt |
+| `role` | Enum `Role` | `USER` \| `ADMIN`, default `USER` |
+| `created_at` | DateTime | Auto |
+| `updated_at` | DateTime | Auto |
+
+### 9.2 Tabela `sessions`
+| Coluna | Tipo | Notas |
+|--------|------|-------|
+| `id` | UUID | PK |
+| `user_id` | UUID | FK → users (cascade delete) |
+| `token` | String | JWT único |
+| `expires_at` | DateTime | Expira em 8h |
+| `created_at` | DateTime | Auto |
+
+### 9.3 Tabela `devices`
+| Coluna | Tipo | Notas |
+|--------|------|-------|
+| `id` | UUID | PK |
+| `ip` | String | — |
+| `hostname` | String | — |
+| `mac_address` | String? | Opcional |
+| `bandwidth_usage` | Float | Default 0 |
+| `status` | Enum `DeviceStatus` | `ONLINE` \| `OFFLINE` \| `BLOCKED` |
+| `blocked` | Boolean | Default false |
+| `created_at` / `updated_at` | DateTime | Auto |
+
+### 9.4 Tabela `logs`
+| Coluna | Tipo | Notas |
+|--------|------|-------|
+| `id` | UUID | PK |
+| `device_id` | UUID? | FK → devices (set null on delete) |
+| `user_id` | UUID? | FK → users (set null on delete) |
+| `event_type` | Enum `EventType` | `CONNECTION`, `DISCONNECTION`, `BLOCK`, `UNBLOCK`, `RENAME`, `LOGIN`, `LOGOUT`, `CONFIG_CHANGE`, `SECURITY_ALERT` |
+| `severity` | Enum `Severity` | `INFO`, `WARNING`, `ERROR`, `CRITICAL` |
+| `message` | String | — |
+| `created_at` | DateTime | Auto |
+
+### 9.5 Tabela `settings` (singleton)
+| Campo | Default | Descrição |
+|-------|---------|-----------|
+| `alert_threshold` | 80 | % banda para disparar alerta |
+| `scan_frequency` | 5 | Minutos entre varreduras |
+| `quarantine_enabled` | false | Quarentena automática |
+| `allowed_ip_range` | `192.168.1.0/24` | CIDR permitida |
+| `monitored_ports` | `80,443,22,3306` | Portas monitoradas |
+| `retention_days` | 30 | Retenção de logs (dias) |
+| `auto_archive` | true | Arquivamento automático |
+| `min_password_length` | 8 | Política de senha |
+| `require_uppercase` | true | Política de senha |
+| `require_numbers` | true | Política de senha |
+| `require_special_chars` | false | Política de senha |
+| `max_session_duration` | 480 | Duração máxima de sessão (min) |
+| `max_login_attempts` | 5 | Tentativas antes do bloqueio |
+| `two_factor_enabled` | false | Toggle de 2FA |
+
+### 9.6 Tabela `traffic_samples`
+| Coluna | Tipo | Notas |
+|--------|------|-------|
+| `id` | UUID | PK |
+| `captured_at` | DateTime | Auto |
+| `download_mbps` | Float | — |
+| `upload_mbps` | Float | — |
+| `suspicious_score` | Float | Default 0 |
+
+---
+
+## 10. API — Endpoints
+
+### Autenticação (`/api/auth`)
+| Método | Rota | Protegida | Descrição |
+|--------|------|-----------|-----------|
+| `POST` | `/api/auth/register` | Não | Cadastro de novo usuário |
+| `POST` | `/api/auth/login` | Não | Login — retorna JWT + usuário |
+| `GET` | `/api/auth/me` | Sim | Perfil do usuário autenticado |
+| `POST` | `/api/auth/logout` | Sim | Invalida sessão no banco |
+
+### Usuários (`/api/users`)
+| Método | Rota | Protegida | Descrição |
+|--------|------|-----------|-----------|
+| `PUT` | `/api/users/me` | Sim | Atualiza nome, e-mail ou senha |
+
+### Configurações (`/api/settings`)
+| Método | Rota | Protegida | Descrição |
+|--------|------|-----------|-----------|
+| `GET` | `/api/settings` | Sim | Busca configurações (auto-cria se não existir) |
+| `PUT` | `/api/settings` | Sim | Salva/atualiza configurações |
+
+### Health Check
+| Método | Rota | Descrição |
+|--------|------|-----------|
+| `GET` | `/api/health` | Retorna `{ status: "ok" }` |
+
+---
+
+## 11. Tecnologias e Dependências
+
+**Backend (npm):**
+- `express` ^5.2.1
+- `@prisma/client` ^7.5.0
+- `prisma` ^7.5.0
+- `jsonwebtoken` ^9.0.3
+- `bcrypt` ^6.0.0
+- `dotenv` ^17.3.1
+- `cors` ^2.8.6
+- `nodemon` ^3.1.14 (dev)
+
+**Frontend (CDN):**
+- Bootstrap 5.3.2
+- Chart.js
 - Lucide Icons (SVG inline)
 - Google Fonts: Orbitron + Rajdhani
 
 ---
 
-## 10. Timeline e Milestones
+## 12. Timeline e Milestones
 
 | Fase | Descrição | Status |
 |------|-----------|--------|
-| 1. Estrutura Base | Criar páginas HTML e estilos CSS | Concluído |
-| 2. Dashboard | Implementar dashboard com métricas | Em Progresso |
-| 3. Dispositivos | Página dedicada com tabela, bloqueio e renomear | Concluído |
-| 4. Sistema de Logs | Desenvolver página de logs com filtros | Em Progresso |
-| 5. Configurações | Painel de configs e políticas de segurança com modais animados | Concluído |
-| 6. Backend | Integração com API de dados | Planejado |
-| 7. Testes | Testes de funcionalidade e performance | Planejado |
-| 8. Deploy | Lançamento em produção | Planejado |
+| 1. Estrutura Base | Criar páginas HTML e estilos CSS | ✅ Concluído |
+| 2. Dashboard | Dashboard com métricas e gráficos Chart.js | ✅ Concluído |
+| 3. Dispositivos | Tabela, bloqueio e renomear com modais | ✅ Concluído |
+| 4. Sistema de Logs | Página de logs com filtros (UI) | ✅ Concluído |
+| 5. Configurações | Painel de configs e políticas com modais animados | ✅ Concluído |
+| 6. Backend — Auth | API REST com JWT, bcrypt, sessões no banco | ✅ Concluído |
+| 7. Backend — Settings | API de configurações integrada ao config.html | ✅ Concluído |
+| 8. Backend — Perfil | API de edição de perfil integrada ao edit-profile.html | ✅ Concluído |
+| 9. Backend — Devices | API de dispositivos com dados reais | 🔄 Planejado |
+| 10. Backend — Logs | API de logs com dados reais e filtros | 🔄 Planejado |
+| 11. Dashboard Real | Integração do dashboard com dados da API e traffic_samples | 🔄 Planejado |
+| 12. Testes | Testes de funcionalidade e performance | 🔄 Planejado |
+| 13. Deploy | Lançamento em produção | 🔄 Planejado |
 
 ---
 
-## 11. Critérios de Sucesso
+## 13. Critérios de Sucesso
 
 - ✅ Interface consistente em todas as páginas
 - ✅ Responsividade em diferentes resoluções
@@ -289,10 +466,13 @@ Dependências principais:
 
 ---
 
-## 12. Notas e Considerações
+## 14. Notas e Considerações
 
 - Priorize a experiência do usuário com interfaces simples e claras
 - Mantenha consistência visual em todas as páginas
 - Documente mudanças significativas no código
 - Teste regularmente em diferentes navegadores e resoluções
 - Implemente melhorias de performance conforme necessário
+- O campo `users.password` referenciado em `users.service.js` deve ser `passwordHash` — corrigir antes de colocar em produção
+- As páginas de Devices e Logs ainda utilizam dados mockados; próximo passo é integrá-las com a API real
+- O 2FA está disponível como toggle de configuração, mas a implementação da verificação ainda não foi feita
