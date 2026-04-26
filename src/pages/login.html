@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,8 +9,9 @@
   <link rel="stylesheet" href="/src/styles/login.css">
   <title>N Eyes - Login</title>
   <link rel="icon" href="/src/public/favicon-32x32.png" type="image/png">
-  
+
 </head>
+
 <body>
   <main class="login-shell" aria-label="Página de login N Eyes">
     <section class="brand">
@@ -24,22 +26,24 @@
       </div>
       <div>
         <label for="password">Senha</label>
-        <input type="password" id="password" name="password" placeholder="Digite sua senha" required autocomplete="current-password">
+        <input type="password" id="password" name="password" placeholder="Digite sua senha" required
+          autocomplete="current-password">
       </div>
       <div id="loginError" class="login-error" role="alert" style="display:none;"></div>
       <button type="submit" id="loginBtn">Entrar</button>
     </form>
 
-      <p class="login-help">
-        Não tem conta? <a href="register.html">Cadastre-se</a> para acessar o painel.
-      </p>
+    <p class="login-help">
+      Não tem conta? <a href="register.html">Cadastre-se</a> para acessar o painel.
+    </p>
 
     <p class="login-footer">Painel de monitoramento de rede N Eyes</p>
   </main>
 
+  <script src="/src/mockData.js"></script>
+  <script src="/src/dataService.js"></script>
   <script>
-    const API = 'http://localhost:3000/api';
-
+    // Login Mockado - Sem dependência de backend
     document.getElementById('loginForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       const btn = document.getElementById('loginBtn');
@@ -52,23 +56,33 @@
       errorEl.style.display = 'none';
 
       try {
-        const res = await fetch(`${API}/auth/login`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email, password }),
-        });
-
-        const data = await res.json();
-
-        if (!res.ok) {
-          throw new Error(data.error || 'Erro ao fazer login.');
+        if (!email || !password) {
+          throw new Error('Email e senha são obrigatórios.');
         }
 
-        localStorage.setItem('neyes_token', data.token);
-        localStorage.setItem('neyes_user', JSON.stringify(data.user));
-        window.location.href = 'home.html';
+        // Autenticação mockada - aceita qualquer email/senha válida
+        const user = dataService.authenticateUser(email, password);
+
+        // Gera token fictício com timestamp
+        const mockToken = 'mock_token_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+
+        // Salva dados no localStorage
+        localStorage.setItem('neyes_token', mockToken);
+        localStorage.setItem('neyes_user', JSON.stringify({
+          id: user.id || 1,
+          name: user.name || 'Usuário',
+          email: user.email,
+          role: user.role || 'USER',
+          department: user.department || 'IT'
+        }));
+
+        // Simula delay de processamento
+        await new Promise(resolve => setTimeout(resolve, 500));
+
+        // Redireciona para dashboard
+        window.location.href = './home.html';
       } catch (err) {
-        errorEl.textContent = err.message;
+        errorEl.textContent = err.message || 'Erro ao fazer login. Tente novamente.';
         errorEl.style.display = 'block';
         btn.disabled = false;
         btn.textContent = 'Entrar';
@@ -76,4 +90,5 @@
     });
   </script>
 </body>
+
 </html>

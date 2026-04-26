@@ -12,6 +12,7 @@
   <!-- Mock Data & Data Service -->
   <script src="/src/mockData.js"></script>
   <script src="/src/dataService.js"></script>
+  <script src="/src/authGuard.js"></script>
 </head>
 
 <body>
@@ -28,7 +29,16 @@
           <li class="nav-item">
             <a href="home.html#dashboard" class="nav-link" aria-label="Ir para Dashboard">
               <span class="icon">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chart-no-axes-combined-icon lucide-chart-no-axes-combined"><path d="M12 16v5"/><path d="M16 14v7"/><path d="M20 10v11"/><path d="m22 3-8.646 8.646a.5.5 0 0 1-.708 0L9.354 8.354a.5.5 0 0 0-.707 0L2 15"/><path d="M4 18v3"/><path d="M8 14v7"/></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                  class="lucide lucide-chart-no-axes-combined-icon lucide-chart-no-axes-combined">
+                  <path d="M12 16v5" />
+                  <path d="M16 14v7" />
+                  <path d="M20 10v11" />
+                  <path d="m22 3-8.646 8.646a.5.5 0 0 1-.708 0L9.354 8.354a.5.5 0 0 0-.707 0L2 15" />
+                  <path d="M4 18v3" />
+                  <path d="M8 14v7" />
+                </svg>
               </span>
               <span class="text">Dashboard</span>
             </a>
@@ -36,7 +46,22 @@
           <li class="nav-item">
             <a href="devices.html" class="nav-link" aria-label="Ir para Dispositivos">
               <span class="icon">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-monitor-cog-icon lucide-monitor-cog"><path d="M12 17v4"/><path d="m14.305 7.53.923-.382"/><path d="m15.228 4.852-.923-.383"/><path d="m16.852 3.228-.383-.924"/><path d="m16.852 8.772-.383.923"/><path d="m19.148 3.228.383-.924"/><path d="m19.53 9.696-.382-.924"/><path d="m20.772 4.852.924-.383"/><path d="m20.772 7.148.924.383"/><path d="M22 13v2a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7"/><path d="M8 21h8"/><circle cx="18" cy="6" r="3"/></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                  class="lucide lucide-monitor-cog-icon lucide-monitor-cog">
+                  <path d="M12 17v4" />
+                  <path d="m14.305 7.53.923-.382" />
+                  <path d="m15.228 4.852-.923-.383" />
+                  <path d="m16.852 3.228-.383-.924" />
+                  <path d="m16.852 8.772-.383.923" />
+                  <path d="m19.148 3.228.383-.924" />
+                  <path d="m19.53 9.696-.382-.924" />
+                  <path d="m20.772 4.852.924-.383" />
+                  <path d="m20.772 7.148.924.383" />
+                  <path d="M22 13v2a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7" />
+                  <path d="M8 21h8" />
+                  <circle cx="18" cy="6" r="3" />
+                </svg>
               </span>
 
               <span class="text">Dispositivos</span>
@@ -45,7 +70,13 @@
           <li class="nav-item">
             <a href="logs.html" class="nav-link active" aria-label="Ir para Logs de Atividades">
               <span class="icon">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-database-icon lucide-database"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5V19A9 3 0 0 0 21 19V5"/><path d="M3 12A9 3 0 0 0 21 12"/></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                  class="lucide lucide-database-icon lucide-database">
+                  <ellipse cx="12" cy="5" rx="9" ry="3" />
+                  <path d="M3 5V19A9 3 0 0 0 21 19V5" />
+                  <path d="M3 12A9 3 0 0 0 21 12" />
+                </svg>
               </span>
 
               <span class="text">Logs</span>
@@ -54,7 +85,13 @@
           <li class="nav-item">
             <a href="config.html" class="nav-link" aria-label="Ir para Configurações">
               <span class="icon">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-settings-icon lucide-settings"><path d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915"/><circle cx="12" cy="12" r="3"/></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                  class="lucide lucide-settings-icon lucide-settings">
+                  <path
+                    d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915" />
+                  <circle cx="12" cy="12" r="3" />
+                </svg>
               </span>
 
               <span class="text">Configurações</span>
@@ -72,12 +109,32 @@
       <!-- TOP BAR -->
       <header class="top-bar">
         <div class="header-info">
-          <h2 class="page-title neon-title"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-scroll-text-icon lucide-scroll-text"><path d="M15 12h-5"/><path d="M15 8h-5"/><path d="M19 17V5a2 2 0 0 0-2-2H4"/><path d="M8 21h12a2 2 0 0 0 2-2v-1a1 1 0 0 0-1-1H11a1 1 0 0 0-1 1v1a2 2 0 1 1-4 0V5a2 2 0 1 0-4 0v2a1 1 0 0 0 1 1h3"/></svg> Logs de Atividades</h2>
+          <h2 class="page-title neon-title"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+              viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round" class="lucide lucide-scroll-text-icon lucide-scroll-text">
+              <path d="M15 12h-5" />
+              <path d="M15 8h-5" />
+              <path d="M19 17V5a2 2 0 0 0-2-2H4" />
+              <path
+                d="M8 21h12a2 2 0 0 0 2-2v-1a1 1 0 0 0-1-1H11a1 1 0 0 0-1 1v1a2 2 0 1 1-4 0V5a2 2 0 1 0-4 0v2a1 1 0 0 0 1 1h3" />
+            </svg> Logs de Atividades</h2>
           <span class="page-subtitle">Histórico de eventos e atividades da rede</span>
         </div>
         <div class="header-actions">
-          <button class="btn-refresh" aria-label="Atualizar logs"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-refresh-ccw-icon lucide-refresh-ccw"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/><path d="M16 16h5v5"/></svg></button>
-          <button class="btn-user" aria-label="Abrir menu de perfil"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user-icon lucide-user"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></button>
+          <button class="btn-refresh" aria-label="Atualizar logs"><svg xmlns="http://www.w3.org/2000/svg" width="24"
+              height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round" class="lucide lucide-refresh-ccw-icon lucide-refresh-ccw">
+              <path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+              <path d="M3 3v5h5" />
+              <path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16" />
+              <path d="M16 16h5v5" />
+            </svg></button>
+          <button class="btn-user" aria-label="Abrir menu de perfil"><svg xmlns="http://www.w3.org/2000/svg" width="24"
+              height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round" class="lucide lucide-user-icon lucide-user">
+              <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+              <circle cx="12" cy="7" r="4" />
+            </svg></button>
 
           <!-- USER PROFILE DROPDOWN -->
           <div class="user-profile-dropdown" id="user-profile-dropdown" style="display: none;">
@@ -87,7 +144,12 @@
             </div>
             <div class="user-profile-content">
               <div class="user-avatar">
-                <span class="avatar-icon"><svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user-icon lucide-user"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>
+                <span class="avatar-icon"><svg xmlns="http://www.w3.org/2000/svg" width="50" height="50"
+                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round" class="lucide lucide-user-icon lucide-user">
+                    <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+                    <circle cx="12" cy="7" r="4" />
+                  </svg></span>
               </div>
               <div class="user-info">
                 <h4 class="user-name">João Calheiros</h4>
@@ -95,10 +157,32 @@
                 <p class="user-role">Administrador de Rede</p>
               </div>
               <div class="user-actions">
-                <a href="edit-profile.html" class="btn-profile-action" style="text-decoration: none; display: block; text-align: center;"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user-pen-icon lucide-user-pen"><path d="M11.5 15H7a4 4 0 0 0-4 4v2"/><path d="M21.378 16.626a1 1 0 0 0-3.004-3.004l-4.01 4.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z"/><circle cx="10" cy="7" r="4"/></svg>  Editar Perfil</a>
-                <a href="config.html" class="btn-profile-action"
-                  <a href="config.html" class="btn-profile-action" style="text-decoration: none; display: block; text-align: center;" ><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-settings-icon lucide-settings"><path d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915"/><circle cx="12" cy="12" r="3"/></svg> Configurações</a>
-                <a href="logout-confirm.html" class="btn-logout-small"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-log-out-icon lucide-log-out"><path d="m16 17 5-5-5-5"/><path d="M21 12H9"/><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/></svg> Sair da conta</a>
+                <a href="edit-profile.html" class="btn-profile-action"
+                  style="text-decoration: none; display: block; text-align: center;"><svg
+                    xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="lucide lucide-user-pen-icon lucide-user-pen">
+                    <path d="M11.5 15H7a4 4 0 0 0-4 4v2" />
+                    <path
+                      d="M21.378 16.626a1 1 0 0 0-3.004-3.004l-4.01 4.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z" />
+                    <circle cx="10" cy="7" r="4" />
+                  </svg> Editar Perfil</a>
+                <a href="config.html" class="btn-profile-action" <a href="config.html" class="btn-profile-action"
+                  style="text-decoration: none; display: block; text-align: center;"><svg
+                    xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="lucide lucide-settings-icon lucide-settings">
+                    <path
+                      d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915" />
+                    <circle cx="12" cy="12" r="3" />
+                  </svg> Configurações</a>
+                <a href="logout-confirm.html" class="btn-logout-small"><svg xmlns="http://www.w3.org/2000/svg"
+                    width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-log-out-icon lucide-log-out">
+                    <path d="m16 17 5-5-5-5" />
+                    <path d="M21 12H9" />
+                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                  </svg> Sair da conta</a>
               </div>
             </div>
           </div>
@@ -170,10 +254,26 @@
             <h2 id="logs-table-title" class="section-title">Registros de Atividades</h2>
             <div class="table-actions">
               <button class="btn-action btn-export-csv" aria-label="Exportar logs em formato CSV">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-up-icon lucide-file-up"><path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"/><path d="M14 2v5a1 1 0 0 0 1 1h5"/><path d="M12 12v6"/><path d="m15 15-3-3-3 3"/></svg> Exportar CSV
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                  class="lucide lucide-file-up-icon lucide-file-up">
+                  <path
+                    d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z" />
+                  <path d="M14 2v5a1 1 0 0 0 1 1h5" />
+                  <path d="M12 12v6" />
+                  <path d="m15 15-3-3-3 3" />
+                </svg> Exportar CSV
               </button>
               <button class="btn-action btn-export-pdf" aria-label="Exportar logs em formato PDF">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-scroll-text-icon lucide-scroll-text"><path d="M15 12h-5"/><path d="M15 8h-5"/><path d="M19 17V5a2 2 0 0 0-2-2H4"/><path d="M8 21h12a2 2 0 0 0 2-2v-1a1 1 0 0 0-1-1H11a1 1 0 0 0-1 1v1a2 2 0 1 1-4 0V5a2 2 0 1 0-4 0v2a1 1 0 0 0 1 1h3"/></svg> Exportar PDF
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                  class="lucide lucide-scroll-text-icon lucide-scroll-text">
+                  <path d="M15 12h-5" />
+                  <path d="M15 8h-5" />
+                  <path d="M19 17V5a2 2 0 0 0-2-2H4" />
+                  <path
+                    d="M8 21h12a2 2 0 0 0 2-2v-1a1 1 0 0 0-1-1H11a1 1 0 0 0-1 1v1a2 2 0 1 1-4 0V5a2 2 0 1 0-4 0v2a1 1 0 0 0 1 1h3" />
+                </svg> Exportar PDF
               </button>
             </div>
           </div>
@@ -197,7 +297,8 @@
                   <td class="log-origin">192.168.1.106 | Notebook-Dev-05</td>
                   <td class="log-details">Dispositivo conectado à rede</td>
                   <td class="log-user">joao.calheiros</td>
-                  <td class="log-severity severity-badge info">ℹ️ Info</td>
+                  <td class="log-severity severity-badge info"
+                    title="Evento de sistema padrão - Operação normal e esperada">ℹ️ Info</td>
                 </tr>
                 <tr class="log-row severity-warning">
                   <td class="log-timestamp">2026-03-13 14:28:12</td>
@@ -205,7 +306,8 @@
                   <td class="log-origin">192.168.1.103 | Servidor-Web-01</td>
                   <td class="log-details">Tentativa de bloqueio - Cancelada</td>
                   <td class="log-user">admin</td>
-                  <td class="log-severity severity-badge warning">⚠️ Aviso</td>
+                  <td class="log-severity severity-badge warning"
+                    title="Aviso importante - Requer atenção do administrador">⚠️ Aviso</td>
                 </tr>
                 <tr class="log-row severity-error">
                   <td class="log-timestamp">2026-03-13 14:15:33</td>
@@ -213,7 +315,8 @@
                   <td class="log-origin">192.168.1.104 | Impressora-Rede-03</td>
                   <td class="log-details">Limite de banda excedido: 450 Mbps</td>
                   <td class="log-user">system</td>
-                  <td class="log-severity severity-badge error">❌ Crítico</td>
+                  <td class="log-severity severity-badge error"
+                    title="Erro crítico - Ação imediata necessária para resolver">❌ Crítico</td>
                 </tr>
                 <tr class="log-row severity-info">
                   <td class="log-timestamp">2026-03-13 14:10:22</td>
@@ -221,7 +324,8 @@
                   <td class="log-origin">192.168.1.101 | Desktop-TI-01</td>
                   <td class="log-details">Limite de banda reduzido para 100 Mbps</td>
                   <td class="log-user">haniel.maia</td>
-                  <td class="log-severity severity-badge info">ℹ️ Info</td>
+                  <td class="log-severity severity-badge info"
+                    title="Evento de sistema padrão - Operação normal e esperada">ℹ️ Info</td>
                 </tr>
                 <tr class="log-row severity-info">
                   <td class="log-timestamp">2026-03-13 14:05:00</td>
@@ -229,7 +333,8 @@
                   <td class="log-origin">192.168.1.107 | Mobile-User-06</td>
                   <td class="log-details">Sessão encerrada</td>
                   <td class="log-user">system</td>
-                  <td class="log-severity severity-badge info">ℹ️ Info</td>
+                  <td class="log-severity severity-badge info"
+                    title="Evento de sistema padrão - Operação normal e esperada">ℹ️ Info</td>
                 </tr>
                 <tr class="log-row severity-warning">
                   <td class="log-timestamp">2026-03-13 13:58:19</td>
@@ -237,7 +342,8 @@
                   <td class="log-origin">192.168.1.102 | Laptop-Equipe-02</td>
                   <td class="log-details">Consumo de banda acima de 50% da capacidade</td>
                   <td class="log-user">system</td>
-                  <td class="log-severity severity-badge warning">⚠️ Aviso</td>
+                  <td class="log-severity severity-badge warning"
+                    title="Aviso importante - Requer atenção do administrador">⚠️ Aviso</td>
                 </tr>
                 <tr class="log-row severity-info">
                   <td class="log-timestamp">2026-03-13 13:45:07</td>
@@ -245,7 +351,8 @@
                   <td class="log-origin">192.168.1.108 | Teste-IP-07</td>
                   <td class="log-details">Dispositivo bloqueado por política de segurança</td>
                   <td class="log-user">kaua.heronides</td>
-                  <td class="log-severity severity-badge warning">⚠️ Aviso</td>
+                  <td class="log-severity severity-badge warning"
+                    title="Aviso importante - Requer atenção do administrador">⚠️ Aviso</td>
                 </tr>
                 <tr class="log-row severity-info">
                   <td class="log-timestamp">2026-03-13 13:30:55</td>
@@ -253,7 +360,8 @@
                   <td class="log-origin">192.168.1.109 | Teste-IP-08</td>
                   <td class="log-details">Dispositivo liberado após análise</td>
                   <td class="log-user">admin</td>
-                  <td class="log-severity severity-badge info">ℹ️ Info</td>
+                  <td class="log-severity severity-badge info"
+                    title="Evento de sistema padrão - Operação normal e esperada">ℹ️ Info</td>
                 </tr>
                 <tr class="log-row severity-warning">
                   <td class="log-timestamp">2026-03-13 13:15:22</td>
@@ -261,7 +369,8 @@
                   <td class="log-origin">192.168.1.110 | Tablet-Vendas-01</td>
                   <td class="log-details">Tráfego suspeito detectado</td>
                   <td class="log-user">system</td>
-                  <td class="log-severity severity-badge warning">⚠️ Aviso</td>
+                  <td class="log-severity severity-badge warning"
+                    title="Aviso importante - Requer atenção do administrador">⚠️ Aviso</td>
                 </tr>
                 <tr class="log-row severity-error">
                   <td class="log-timestamp">2026-03-13 13:05:10</td>
@@ -269,7 +378,8 @@
                   <td class="log-origin">192.168.1.111 | Servidor-BD-02</td>
                   <td class="log-details">Múltiplas tentativas de acesso falhadas</td>
                   <td class="log-user">system</td>
-                  <td class="log-severity severity-badge error">❌ Crítico</td>
+                  <td class="log-severity severity-badge error"
+                    title="Erro crítico - Ação imediata necessária para resolver">❌ Crítico</td>
                 </tr>
                 <tr class="log-row severity-info">
                   <td class="log-timestamp">2026-03-13 12:55:45</td>
@@ -277,7 +387,8 @@
                   <td class="log-origin">192.168.1.112 | Console-Admin-01</td>
                   <td class="log-details">Sessão de administrador iniciada</td>
                   <td class="log-user">maria.silva</td>
-                  <td class="log-severity severity-badge info">ℹ️ Info</td>
+                  <td class="log-severity severity-badge info"
+                    title="Evento de sistema padrão - Operação normal e esperada">ℹ️ Info</td>
                 </tr>
                 <tr class="log-row severity-warning">
                   <td class="log-timestamp">2026-03-13 12:45:33</td>
@@ -285,7 +396,8 @@
                   <td class="log-origin">192.168.1.113 | Teste-IP-09</td>
                   <td class="log-details">Dispositivo bloqueado por inatividade</td>
                   <td class="log-user">admin</td>
-                  <td class="log-severity severity-badge warning">⚠️ Aviso</td>
+                  <td class="log-severity severity-badge warning"
+                    title="Aviso importante - Requer atenção do administrador">⚠️ Aviso</td>
                 </tr>
                 <tr class="log-row severity-info">
                   <td class="log-timestamp">2026-03-13 12:35:20</td>
@@ -301,7 +413,8 @@
                   <td class="log-origin">192.168.1.115 | Mobile-User-07</td>
                   <td class="log-details">Dispositivo desconectado</td>
                   <td class="log-user">system</td>
-                  <td class="log-severity severity-badge info">ℹ️ Info</td>
+                  <td class="log-severity severity-badge info"
+                    title="Evento de sistema padrão - Operação normal e esperada">ℹ️ Info</td>
                 </tr>
                 <tr class="log-row severity-warning">
                   <td class="log-timestamp">2026-03-13 12:15:42</td>
@@ -309,7 +422,8 @@
                   <td class="log-origin">192.168.1.116 | Impressora-Admin-02</td>
                   <td class="log-details">Consumo anormal de banda detectado</td>
                   <td class="log-user">system</td>
-                  <td class="log-severity severity-badge warning">⚠️ Aviso</td>
+                  <td class="log-severity severity-badge warning"
+                    title="Aviso importante - Requer atenção do administrador">⚠️ Aviso</td>
                 </tr>
                 <tr class="log-row severity-info">
                   <td class="log-timestamp">2026-03-13 12:05:15</td>
@@ -540,41 +654,41 @@
     // ════════════════════════════════════════════════════════════════════════════════════════════════
     // PAGINATION FUNCTIONALITY
     // ════════════════════════════════════════════════════════════════════════════════════════════════
-    
+
     const logsPerPage = 8;
     let currentPage = 1;
     const logRows = document.querySelectorAll('.logs-table tbody tr');
     const totalPages = Math.ceil(logRows.length / logsPerPage);
-    
+
     // Set total pages in the UI
     document.getElementById('total-pages').textContent = totalPages;
-    
+
     function displayPage(pageNumber) {
       const startIndex = (pageNumber - 1) * logsPerPage;
       const endIndex = startIndex + logsPerPage;
-      
+
       // Hide all rows
       logRows.forEach(row => {
         row.style.display = 'none';
       });
-      
+
       // Show rows for current page
       for (let i = startIndex; i < endIndex && i < logRows.length; i++) {
         logRows[i].style.display = 'table-row';
       }
-      
+
       // Update current page display
       currentPage = pageNumber;
       document.getElementById('current-page').textContent = currentPage;
-      
+
       // Update button states
       updatePaginationButtons();
     }
-    
+
     function updatePaginationButtons() {
       const prevBtn = document.querySelector('.btn-pagination.prev');
       const nextBtn = document.querySelector('.btn-pagination.next');
-      
+
       // Disable prev button on first page
       if (currentPage === 1) {
         prevBtn.disabled = true;
@@ -585,7 +699,7 @@
         prevBtn.style.opacity = '1';
         prevBtn.style.cursor = 'pointer';
       }
-      
+
       // Disable next button on last page
       if (currentPage === totalPages) {
         nextBtn.disabled = true;
@@ -597,25 +711,25 @@
         nextBtn.style.cursor = 'pointer';
       }
     }
-    
+
     // Get pagination buttons
     const prevBtn = document.querySelector('.btn-pagination.prev');
     const nextBtn = document.querySelector('.btn-pagination.next');
-    
+
     // Previous page button
     prevBtn.addEventListener('click', () => {
       if (currentPage > 1) {
         displayPage(currentPage - 1);
       }
     });
-    
+
     // Next page button
     nextBtn.addEventListener('click', () => {
       if (currentPage < totalPages) {
         displayPage(currentPage + 1);
       }
     });
-    
+
     // Initialize: display first page
     displayPage(1);
   </script>
@@ -734,7 +848,7 @@
     }
 
     // Inicializa a tabela
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
       // Renderiza todos os logs inicialmente
       const allLogs = dataService.getLogs(50);
       renderLogsTable(allLogs);
