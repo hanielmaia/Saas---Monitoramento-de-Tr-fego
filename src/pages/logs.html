@@ -9,6 +9,9 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="/src/styles/logs.css">
   <link rel="icon" href="/src/public/favicon-32x32.png" type="image/png">
+  <!-- Mock Data & Data Service -->
+  <script src="/src/mockData.js"></script>
+  <script src="/src/dataService.js"></script>
 </head>
 
 <body>
@@ -626,6 +629,180 @@
       document.querySelectorAll('.user-email').forEach(el => el.textContent = user.email || el.textContent);
       document.querySelectorAll('.user-role').forEach(el => el.textContent = user.role === 'ADMIN' ? 'Administrador' : 'Usuário');
     })();
+  </script>
+
+  <!-- DYNAMIC LOGS TABLE -->
+  <script>
+    /**
+     * Renderiza a tabela de logs com dados dinâmicos
+     */
+    function renderLogsTable(logs) {
+      const tbody = document.querySelector('.logs-table tbody');
+      if (!tbody) return;
+
+      tbody.innerHTML = '';
+
+      logs.forEach(log => {
+        const row = document.createElement('tr');
+        const severityMap = {
+          'INFO': 'info',
+          'WARNING': 'warning',
+          'ERROR': 'error',
+          'CRITICAL': 'error'
+        };
+        const severityClass = severityMap[log.severity] || 'info';
+        const severityEmoji = {
+          'INFO': 'ℹ️',
+          'WARNING': '⚠️',
+          'ERROR': '❌',
+          'CRITICAL': '❌'
+        };
+        const severityLabel = {
+          'INFO': 'Info',
+          'WARNING': 'Aviso',
+          'ERROR': 'Erro',
+          'CRITICAL': 'Crítico'
+        };
+
+        row.className = `log-row severity-${severityClass}`;
+        row.innerHTML = `
+          <td class="log-timestamp">${formatDateTime(log.timestamp)}</td>
+          <td class="log-event">${formatEventType(log.eventType)}</td>
+          <td class="log-origin">${log.origin}</td>
+          <td class="log-details">${log.details}</td>
+          <td class="log-user">${log.user}</td>
+          <td class="log-severity severity-badge ${severityClass}">${severityEmoji[log.severity] || ''} ${severityLabel[log.severity]}</td>
+        `;
+
+        tbody.appendChild(row);
+      });
+    }
+
+    /**
+     * Formata tipo de evento
+     */
+    function formatEventType(eventType) {
+      const typeMap = {
+        'CONNECTION': 'Conexão',
+        'DISCONNECTION': 'Desconexão',
+        'BLOCK': 'Bloqueio de Dispositivo',
+        'UNBLOCK': 'Liberação de Dispositivo',
+        'RENAME': 'Renomeação',
+        'LOGIN': 'Login',
+        'LOGOUT': 'Logout',
+        'CONFIG_CHANGE': 'Alteração de Configuração',
+        'SECURITY_ALERT': 'Evento de Segurança'
+      };
+      return typeMap[eventType] || eventType;
+    }
+
+    /**
+     * Formata data e hora
+     */
+    function formatDateTime(date) {
+      if (!(date instanceof Date)) {
+        date = new Date(date);
+      }
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      const hours = String(date.getHours()).padStart(2, '0');
+      const minutes = String(date.getMinutes()).padStart(2, '0');
+      const seconds = String(date.getSeconds()).padStart(2, '0');
+      return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+    }
+
+    /**
+     * Aplica filtros aos logs
+     */
+    function applyFilters() {
+      const search = document.getElementById('filter-search').value;
+      const eventType = document.getElementById('filter-event-type').value;
+      const dateStart = document.getElementById('filter-date-start').value;
+      const dateEnd = document.getElementById('filter-date-end').value;
+      const device = document.getElementById('filter-device').value;
+
+      const criteria = {};
+      if (search) criteria.search = search;
+      if (eventType) criteria.eventType = eventType;
+      if (dateStart) criteria.dateStart = dateStart;
+      if (dateEnd) criteria.dateEnd = dateEnd;
+      if (device) criteria.search = (criteria.search || '') + ' ' + device;
+
+      const filteredLogs = dataService.filterLogs(criteria);
+      renderLogsTable(filteredLogs);
+    }
+
+    // Inicializa a tabela
+    document.addEventListener('DOMContentLoaded', function() {
+      // Renderiza todos os logs inicialmente
+      const allLogs = dataService.getLogs(50);
+      renderLogsTable(allLogs);
+
+      // Event listeners para filtros
+      const form = document.getElementById('logs-filters-form');
+      if (form) {
+        form.addEventListener('submit', (e) => {
+          e.preventDefault();
+          applyFilters();
+        });
+
+        form.addEventListener('reset', () => {
+          setTimeout(() => {
+            const allLogs = dataService.getLogs(50);
+            renderLogsTable(allLogs);
+          }, 0);
+        });
+      }
+
+      // Export CSV
+      const btnExportCSV = document.querySelector('.btn-export-csv');
+      if (btnExportCSV) {
+        btnExportCSV.addEventListener('click', () => {
+          const csv = dataService.exportLogsCSV();
+          downloadFile(csv, 'logs_export.csv', 'text/csv');
+        });
+      }
+
+      // Export PDF (simulado - apenas download CSV para demonstração)
+      const btnExportPDF = document.querySelector('.btn-export-pdf');
+      if (btnExportPDF) {
+        btnExportPDF.addEventListener('click', () => {
+          alert('Exportação em PDF seria feita aqui com uma biblioteca como jsPDF.\nPor enquanto, use a exportação CSV.');
+        });
+      }
+
+      // Auto-atualiza logs a cada 30 segundos
+      setInterval(() => {
+        // Adiciona um novo log simulado
+        const eventTypes = ['CONNECTION', 'DISCONNECTION', 'BLOCK', 'UNBLOCK', 'CONFIG_CHANGE'];
+        const randomEvent = eventTypes[Math.floor(Math.random() * eventTypes.length)];
+        dataService.addLog({
+          eventType: randomEvent,
+          origin: `192.168.1.${Math.floor(Math.random() * 255)} | Device-${Math.floor(Math.random() * 100)}`,
+          details: 'Evento simulado durante apresentação',
+          user: 'admin',
+          severity: Math.random() > 0.7 ? 'WARNING' : 'INFO'
+        });
+
+        // Recarrega a tabela
+        const allLogs = dataService.getLogs(50);
+        renderLogsTable(allLogs);
+      }, 30000);
+    });
+
+    /**
+     * Helper para download de arquivo
+     */
+    function downloadFile(content, filename, type) {
+      const element = document.createElement('a');
+      element.setAttribute('href', 'data:' + type + ';charset=utf-8,' + encodeURIComponent(content));
+      element.setAttribute('download', filename);
+      element.style.display = 'none';
+      document.body.appendChild(element);
+      element.click();
+      document.body.removeChild(element);
+    }
   </script>
 </body>
 

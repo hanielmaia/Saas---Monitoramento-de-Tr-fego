@@ -10,6 +10,9 @@
   <link rel="stylesheet" href="/src/styles/home.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <link rel="icon" href="/src/public/favicon-32x32.png" type="image/png">
+  <!-- Mock Data & Data Service -->
+  <script src="/src/mockData.js"></script>
+  <script src="/src/dataService.js"></script>
 </head>
 
 <body>
@@ -477,4 +480,68 @@ document.addEventListener('DOMContentLoaded', function() {
       closeAllDropdowns();
     }
   });
-});</script>
+});
+</script>
+
+<!-- DYNAMIC DATA INTEGRATION -->
+<script>
+  // Função para atualizar métricas do dashboard com dados dinâmicos
+  function updateDashboardMetrics() {
+    const metrics = dataService.getMetrics();
+    
+    // Atualiza card de Download
+    const downloadValue = document.querySelector('#download-metric .metric-value');
+    if (downloadValue) {
+      downloadValue.textContent = metrics.downloadCurrent.toFixed(1);
+    }
+
+    // Atualiza card de Upload
+    const uploadValue = document.querySelector('#upload-metric .metric-value');
+    if (uploadValue) {
+      uploadValue.textContent = metrics.uploadCurrent.toFixed(1);
+    }
+
+    // Atualiza card de Dispositivos Conectados
+    const devicesValue = document.querySelector('#devices-metric .metric-value');
+    if (devicesValue) {
+      devicesValue.textContent = metrics.devicesConnected;
+    }
+  }
+
+  // Função para atualizar gráficos com dados do serviço
+  function updateChartsWithServiceData() {
+    const trafficData = dataService.getTrafficSamples();
+    
+    // Atualiza Gráfico de Tráfego
+    if (trafficChart && trafficData.length > 0) {
+      trafficChart.data.labels = trafficData.map(t => t.time);
+      trafficChart.data.datasets[0].data = trafficData.map(t => t.download);
+      trafficChart.data.datasets[1].data = trafficData.map(t => t.upload);
+      trafficChart.update('none');
+    }
+
+    // Atualiza Gráfico de Tráfego Malicioso
+    if (maliciousTrafficChart && trafficData.length > 0) {
+      maliciousTrafficChart.data.labels = trafficData.map(t => t.time);
+      maliciousTrafficChart.data.datasets[0].data = trafficData.map(t => Math.floor(t.maliciousScore * 3));
+      maliciousTrafficChart.data.datasets[1].data = trafficData.map(t => Math.floor(t.maliciousScore / 2));
+      maliciousTrafficChart.update('none');
+    }
+  }
+
+  // Atualiza métricasinicialmente
+  document.addEventListener('DOMContentLoaded', function() {
+    // Aguarda um pouco para garantir que Chart.js está pronto
+    setTimeout(() => {
+      updateDashboardMetrics();
+      updateChartsWithServiceData();
+    }, 100);
+  });
+
+  // Auto-atualiza a cada 10 segundos
+  setInterval(() => {
+    dataService.updateTrafficSimulation();
+    updateDashboardMetrics();
+    updateChartsWithServiceData();
+  }, 10000);
+</script>

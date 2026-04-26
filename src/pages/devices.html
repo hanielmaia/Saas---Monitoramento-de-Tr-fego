@@ -9,6 +9,9 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="/src/styles/home.css">
   <link rel="icon" href="/src/public/favicon-32x32.png" type="image/png">
+  <!-- Mock Data & Data Service -->
+  <script src="/src/mockData.js"></script>
+  <script src="/src/dataService.js"></script>
 </head>
 
 <body>
@@ -594,6 +597,139 @@
       document.querySelectorAll('.user-email').forEach(el => el.textContent = user.email || el.textContent);
       document.querySelectorAll('.user-role').forEach(el => el.textContent = user.role === 'ADMIN' ? 'Administrador' : 'Usuário');
     })();
+  </script>
+
+  <!-- DYNAMIC DEVICES TABLE -->
+  <script>
+    /**
+     * Renderiza a tabela de dispositivos com dados dinâmicos
+     */
+    function renderDevicesTable() {
+      const tbody = document.querySelector('.devices-table tbody');
+      if (!tbody) return;
+
+      const devices = dataService.getDevices();
+      tbody.innerHTML = '';
+
+      devices.forEach(device => {
+        const row = document.createElement('tr');
+        row.className = 'device-row';
+        row.dataset.deviceId = device.id;
+        row.dataset.blocked = device.blocked ? 'true' : 'false';
+        row.dataset.prevStatus = device.status === 'ONLINE' ? 'Online' : 'Offline';
+
+        const statusClass = device.blocked ? 'status-blocked' : (device.status === 'ONLINE' ? 'status-online' : 'status-offline');
+        const statusText = device.blocked ? 'Bloqueado' : (device.status === 'ONLINE' ? 'Online' : 'Offline');
+        const blockBtnText = device.blocked ? 'Desbloquear' : 'Bloquear';
+
+        row.innerHTML = `
+          <td class="device-ip">${device.ip}</td>
+          <td class="device-name">${device.hostname}</td>
+          <td class="device-bandwidth">${device.bandwidth.toFixed(1)}</td>
+          <td class="device-status ${statusClass}">${statusText}</td>
+          <td class="device-actions">
+            <button class="btn-action btn-action-block" aria-label="Bloquear/Desbloquear dispositivo ${device.hostname}">${blockBtnText}</button>
+            <button class="btn-action btn-action-rename" aria-label="Renomear dispositivo ${device.hostname}">Renomear</button>
+            <button class="btn-action btn-action-delete" aria-label="Deletar dispositivo ${device.hostname}">Deletar</button>
+          </td>
+        `;
+
+        tbody.appendChild(row);
+      });
+
+      // Anexa event listeners para os botões de deletar
+      document.querySelectorAll('.btn-action-delete').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const row = this.closest('tr');
+          const deviceId = parseInt(row.dataset.deviceId);
+          const deviceName = row.querySelector('.device-name').textContent;
+
+          if (confirm(`Tem certeza que deseja deletar o dispositivo "${deviceName}"?`)) {
+            dataService.deleteDevice(deviceId);
+            row.style.animation = 'fadeOut 0.3s ease-out';
+            setTimeout(() => {
+              row.remove();
+              dataService.addNotification('Dispositivo removido', `${deviceName} foi removido da rede`, 'warning');
+            }, 300);
+          }
+        });
+      });
+    }
+
+    /**
+     * Adiciona um novo dispositivo (simulado)
+     */
+    function addNewDevice() {
+      const deviceCount = dataService.getDevices().length;
+      const newHostname = `Device-New-${deviceCount + 1}`;
+      const newIP = `192.168.1.${120 + deviceCount}`;
+
+      dataService.addDevice(newHostname, newIP);
+      renderDevicesTable();
+      dataService.addNotification('Dispositivo adicionado', `${newHostname} foi adicionado à rede`, 'success');
+    }
+
+    // Inicializa a tabela
+    document.addEventListener('DOMContentLoaded', function() {
+      renderDevicesTable();
+
+      // Adiciona botão para simular adição de dispositivos (apenas para apresentação)
+      const header = document.querySelector('.devices-section');
+      if (header) {
+        const addBtn = document.createElement('button');
+        addBtn.className = 'btn-refresh';
+        addBtn.style.marginLeft = '10px';
+        addBtn.innerHTML = '➕ Adicionar Dispositivo';
+        addBtn.title = 'Adicionar um novo dispositivo simulado';
+        addBtn.addEventListener('click', addNewDevice);
+
+        const sectionTitle = header.querySelector('.section-title');
+        if (sectionTitle) {
+          sectionTitle.parentNode.insertBefore(addBtn, sectionTitle.nextSibling);
+        }
+      }
+
+      // Atualiza a tabela a cada 15 segundos (simulação de atualização)
+      setInterval(() => {
+        const tableRows = document.querySelectorAll('.devices-table tbody tr');
+        tableRows.forEach(row => {
+          const deviceId = parseInt(row.dataset.deviceId);
+          const device = dataService.getDevice(deviceId);
+          if (device) {
+            // Atualiza bandwidth com variação
+            device.bandwidth = Math.max(0, device.bandwidth + (Math.random() - 0.5) * 50);
+            row.querySelector('.device-bandwidth').textContent = device.bandwidth.toFixed(1);
+          }
+        });
+      }, 15000);
+    });
+
+    // Adiciona CSS para animação de fade out
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes fadeOut {
+        from { opacity: 1; transform: translateX(0); }
+        to { opacity: 0; transform: translateX(-20px); }
+      }
+      .btn-action-delete {
+        background-color: #ef4444;
+        color: white;
+        padding: 6px 12px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 12px;
+        transition: all 0.2s;
+      }
+      .btn-action-delete:hover {
+        background-color: #dc2626;
+        transform: scale(1.05);
+      }
+      .btn-action-delete:active {
+        transform: scale(0.95);
+      }
+    `;
+    document.head.appendChild(style);
   </script>
 </body>
 
