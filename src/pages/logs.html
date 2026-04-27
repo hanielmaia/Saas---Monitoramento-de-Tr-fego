@@ -627,6 +627,114 @@
       document.querySelectorAll('.user-role').forEach(el => el.textContent = user.role === 'ADMIN' ? 'Administrador' : 'Usuário');
     })();
   </script>
+  
+  <!-- SEVERITY DETAIL PANEL -->
+  <div id="severity-panel" aria-hidden="true">
+    <div class="panel-header">
+      <h3 class="panel-title">Detalhes da Severidade</h3>
+      <button class="panel-close" id="severity-panel-close" aria-label="Fechar">✕</button>
+    </div>
+    <div class="panel-body" id="severity-panel-body">
+      <div class="severity-explanation" id="severity-explanation">Selecione uma severidade para ver a explicação.</div>
+      <div class="field" id="severity-log-info"></div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      const panel = document.getElementById('severity-panel');
+      const explanationEl = document.getElementById('severity-explanation');
+      const infoEl = document.getElementById('severity-log-info');
+      const closeBtn = document.getElementById('severity-panel-close');
+
+      function generateReason(sevKey, row) {
+        const details = (row.querySelector('.log-details')?.textContent || '').toLowerCase();
+        const event = (row.querySelector('.log-event')?.textContent || '').toLowerCase();
+
+        if (sevKey === 'error') {
+          if (details.includes('malware') || details.includes('tentativa') || details.includes('bypass') || event.includes('segurança')) {
+            return 'Log malicioso detectado — possível comprometimento de sistema. Risco: exposição de credenciais ou execução de código. Recomenda-se isolar o host e investigar.';
+          }
+          if (details.includes('ddos') || details.includes('ataque')) {
+            return 'Tráfego malicioso em padrão DDoS detectado — risco de indisponibilidade. Aplicar mitigação e monitorar.';
+          }
+          if (details.includes('certificado') || details.includes('ssl')) {
+            return 'Certificado/SSL com problema detectado — risco de conexões inseguras ou interceptação. Renovar o certificado.';
+          }
+          return 'Erro crítico identificado — investigar imediatamente (motivo fictício gerado).';
+        }
+
+        if (sevKey === 'warning') {
+          if (details.includes('consumo') || details.includes('banda') || details.includes('pico')) {
+            return 'Uso anômalo de banda detectado — possível exfiltração de dados ou atualização massiva; monitorar origem.';
+          }
+          if (details.includes('scann') || details.includes('scanning') || details.includes('scanner')) {
+            return 'Atividade de reconhecimento (scan) detectada — possível reconhecimento de rede por actor malicioso.';
+          }
+          if (details.includes('bloqueado') || event.includes('bloqueio')) {
+            return 'Ação de bloqueio registrada — verificar se foi manual ou automático e se há tentativas repetidas.';
+          }
+          return 'Evento de atenção — revisar logs correlacionados para avaliar impacto.';
+        }
+
+        // info
+        if (details.includes('conect') || event.includes('conex')) {
+          return 'Registro informativo: operação de conexão normal; nenhuma ação necessária.';
+        }
+        return 'Registro informativo; disponível para auditoria.';
+      }
+
+      function showPanel(sevKey, row) {
+        const ts = row.querySelector('.log-timestamp')?.textContent || '';
+        const event = row.querySelector('.log-event')?.textContent || '';
+        const origin = row.querySelector('.log-origin')?.textContent || '';
+        const details = row.querySelector('.log-details')?.textContent || '';
+        const user = row.querySelector('.log-user')?.textContent || '';
+
+        const reason = row.dataset.reason || generateReason(sevKey, row);
+
+        explanationEl.textContent = reason;
+        infoEl.innerHTML = `
+          <div><strong>Timestamp:</strong> ${ts}</div>
+          <div><strong>Evento:</strong> ${event}</div>
+          <div><strong>Origem:</strong> ${origin}</div>
+          <div><strong>Detalhes:</strong> ${details}</div>
+          <div><strong>Usuário:</strong> ${user}</div>
+        `;
+
+        panel.classList.add('visible');
+        panel.setAttribute('aria-hidden', 'false');
+      }
+
+      function hidePanel() {
+        panel.classList.remove('visible');
+        panel.setAttribute('aria-hidden', 'true');
+      }
+
+      // Attach listeners to existing severity badges
+      document.querySelectorAll('.log-severity').forEach(b => {
+        b.addEventListener('click', (e) => {
+          const row = e.target.closest('tr');
+          if (!row) return;
+          const sevKey = row.classList.contains('severity-error') ? 'error' : (row.classList.contains('severity-warning') ? 'warning' : 'info');
+          showPanel(sevKey, row);
+        });
+      });
+
+      // Close button and outside click
+      closeBtn.addEventListener('click', hidePanel);
+      document.addEventListener('click', (e) => {
+        if (!e.target.closest('#severity-panel') && !e.target.closest('.log-severity')) {
+          hidePanel();
+        }
+      });
+
+      // ESC to close
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') hidePanel();
+      });
+    })();
+  </script>
 </body>
 
 </html>
