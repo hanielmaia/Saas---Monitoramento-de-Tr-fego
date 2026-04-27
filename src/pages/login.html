@@ -38,8 +38,7 @@
   </main>
 
   <script>
-    const API = 'http://localhost:3000/api';
-
+    // Modo offline: login mockado sem backend
     document.getElementById('loginForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       const btn = document.getElementById('loginBtn');
@@ -51,28 +50,27 @@
       btn.textContent = 'Entrando...';
       errorEl.style.display = 'none';
 
-      try {
-        const res = await fetch(`${API}/auth/login`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email, password }),
-        });
+      // Simulação de delay
+      await new Promise(r => setTimeout(r, 800));
 
-        const data = await res.json();
-
-        if (!res.ok) {
-          throw new Error(data.error || 'Erro ao fazer login.');
-        }
-
-        localStorage.setItem('neyes_token', data.token);
-        localStorage.setItem('neyes_user', JSON.stringify(data.user));
-        window.location.href = 'home.html';
-      } catch (err) {
-        errorEl.textContent = err.message;
+      // Validação básica
+      if (!email || !password) {
+        errorEl.textContent = 'Por favor, preencha todos os campos.';
         errorEl.style.display = 'block';
         btn.disabled = false;
         btn.textContent = 'Entrar';
+        return;
       }
+
+      // Mockar login (qualquer email/senha válida)
+      localStorage.setItem('neyes_token', 'mock_token_' + Date.now());
+      localStorage.setItem('neyes_user', JSON.stringify({
+        id: 1,
+        name: email.split('@')[0],
+        email: email,
+        role: 'ADMIN'
+      }));
+      window.location.href = 'home.html';
     });
   </script>
 </body>

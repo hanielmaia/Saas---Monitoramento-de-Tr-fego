@@ -320,29 +320,23 @@
       thresholdValueDisplay.textContent = alertThresholdInput.value + '%';
     }
 
-    // Form submissions
-    const API = 'http://localhost:3000/api';
+    // Modo offline: configurações salvas apenas em localStorage
     const token = localStorage.getItem('neyes_token');
 
-    // Carregar configurações salvas do banco ao abrir a página
-    async function loadSettings() {
-      if (!token) return;
-      try {
-        const res = await fetch(`${API}/settings`, { headers: { 'Authorization': `Bearer ${token}` } });
-        if (!res.ok) return;
-        const s = await res.json();
-        if (s.alert_threshold) { alertThresholdInput.value = s.alert_threshold; thresholdValueDisplay.textContent = s.alert_threshold + '%'; }
-        if (s.scan_frequency) document.getElementById('scan-frequency').value = s.scan_frequency;
-        if (s.auto_quarantine !== undefined) document.getElementById('auto-quarantine').checked = s.auto_quarantine === 'true';
-        if (s.allowed_ip_range) document.getElementById('allowed-ip-range').value = s.allowed_ip_range;
-        if (s.monitored_ports) document.getElementById('monitored-ports').value = s.monitored_ports;
-        if (s.log_retention) document.getElementById('log-retention').value = s.log_retention;
-        if (s.auto_archive !== undefined) document.getElementById('auto-archive').checked = s.auto_archive === 'true';
-        if (s.min_password_length) document.getElementById('min-password-length').value = s.min_password_length;
-        if (s.uppercase_required !== undefined) document.getElementById('uppercase-required').checked = s.uppercase_required === 'true';
-        if (s.numbers_required !== undefined) document.getElementById('numbers-required').checked = s.numbers_required === 'true';
-        if (s.special_chars_required !== undefined) document.getElementById('special-chars-required').checked = s.special_chars_required === 'true';
-      } catch {}
+    // Carregar configurações salvas do localStorage
+    function loadSettings() {
+      const settings = JSON.parse(localStorage.getItem('neyes_settings') || '{}');
+      if (settings.alert_threshold) { alertThresholdInput.value = settings.alert_threshold; thresholdValueDisplay.textContent = settings.alert_threshold + '%'; }
+      if (settings.scan_frequency) document.getElementById('scan-frequency').value = settings.scan_frequency;
+      if (settings.auto_quarantine !== undefined) document.getElementById('auto-quarantine').checked = settings.auto_quarantine;
+      if (settings.allowed_ip_range) document.getElementById('allowed-ip-range').value = settings.allowed_ip_range;
+      if (settings.monitored_ports) document.getElementById('monitored-ports').value = settings.monitored_ports;
+      if (settings.log_retention) document.getElementById('log-retention').value = settings.log_retention;
+      if (settings.auto_archive !== undefined) document.getElementById('auto-archive').checked = settings.auto_archive;
+      if (settings.min_password_length) document.getElementById('min-password-length').value = settings.min_password_length;
+      if (settings.uppercase_required !== undefined) document.getElementById('uppercase-required').checked = settings.uppercase_required;
+      if (settings.numbers_required !== undefined) document.getElementById('numbers-required').checked = settings.numbers_required;
+      if (settings.special_chars_required !== undefined) document.getElementById('special-chars-required').checked = settings.special_chars_required;
     }
     loadSettings();
 
@@ -354,23 +348,22 @@
         e.preventDefault();
         const btn = systemConfigForm.querySelector('.btn-submit');
         btn.disabled = true; btn.textContent = 'Salvando...';
-        try {
-          const res = await fetch(`${API}/settings`, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-            body: JSON.stringify({
-              alert_threshold: document.getElementById('alert-threshold').value,
-              scan_frequency: document.getElementById('scan-frequency').value,
-              auto_quarantine: document.getElementById('auto-quarantine').checked,
-              allowed_ip_range: document.getElementById('allowed-ip-range').value,
-              monitored_ports: document.getElementById('monitored-ports').value,
-              log_retention: document.getElementById('log-retention').value,
-              auto_archive: document.getElementById('auto-archive').checked,
-            }),
-          });
-          if (!res.ok) throw new Error((await res.json()).error);
-          showModal('Configurações do sistema salvas com sucesso!');
-        } catch (err) { alert(err.message); }
+        
+        // Simulação de delay
+        await new Promise(r => setTimeout(r, 800));
+        
+        const settings = {
+          alert_threshold: document.getElementById('alert-threshold').value,
+          scan_frequency: document.getElementById('scan-frequency').value,
+          auto_quarantine: document.getElementById('auto-quarantine').checked,
+          allowed_ip_range: document.getElementById('allowed-ip-range').value,
+          monitored_ports: document.getElementById('monitored-ports').value,
+          log_retention: document.getElementById('log-retention').value,
+          auto_archive: document.getElementById('auto-archive').checked,
+        };
+        // Mockar salvamento: atualizar apenas localStorage
+        localStorage.setItem('neyes_settings', JSON.stringify({...JSON.parse(localStorage.getItem('neyes_settings') || '{}'), ...settings}));
+        showModal('Configurações do sistema salvas com sucesso!');
         btn.disabled = false; btn.textContent = 'Salvar Configurações';
       });
     }
@@ -380,20 +373,19 @@
         e.preventDefault();
         const btn = securityPoliciesForm.querySelector('.btn-submit');
         btn.disabled = true; btn.textContent = 'Salvando...';
-        try {
-          const res = await fetch(`${API}/settings`, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-            body: JSON.stringify({
-              min_password_length: document.getElementById('min-password-length').value,
-              uppercase_required: document.getElementById('uppercase-required').checked,
-              numbers_required: document.getElementById('numbers-required').checked,
-              special_chars_required: document.getElementById('special-chars-required').checked,
-            }),
-          });
-          if (!res.ok) throw new Error((await res.json()).error);
-          showModal('Políticas de segurança aplicadas com sucesso!');
-        } catch (err) { alert(err.message); }
+        
+        // Simulação de delay
+        await new Promise(r => setTimeout(r, 800));
+        
+        const settings = {
+          min_password_length: document.getElementById('min-password-length').value,
+          uppercase_required: document.getElementById('uppercase-required').checked,
+          numbers_required: document.getElementById('numbers-required').checked,
+          special_chars_required: document.getElementById('special-chars-required').checked,
+        };
+        // Mockar salvamento: atualizar apenas localStorage
+        localStorage.setItem('neyes_settings', JSON.stringify({...JSON.parse(localStorage.getItem('neyes_settings') || '{}'), ...settings}));
+        showModal('Políticas de segurança aplicadas com sucesso!');
         btn.disabled = false; btn.textContent = 'Salvar Políticas';
       });
     }

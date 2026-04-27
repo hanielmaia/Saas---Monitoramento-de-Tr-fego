@@ -42,8 +42,7 @@
   </main>
 
   <script>
-    const API = 'http://localhost:3000/api';
-
+    // Modo offline: cadastro mockado sem backend
     document.getElementById('registerForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       const btn = document.getElementById('registerBtn');
@@ -58,28 +57,34 @@
       errorEl.style.display = 'none';
       successEl.style.display = 'none';
 
-      try {
-        const res = await fetch(`${API}/auth/register`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ name, email, password }),
-        });
-
-        const data = await res.json();
-
-        if (!res.ok) {
-          throw new Error(data.error || 'Erro ao criar conta.');
-        }
-
-        successEl.textContent = 'Conta criada! Redirecionando para o login...';
-        successEl.style.display = 'block';
-        setTimeout(() => { window.location.href = 'login.html'; }, 1500);
-      } catch (err) {
-        errorEl.textContent = err.message;
+      // Validação básica
+      if (!name || !email || !password) {
+        errorEl.textContent = 'Por favor, preencha todos os campos.';
         errorEl.style.display = 'block';
         btn.disabled = false;
         btn.textContent = 'Cadastrar';
+        return;
       }
+
+      if (password.length < 6) {
+        errorEl.textContent = 'Senha deve ter no mínimo 6 caracteres.';
+        errorEl.style.display = 'block';
+        btn.disabled = false;
+        btn.textContent = 'Cadastrar';
+        return;
+      }
+
+      // Simulação de delay
+      await new Promise(r => setTimeout(r, 1200));
+
+      // Mockar registro (salvar no localStorage para simular cadastro)
+      const users = JSON.parse(localStorage.getItem('neyes_users') || '[]');
+      users.push({ id: users.length + 1, name, email, password });
+      localStorage.setItem('neyes_users', JSON.stringify(users));
+
+      successEl.textContent = 'Conta criada! Redirecionando para o login...';
+      successEl.style.display = 'block';
+      setTimeout(() => { window.location.href = 'login.html'; }, 1500);
     });
   </script>
 </body>

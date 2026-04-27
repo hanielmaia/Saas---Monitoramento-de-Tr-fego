@@ -294,7 +294,7 @@
   </div>
 
   <script>
-    const API = 'http://localhost:3000/api';
+    // Modo offline: usar apenas localStorage
     const token = localStorage.getItem('neyes_token');
     const user = JSON.parse(localStorage.getItem('neyes_user') || '{}');
 
@@ -351,32 +351,19 @@
         btn.disabled = true;
         btn.textContent = 'Salvando...';
 
-        const body = {
+        // Simulação de delay
+        await new Promise(r => setTimeout(r, 800));
+
+        const updatedUser = {
+          ...user,
           name: document.getElementById('profile-fullname').value.trim(),
           email: document.getElementById('profile-email').value.trim(),
         };
-        const currentPassword = document.getElementById('profile-current-password').value;
-        if (currentPassword) body.currentPassword = currentPassword;
-        if (newPassword) body.newPassword = newPassword;
 
-        try {
-          const res = await fetch(`${API}/users/me`, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-            body: JSON.stringify(body),
-          });
-          const data = await res.json();
-          if (!res.ok) throw new Error(data.error || 'Erro ao salvar.');
-
-          // Atualizar localStorage com novos dados
-          localStorage.setItem('neyes_user', JSON.stringify({ ...user, ...data.user }));
-          alert('Perfil atualizado com sucesso!');
-          location.reload();
-        } catch (err) {
-          alert(err.message);
-          btn.disabled = false;
-          btn.textContent = 'Salvar Alterações';
-        }
+        // Mockar salvamento: atualizar apenas localStorage
+        localStorage.setItem('neyes_user', JSON.stringify(updatedUser));
+        alert('Perfil atualizado com sucesso!');
+        location.reload();
       });
     }
 
