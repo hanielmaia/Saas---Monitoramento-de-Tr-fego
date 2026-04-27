@@ -5,6 +5,31 @@
  */
 
 const mockData = {
+  // Usuários Fictícios
+  users: [
+    {
+      id: 1,
+      name: "João Calheiros",
+      email: "joao.calheiros@empresa.com.br",
+      role: "ADMIN",
+      department: "TI"
+    },
+    {
+      id: 2,
+      name: "Maria Silva",
+      email: "maria.silva@empresa.com.br",
+      role: "USER",
+      department: "RH"
+    },
+    {
+      id: 3,
+      name: "Haniel Maia",
+      email: "haniel.maia@empresa.com.br",
+      role: "MODERATOR",
+      department: "TI"
+    }
+  ],
+
   // Dados de Dispositivos
   devices: [
     { id: 1, ip: '192.168.1.101', hostname: 'Desktop-TI-01', bandwidth: 45.2, status: 'ONLINE', blocked: false, lastSeen: new Date(Date.now() - 2 * 60000) },
