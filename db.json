@@ -1,0 +1,229 @@
+{
+    "devices": [
+        {
+            "id": 1,
+            "ip": "192.168.1.100",
+            "hostname": "Laptop-Equipe-01",
+            "status": "Online",
+            "bandwidth": 45.2,
+            "lastSeen": "2026-05-03T14:32:00Z"
+        },
+        {
+            "id": 2,
+            "ip": "192.168.1.101",
+            "hostname": "Laptop-Equipe-02",
+            "status": "Online",
+            "bandwidth": 78.6,
+            "lastSeen": "2026-05-03T14:31:45Z"
+        },
+        {
+            "id": 3,
+            "ip": "192.168.1.102",
+            "hostname": "Servidor-Web-01",
+            "status": "Online",
+            "bandwidth": 234.8,
+            "lastSeen": "2026-05-03T14:33:10Z"
+        },
+        {
+            "id": 4,
+            "ip": "192.168.1.103",
+            "hostname": "Impressora-Rede-03",
+            "status": "Online",
+            "bandwidth": 12.3,
+            "lastSeen": "2026-05-03T14:30:22Z"
+        },
+        {
+            "id": 5,
+            "ip": "192.168.1.104",
+            "hostname": "Mobile-Admin-04",
+            "status": "Offline",
+            "bandwidth": 28.7,
+            "lastSeen": "2026-05-03T13:15:00Z"
+        },
+        {
+            "id": 6,
+            "ip": "192.168.1.105",
+            "hostname": "Laptop-Equipe-05",
+            "status": "Online",
+            "bandwidth": 61.4,
+            "lastSeen": "2026-05-03T14:32:55Z"
+        },
+        {
+            "id": 7,
+            "ip": "192.168.1.106",
+            "hostname": "Servidor-BD-02",
+            "status": "Online",
+            "bandwidth": 312.6,
+            "lastSeen": "2026-05-03T14:33:05Z"
+        },
+        {
+            "id": 8,
+            "ip": "192.168.1.107",
+            "hostname": "Camera-IP-01",
+            "status": "Online",
+            "bandwidth": 8.9,
+            "lastSeen": "2026-05-03T14:32:40Z"
+        },
+        {
+            "id": 9,
+            "ip": "192.168.1.108",
+            "hostname": "Switch-Core-01",
+            "status": "Online",
+            "bandwidth": 489.1,
+            "lastSeen": "2026-05-03T14:33:00Z"
+        },
+        {
+            "id": 10,
+            "ip": "192.168.1.109",
+            "hostname": "Desktop-RH-06",
+            "status": "Offline",
+            "bandwidth": 33.5,
+            "lastSeen": "2026-05-03T12:45:30Z"
+        },
+        {
+            "id": 11,
+            "ip": "192.168.1.110",
+            "hostname": "Firewall-Principal",
+            "status": "Online",
+            "bandwidth": 1250.4,
+            "lastSeen": "2026-05-03T14:33:08Z"
+        }
+    ],
+    "logs": [
+        {
+            "id": 1,
+            "timestamp": "2026-05-03T14:32:15Z",
+            "deviceId": 1,
+            "deviceName": "Laptop-Equipe-01",
+            "message": "Conexão estabelecida",
+            "severity": "info",
+            "type": "connection"
+        },
+        {
+            "id": 2,
+            "timestamp": "2026-05-03T14:31:50Z",
+            "deviceId": 2,
+            "deviceName": "Laptop-Equipe-02",
+            "message": "Consumo de banda acima de 70 Mbps",
+            "severity": "warning",
+            "type": "bandwidth"
+        },
+        {
+            "id": 3,
+            "timestamp": "2026-05-03T14:30:00Z",
+            "deviceId": 3,
+            "deviceName": "Servidor-Web-01",
+            "message": "Consumo crítico: 234.8 Mbps",
+            "severity": "critical",
+            "type": "bandwidth"
+        },
+        {
+            "id": 4,
+            "timestamp": "2026-05-03T14:25:30Z",
+            "deviceId": 5,
+            "deviceName": "Mobile-Admin-04",
+            "message": "Dispositivo desconectado",
+            "severity": "warning",
+            "type": "disconnection"
+        },
+        {
+            "id": 5,
+            "timestamp": "2026-05-03T14:20:12Z",
+            "deviceId": 7,
+            "deviceName": "Servidor-BD-02",
+            "message": "Atividade anormal detectada",
+            "severity": "critical",
+            "type": "security"
+        },
+        {
+            "id": 6,
+            "timestamp": "2026-05-03T14:15:45Z",
+            "deviceId": 1,
+            "deviceName": "Laptop-Equipe-01",
+            "message": "Autenticação bem-sucedida",
+            "severity": "info",
+            "type": "auth"
+        },
+        {
+            "id": 7,
+            "timestamp": "2026-05-03T14:10:22Z",
+            "deviceId": 4,
+            "deviceName": "Impressora-Rede-03",
+            "message": "Impressora pronta para uso",
+            "severity": "info",
+            "type": "status"
+        },
+        {
+            "id": 8,
+            "timestamp": "2026-05-03T14:05:00Z",
+            "deviceId": 9,
+            "deviceName": "Switch-Core-01",
+            "message": "Latência detectada: 45ms",
+            "severity": "warning",
+            "type": "performance"
+        },
+        {
+            "id": 9,
+            "timestamp": "2026-05-03T14:00:33Z",
+            "deviceId": 8,
+            "deviceName": "Camera-IP-01",
+            "message": "Fluxo de vídeo ativo",
+            "severity": "info",
+            "type": "video"
+        },
+        {
+            "id": 10,
+            "timestamp": "2026-05-03T13:55:18Z",
+            "deviceId": 6,
+            "deviceName": "Laptop-Equipe-05",
+            "message": "Update de software completado",
+            "severity": "info",
+            "type": "system"
+        },
+        {
+            "id": 11,
+            "timestamp": "2026-05-03T13:50:45Z",
+            "deviceId": 11,
+            "deviceName": "Firewall-Principal",
+            "message": "Tentativa de acesso bloqueada",
+            "severity": "warning",
+            "type": "security"
+        },
+        {
+            "id": 12,
+            "timestamp": "2026-05-03T13:45:22Z",
+            "deviceId": 3,
+            "deviceName": "Servidor-Web-01",
+            "message": "Backup realizado com sucesso",
+            "severity": "info",
+            "type": "backup"
+        },
+        {
+            "id": 13,
+            "timestamp": "2026-05-03T13:40:10Z",
+            "deviceId": 7,
+            "deviceName": "Servidor-BD-02",
+            "message": "Base de dados sincronizada",
+            "severity": "info",
+            "type": "database"
+        },
+        {
+            "id": 14,
+            "timestamp": "2026-05-03T13:35:55Z",
+            "deviceId": 2,
+            "deviceName": "Laptop-Equipe-02",
+            "message": "VPN conectada com sucesso",
+            "severity": "info",
+            "type": "vpn"
+        },
+        {
+            "id": 15,
+            "timestamp": "2026-05-03T13:30:30Z",
+            "deviceId": 10,
+            "deviceName": "Desktop-RH-06",
+            "message": "Dispositivo offline desde 13:30",
+            "severity": "critical",
+            "type": "disconnection"
+        }
+    ]
+}
