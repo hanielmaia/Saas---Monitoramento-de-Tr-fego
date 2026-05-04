@@ -51,9 +51,9 @@ class DevicesController {
     // Aplicar ordenação
     devices = sortBy(devices, this.currentSort.column, this.currentSort.order);
 
-    // Renderizar linhas
-    tbody.innerHTML = devices.map(device => `
-      <tr class="device-row" data-device-id="${device.id}">
+    // Renderizar linhas com animação escalonada por índice
+    tbody.innerHTML = devices.map((device, idx) => `
+      <tr class="device-row" data-device-id="${device.id}" style="animation-delay: ${600 + idx * 80}ms;">
         <td>
           <strong>${getDeviceIcon(device.type)}</strong>
         </td>
