@@ -11,7 +11,10 @@ class LogsController {
     this.currentFilter = {
       type: 'all',
       severity: 'all',
-      search: ''
+      search: '',
+      device: '', // Filtro por IP ou nome do dispositivo
+      dateStart: '', // Data de início
+      dateEnd: '' // Data de fim
     };
     this.currentSort = { column: 'timestamp', order: 'desc' };
   }
@@ -56,6 +59,25 @@ class LogsController {
         l.deviceIp.toLowerCase().includes(q) ||
         l.message.toLowerCase().includes(q)
       );
+    }
+
+    if (this.currentFilter.device) {
+      const q = this.currentFilter.device.toLowerCase();
+      logs = logs.filter(l => 
+        l.deviceName.toLowerCase().includes(q) ||
+        l.deviceIp.toLowerCase().includes(q)
+      );
+    }
+
+    if (this.currentFilter.dateStart) {
+      const startDate = new Date(this.currentFilter.dateStart).getTime();
+      logs = logs.filter(l => new Date(l.timestamp).getTime() >= startDate);
+    }
+
+    if (this.currentFilter.dateEnd) {
+      const endDate = new Date(this.currentFilter.dateEnd);
+      endDate.setHours(23, 59, 59, 999); // Incluir todo o dia
+      logs = logs.filter(l => new Date(l.timestamp).getTime() <= endDate.getTime());
     }
 
     // Aplicar ordenação
@@ -210,13 +232,43 @@ class LogsController {
     });
 
     // Search input (com debounce)
-    const searchInput = document.getElementById('search-logs');
+    const searchInput = document.getElementById('filter-search');
     if (searchInput) {
       searchInput.addEventListener('input', debounce((e) => {
         this.currentFilter.search = e.target.value;
         this.currentPage = 1;
         this.renderLogs();
       }, 300));
+    }
+
+    // Filtro por dispositivo/IP (com debounce)
+    const deviceFilter = document.getElementById('filter-device');
+    if (deviceFilter) {
+      deviceFilter.addEventListener('input', debounce((e) => {
+        this.currentFilter.device = e.target.value;
+        this.currentPage = 1;
+        this.renderLogs();
+      }, 300));
+    }
+
+    // Filtro por data de início
+    const dateStartFilter = document.getElementById('filter-date-start');
+    if (dateStartFilter) {
+      dateStartFilter.addEventListener('change', (e) => {
+        this.currentFilter.dateStart = e.target.value;
+        this.currentPage = 1;
+        this.renderLogs();
+      });
+    }
+
+    // Filtro por data de fim
+    const dateEndFilter = document.getElementById('filter-date-end');
+    if (dateEndFilter) {
+      dateEndFilter.addEventListener('change', (e) => {
+        this.currentFilter.dateEnd = e.target.value;
+        this.currentPage = 1;
+        this.renderLogs();
+      });
     }
 
     // Escutar eventos de logs
