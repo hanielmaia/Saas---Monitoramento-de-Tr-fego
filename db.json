@@ -225,5 +225,15 @@
             "severity": "critical",
             "type": "disconnection"
         }
-    ]
+    ],
+    "metrics": {
+        "id": 1,
+        "timestamp": "2026-05-04T14:32:00Z",
+        "download": 245.8,
+        "upload": 128.4,
+        "devicesConnected": 9,
+        "activeConnections": 47,
+        "packetLoss": 0.2,
+        "latency": 12.5
+    }
 }

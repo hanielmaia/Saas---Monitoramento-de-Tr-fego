@@ -171,6 +171,20 @@ export async function renameDevice(id, newName) {
     return updateDevice(id, { hostname: newName });
 }
 
+/**
+ * Busca as métricas em tempo real do dashboard
+ * @returns {Promise<Object>} Objeto com métricas (download, upload, devicesConnected, etc)
+ */
+export async function getMetrics() {
+    try {
+        const response = await fetch(`${API_BASE_URL}/metrics`);
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        return await response.json();
+    } catch (error) {
+        handleError('getMetrics', error);
+    }
+}
+
 export default {
     getDevices,
     getDevice,
@@ -181,5 +195,6 @@ export default {
     getTrafficStats,
     blockDevice,
     unblockDevice,
-    renameDevice
+    renameDevice,
+    getMetrics
 };
