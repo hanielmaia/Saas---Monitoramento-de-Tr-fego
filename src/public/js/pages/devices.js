@@ -54,9 +54,6 @@ class DevicesController {
     // Renderizar linhas com animação escalonada por índice
     tbody.innerHTML = devices.map((device, idx) => `
       <tr class="device-row" data-device-id="${device.id}" style="animation-delay: ${600 + idx * 80}ms;">
-        <td>
-          <strong>${getDeviceIcon(device.type)}</strong>
-        </td>
         <td class="device-ip">${device.ip}</td>
         <td class="device-name">${device.name}</td>
         <td class="device-bandwidth">
@@ -73,12 +70,12 @@ class DevicesController {
             <button class="btn-block" 
               title="${device.blocked ? 'Desbloquear' : 'Bloquear'}"
               onclick="devicesController.toggleBlockDevice(${device.id})">
-              ${device.blocked ? '🔓' : '🔒'}
+              ${device.blocked ? 'Desbloquear' : 'Bloquear'}
             </button>
             <button class="btn-rename" 
               title="Renomear"
               onclick="devicesController.openRenameModal(${device.id})">
-              ✏️
+              Renomear
             </button>
           </div>
         </td>

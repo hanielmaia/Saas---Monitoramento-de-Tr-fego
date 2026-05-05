@@ -217,38 +217,72 @@ class LogsController {
       showToast('Logs atualizados', 'info', 2000);
     });
 
-    // Filtro de tipo
+    // Botão Aplicar Filtros
+    document.getElementById('btn-apply-filters')?.addEventListener('click', (e) => {
+      e.preventDefault();
+      // Atualizar valores dos filtros dos inputs
+      this.currentFilter.type = document.getElementById('filter-type')?.value || 'all';
+      this.currentFilter.severity = document.getElementById('filter-severity')?.value || 'all';
+      this.currentFilter.search = document.getElementById('filter-search')?.value || '';
+      this.currentFilter.device = document.getElementById('filter-device')?.value || '';
+      this.currentFilter.dateStart = document.getElementById('filter-date-start')?.value || '';
+      this.currentFilter.dateEnd = document.getElementById('filter-date-end')?.value || '';
+      
+      this.currentPage = 1;
+      this.renderLogs();
+      showToast('Filtros aplicados com sucesso', 'success', 2000);
+    });
+
+    // Botão Limpar Filtros
+    document.getElementById('btn-clear-filters')?.addEventListener('click', (e) => {
+      e.preventDefault();
+      // Resetar todos os valores de filtro
+      this.currentFilter = {
+        type: 'all',
+        severity: 'all',
+        search: '',
+        device: '',
+        dateStart: '',
+        dateEnd: ''
+      };
+      this.currentPage = 1;
+      
+      // Limpar inputs do formulário
+      document.getElementById('filter-search').value = '';
+      document.getElementById('filter-date-start').value = '';
+      document.getElementById('filter-date-end').value = '';
+      document.getElementById('filter-type').value = 'all';
+      document.getElementById('filter-severity').value = 'all';
+      document.getElementById('filter-device').value = '';
+      
+      this.renderLogs();
+      showToast('Filtros removidos', 'info', 2000);
+    });
+
+    // Filtro de tipo - apenas atualiza no objeto, aplicar com botão
     document.getElementById('filter-type')?.addEventListener('change', (e) => {
       this.currentFilter.type = e.target.value;
-      this.currentPage = 1;
-      this.renderLogs();
     });
 
-    // Filtro de severidade
+    // Filtro de severidade - apenas atualiza no objeto, aplicar com botão
     document.getElementById('filter-severity')?.addEventListener('change', (e) => {
       this.currentFilter.severity = e.target.value;
-      this.currentPage = 1;
-      this.renderLogs();
     });
 
-    // Search input (com debounce)
+    // Search input - apenas atualiza no objeto, aplicar com botão
     const searchInput = document.getElementById('filter-search');
     if (searchInput) {
-      searchInput.addEventListener('input', debounce((e) => {
+      searchInput.addEventListener('input', (e) => {
         this.currentFilter.search = e.target.value;
-        this.currentPage = 1;
-        this.renderLogs();
-      }, 300));
+      });
     }
 
-    // Filtro por dispositivo/IP (com debounce)
+    // Filtro por dispositivo/IP - apenas atualiza no objeto, aplicar com botão
     const deviceFilter = document.getElementById('filter-device');
     if (deviceFilter) {
-      deviceFilter.addEventListener('input', debounce((e) => {
+      deviceFilter.addEventListener('input', (e) => {
         this.currentFilter.device = e.target.value;
-        this.currentPage = 1;
-        this.renderLogs();
-      }, 300));
+      });
     }
 
     // Filtro por data de início
@@ -256,8 +290,6 @@ class LogsController {
     if (dateStartFilter) {
       dateStartFilter.addEventListener('change', (e) => {
         this.currentFilter.dateStart = e.target.value;
-        this.currentPage = 1;
-        this.renderLogs();
       });
     }
 
@@ -266,8 +298,6 @@ class LogsController {
     if (dateEndFilter) {
       dateEndFilter.addEventListener('change', (e) => {
         this.currentFilter.dateEnd = e.target.value;
-        this.currentPage = 1;
-        this.renderLogs();
       });
     }
 

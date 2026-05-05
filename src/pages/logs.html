@@ -144,17 +144,19 @@
 
               <!-- Event Type Filter -->
               <div class="filter-group">
-                <label for="filter-event-type" class="filter-label">Tipo de Evento</label>
-                <select id="filter-event-type" name="event_type" class="filter-input select-input"
+                <label for="filter-type" class="filter-label">Tipo de Evento</label>
+                <select id="filter-type" name="type" class="filter-input select-input"
                   aria-label="Selecionar tipo de evento para filtro">
-                  <option value="">Todos os Tipos</option>
-                  <option value="conexao">Conexão</option>
-                  <option value="desconexao">Desconexão</option>
-                  <option value="bloqueio">Bloqueio de Dispositivo</option>
-                  <option value="liberacao">Liberação de Dispositivo</option>
-                  <option value="configuracao">Alteração de Configuração</option>
-                  <option value="seguranca">Evento de Segurança</option>
-                  <option value="alerta">Alerta</option>
+                  <option value="all">Todos os Tipos</option>
+                </select>
+              </div>
+
+              <!-- Severity Filter -->
+              <div class="filter-group">
+                <label for="filter-severity" class="filter-label">Severidade</label>
+                <select id="filter-severity" name="severity" class="filter-input select-input"
+                  aria-label="Selecionar severidade para filtro">
+                  <option value="all">Todas as Severidades</option>
                 </select>
               </div>
 
@@ -167,8 +169,8 @@
             </div>
 
             <div class="filter-actions">
-              <button type="submit" class="btn-primary" aria-label="Aplicar filtros">Aplicar Filtros</button>
-              <button type="reset" class="btn-secondary" aria-label="Limpar todos os filtros">Limpar Filtros</button>
+              <button type="button" class="btn-primary" id="btn-apply-filters" aria-label="Aplicar filtros">Aplicar Filtros</button>
+              <button type="button" class="btn-secondary" id="btn-clear-filters" aria-label="Limpar todos os filtros">Limpar Filtros</button>
             </div>
           </form>
         </section>
