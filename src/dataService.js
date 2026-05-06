@@ -1,242 +1,200 @@
 /**
- * Data Service - N Eyes
- * Camada de serviço para gerenciar dados mockados
- * Fornece interface consistente de acesso aos dados
+ * Data Service Layer - N Eyes
+ * Centraliza todas as requisições à API usando Fetch API
+ * Segue o padrão ES6 Modules (ESM) com import/export
  */
 
-class DataService {
-  constructor() {
-    // Inicializa dados em memória a partir do mockData
-    if (typeof mockData !== 'undefined') {
-      this.devices = [...mockData.devices];
-      this.logs = [...mockData.logs];
-      this.users = [...mockData.users];
-      this.settings = { ...mockData.settings };
-    } else {
-      console.error('mockData não carregado. Verifique se mockData.js foi incluído.');
-    }
-  }
+const API_BASE_URL = 'http://localhost:8000/api';
 
-  // ========== AUTENTICAÇÃO ==========
-
-  /**
-   * Autentica usuário com mock data
-   */
-  authenticateUser(email, password) {
-    if (!email || !password) {
-      throw new Error('Email e senha são obrigatórios');
-    }
-
-    // Busca usuário no mock data
-    const user = this.users.find(u => u.email.toLowerCase() === email.toLowerCase());
-
-    if (user) {
-      return { ...user };
-    }
-
-    // Se não encontrado, cria usuário fictício com os dados fornecidos
-    return {
-      id: Math.random(),
-      name: email.split('@')[0].replace(/[._-]/g, ' '),
-      email: email,
-      role: 'USER',
-      department: 'IT'
+/**
+ * Tratamento centralizado de erros
+ * @param {string} operation - Nome da operação para logging
+ * @param {Error} error - Erro capturado
+ */
+function handleError(operation, error) {
+    console.error(`[${operation}] Erro:`, error.message);
+    throw {
+        operation,
+        message: error.message,
+        status: error.status || 'unknown'
     };
-  }
-
-  // ========== DISPOSITIVOS ==========
-
-  /**
-   * Retorna todos os dispositivos
-   */
-  getDevices() {
-    return this.devices;
-  }
-
-  /**
-   * Retorna um dispositivo específico
-   */
-  getDevice(id) {
-    return this.devices.find(d => d.id === id);
-  }
-
-  /**
-   * Adiciona um novo dispositivo
-   */
-  addDevice(hostname, ip) {
-    const newDevice = {
-      id: this.devices.length > 0 ? Math.max(...this.devices.map(d => d.id)) + 1 : 1,
-      ip: ip || `192.168.1.${120 + this.devices.length}`,
-      name: hostname || `Device-${Date.now()}`,
-      type: 'PC',
-      status: 'online',
-      bandwidth: Math.round(Math.random() * 300) + ' Mbps',
-      lastSeen: new Date().toLocaleString('pt-BR'),
-      owner: 'admin'
-    };
-    this.devices.push(newDevice);
-
-    // Registra evento de conexão no log
-    this.addLog({
-      eventType: 'Conexão',
-      source: `${newDevice.ip} | ${newDevice.name}`,
-      details: 'Novo dispositivo adicionado (simulação)',
-      user: 'admin',
-      severity: 'INFO'
-    });
-
-    return newDevice;
-  }
-
-  /**
-   * Remove um dispositivo
-   */
-  deleteDevice(id) {
-    const index = this.devices.findIndex(d => d.id === id);
-    if (index > -1) {
-      const device = this.devices[index];
-      this.devices.splice(index, 1);
-
-      // Registra evento de desconexão no log
-      this.addLog({
-        eventType: 'Desconexão',
-        source: `${device.ip} | ${device.name}`,
-        details: 'Dispositivo removido (simulação)',
-        user: 'admin',
-        severity: 'INFO'
-      });
-
-      return true;
-    }
-    return false;
-  }
-
-  /**
-   * Atualiza um dispositivo
-   */
-  updateDevice(id, updates) {
-    const device = this.devices.find(d => d.id === id);
-    if (device) {
-      Object.assign(device, updates, { lastSeen: new Date().toLocaleString('pt-BR') });
-      return device;
-    }
-    return null;
-  }
-
-  /**
-   * Altera status de um dispositivo
-   */
-  toggleDeviceStatus(id) {
-    const device = this.getDevice(id);
-    if (device) {
-      device.status = device.status === 'online' ? 'offline' : 'online';
-      device.lastSeen = new Date().toLocaleString('pt-BR');
-      return device;
-    }
-    return null;
-  }
-
-  // ========== LOGS ==========
-
-  /**
-   * Retorna todos os logs
-   */
-  getLogs() {
-    return this.logs;
-  }
-
-  /**
-   * Filtra logs por critérios
-   */
-  filterLogs(criteria = {}) {
-    let filtered = [...this.logs];
-
-    if (criteria.severity) {
-      filtered = filtered.filter(log => log.severity === criteria.severity);
-    }
-
-    if (criteria.search) {
-      const search = criteria.search.toLowerCase();
-      filtered = filtered.filter(log =>
-        (log.source && log.source.toLowerCase().includes(search)) ||
-        (log.details && log.details.toLowerCase().includes(search)) ||
-        (log.user && log.user.toLowerCase().includes(search))
-      );
-    }
-
-    if (criteria.dateStart) {
-      filtered = filtered.filter(log => log.timestamp >= criteria.dateStart);
-    }
-
-    if (criteria.dateEnd) {
-      filtered = filtered.filter(log => log.timestamp <= criteria.dateEnd);
-    }
-
-    if (criteria.eventType) {
-      filtered = filtered.filter(log => log.eventType === criteria.eventType);
-    }
-
-    return filtered;
-  }
-
-  /**
-   * Adiciona novo log
-   */
-  addLog(log) {
-    const newLog = {
-      id: this.logs.length > 0 ? Math.max(...this.logs.map(l => l.id)) + 1 : 1,
-      timestamp: new Date().toLocaleString('pt-BR'),
-      ...log
-    };
-    this.logs.unshift(newLog);
-    return newLog;
-  }
-
-  // ========== CONFIGURAÇÕES ==========
-
-  /**
-   * Obtém configurações do sistema
-   */
-  getSettings() {
-    const stored = localStorage.getItem('neyes_settings');
-    return stored ? JSON.parse(stored) : this.settings;
-  }
-
-  /**
-   * Salva configurações
-   */
-  saveSettings(settings) {
-    this.settings = { ...settings };
-    localStorage.setItem('neyes_settings', JSON.stringify(settings));
-    return this.settings;
-  }
-
-  // ========== ESTATÍSTICAS ==========
-
-  /**
-   * Obtém estatísticas da rede
-   */
-  getStatistics() {
-    const online = this.devices.filter(d => d.status === 'online').length;
-    const offline = this.devices.filter(d => d.status === 'offline').length;
-    const blocked = this.devices.filter(d => d.status === 'blocked').length;
-
-    return {
-      totalDevices: this.devices.length,
-      online,
-      offline,
-      blocked,
-      totalLogs: this.logs.length
-    };
-  }
-
-  /**
-   * Obtém atividades recentes
-   */
-  getRecentActivity(limit = 5) {
-    return this.logs.slice(0, limit);
-  }
 }
 
-// Instância global
-const dataService = new DataService();
+/**
+ * Busca todos os dispositivos
+ * @returns {Promise<Array>} Array com todos os dispositivos
+ */
+export async function getDevices() {
+    try {
+        const response = await fetch(`${API_BASE_URL}/devices`);
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        return await response.json();
+    } catch (error) {
+        handleError('getDevices', error);
+    }
+}
+
+/**
+ * Busca um dispositivo específico pelo ID
+ * @param {number} id - ID do dispositivo
+ * @returns {Promise<Object>} Dados do dispositivo
+ */
+export async function getDevice(id) {
+    try {
+        const response = await fetch(`${API_BASE_URL}/devices/${id}`);
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        return await response.json();
+    } catch (error) {
+        handleError(`getDevice(${id})`, error);
+    }
+}
+
+/**
+ * Atualiza dados de um dispositivo (bloquear, renomear, etc)
+ * @param {number} id - ID do dispositivo
+ * @param {Object} data - Dados a atualizar (hostname, status, etc)
+ * @returns {Promise<Object>} Dispositivo atualizado
+ */
+export async function updateDevice(id, data) {
+    try {
+        const response = await fetch(`${API_BASE_URL}/devices/${id}`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        });
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        return await response.json();
+    } catch (error) {
+        handleError(`updateDevice(${id})`, error);
+    }
+}
+
+/**
+ * Deleta um dispositivo
+ * @param {number} id - ID do dispositivo
+ * @returns {Promise<Object>} Resposta da servidor
+ */
+export async function deleteDevice(id) {
+    try {
+        const response = await fetch(`${API_BASE_URL}/devices/${id}`, {
+            method: 'DELETE'
+        });
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        return { success: true, id };
+    } catch (error) {
+        handleError(`deleteDevice(${id})`, error);
+    }
+}
+
+/**
+ * Busca todos os logs de atividade
+ * @returns {Promise<Array>} Array com todos os logs
+ */
+export async function getLogs() {
+    try {
+        const response = await fetch(`${API_BASE_URL}/logs`);
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        return await response.json();
+    } catch (error) {
+        handleError('getLogs', error);
+    }
+}
+
+/**
+ * Busca logs de um dispositivo específico
+ * @param {number} deviceId - ID do dispositivo
+ * @returns {Promise<Array>} Array com logs do dispositivo
+ */
+export async function getLogsByDevice(deviceId) {
+    try {
+        const response = await fetch(`${API_BASE_URL}/logs?deviceId=${deviceId}`);
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        return await response.json();
+    } catch (error) {
+        handleError(`getLogsByDevice(${deviceId})`, error);
+    }
+}
+
+/**
+ * Busca estatísticas de tráfego
+ * @returns {Promise<Object>} Objeto com estatísticas
+ */
+export async function getTrafficStats() {
+    try {
+        const devices = await getDevices();
+        const onlineCount = devices.filter(d => d.status === 'Online').length;
+        const offlineCount = devices.filter(d => d.status === 'Offline').length;
+        const totalBandwidth = devices.reduce((sum, d) => sum + d.bandwidth, 0);
+        const avgBandwidth = (totalBandwidth / devices.length).toFixed(2);
+
+        return {
+            totalDevices: devices.length,
+            onlineCount,
+            offlineCount,
+            totalBandwidth: totalBandwidth.toFixed(2),
+            avgBandwidth,
+            criticalBandwidth: devices.filter(d => d.bandwidth > 200).length
+        };
+    } catch (error) {
+        handleError('getTrafficStats', error);
+    }
+}
+
+/**
+ * Bloqueia um dispositivo
+ * @param {number} id - ID do dispositivo
+ * @returns {Promise<Object>} Dispositivo atualizado
+ */
+export async function blockDevice(id) {
+    return updateDevice(id, { status: 'Blocked' });
+}
+
+/**
+ * Desbloqueia um dispositivo
+ * @param {number} id - ID do dispositivo
+ * @param {string} previousStatus - Status anterior ('Online' ou 'Offline')
+ * @returns {Promise<Object>} Dispositivo atualizado
+ */
+export async function unblockDevice(id, previousStatus = 'Online') {
+    return updateDevice(id, { status: previousStatus });
+}
+
+/**
+ * Renomeia um dispositivo
+ * @param {number} id - ID do dispositivo
+ * @param {string} newName - Novo nome/hostname
+ * @returns {Promise<Object>} Dispositivo atualizado
+ */
+export async function renameDevice(id, newName) {
+    return updateDevice(id, { hostname: newName });
+}
+
+/**
+ * Busca as métricas em tempo real do dashboard
+ * @returns {Promise<Object>} Objeto com métricas (download, upload, devicesConnected, etc)
+ */
+export async function getMetrics() {
+    try {
+        const response = await fetch(`${API_BASE_URL}/metrics`);
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        return await response.json();
+    } catch (error) {
+        handleError('getMetrics', error);
+    }
+}
+
+export default {
+    getDevices,
+    getDevice,
+    updateDevice,
+    deleteDevice,
+    getLogs,
+    getLogsByDevice,
+    getTrafficStats,
+    blockDevice,
+    unblockDevice,
+    renameDevice,
+    getMetrics
+};

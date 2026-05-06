@@ -1,0 +1,23 @@
+{
+    "name": "n-eyes",
+    "version": "1.0.0",
+    "description": "N Eyes - Sistema de Monitoramento de Tráfego de Rede",
+    "type": "module",
+    "main": "server.js",
+    "scripts": {
+        "start": "node server.js",
+        "dev": "node server.js"
+    },
+    "keywords": [
+        "network",
+        "monitoring",
+        "cybersecurity",
+        "traffic"
+    ],
+    "author": "Estudante",
+    "license": "MIT",
+    "dependencies": {
+        "json-server": "^0.17.4"
+    },
+    "devDependencies": {}
+}

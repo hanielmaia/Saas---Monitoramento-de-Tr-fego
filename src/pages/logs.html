@@ -5,14 +5,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="N Eyes - Sistema de Logs de Atividades de Rede">
-  <title>N Eyes - Logs de Atividades</title>
+  <title>N Eyes | Logs</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="/src/styles/logs.css">
   <link rel="icon" href="/src/public/favicon-32x32.png" type="image/png">
-  <!-- Mock Data & Data Service -->
-  <script src="/src/mockData.js"></script>
-  <script src="/src/dataService.js"></script>
-  <script src="/src/authGuard.js"></script>
 </head>
 
 <body>
@@ -100,7 +96,8 @@
       </nav>
 
       <footer class="sidebar-footer">
-        <a href="logout-confirm.html" class="btn-logout" aria-label="Fazer logout da plataforma">Sair</a>
+        <a href="logout-confirm.html" class="btn-logout" title="Encerrar sessão com segurança"
+          aria-label="Fazer logout da plataforma">Sair</a>
       </footer>
     </aside>
 
@@ -253,7 +250,8 @@
           <div class="table-header">
             <h2 id="logs-table-title" class="section-title">Registros de Atividades</h2>
             <div class="table-actions">
-              <button class="btn-action btn-export-csv" aria-label="Exportar logs em formato CSV">
+              <button class="btn-action btn-export-csv" title="Gerar relatório em formato de planilha (CSV)"
+                aria-label="Exportar logs em formato CSV">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                   stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                   class="lucide lucide-file-up-icon lucide-file-up">
@@ -264,7 +262,8 @@
                   <path d="m15 15-3-3-3 3" />
                 </svg> Exportar CSV
               </button>
-              <button class="btn-action btn-export-pdf" aria-label="Exportar logs em formato PDF">
+              <button class="btn-action btn-export-pdf" title="Gerar relatório em formato PDF (portátil)"
+                aria-label="Exportar logs em formato PDF">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                   stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                   class="lucide lucide-scroll-text-icon lucide-scroll-text">
@@ -297,8 +296,7 @@
                   <td class="log-origin">192.168.1.106 | Notebook-Dev-05</td>
                   <td class="log-details">Dispositivo conectado à rede</td>
                   <td class="log-user">joao.calheiros</td>
-                  <td class="log-severity severity-badge info"
-                    title="Evento de sistema padrão - Operação normal e esperada">ℹ️ Info</td>
+                  <td class="log-severity severity-badge info" title="Evento padrão do sistema">ℹ️ Info</td>
                 </tr>
                 <tr class="log-row severity-warning">
                   <td class="log-timestamp">2026-03-13 14:28:12</td>
@@ -306,8 +304,8 @@
                   <td class="log-origin">192.168.1.103 | Servidor-Web-01</td>
                   <td class="log-details">Tentativa de bloqueio - Cancelada</td>
                   <td class="log-user">admin</td>
-                  <td class="log-severity severity-badge warning"
-                    title="Aviso importante - Requer atenção do administrador">⚠️ Aviso</td>
+                  <td class="log-severity severity-badge error"
+                    title="Alerta de alta prioridade: Intervenção imediata necessária">❌ Crítico</td>
                 </tr>
                 <tr class="log-row severity-error">
                   <td class="log-timestamp">2026-03-13 14:15:33</td>
@@ -316,7 +314,7 @@
                   <td class="log-details">Limite de banda excedido: 450 Mbps</td>
                   <td class="log-user">system</td>
                   <td class="log-severity severity-badge error"
-                    title="Erro crítico - Ação imediata necessária para resolver">❌ Crítico</td>
+                    title="Alerta de alta prioridade: Intervenção imediata necessária">❌ Crítico</td>
                 </tr>
                 <tr class="log-row severity-info">
                   <td class="log-timestamp">2026-03-13 14:10:22</td>
@@ -324,8 +322,7 @@
                   <td class="log-origin">192.168.1.101 | Desktop-TI-01</td>
                   <td class="log-details">Limite de banda reduzido para 100 Mbps</td>
                   <td class="log-user">haniel.maia</td>
-                  <td class="log-severity severity-badge info"
-                    title="Evento de sistema padrão - Operação normal e esperada">ℹ️ Info</td>
+                  <td class="log-severity severity-badge info" title="Evento padrão do sistema">ℹ️ Info</td>
                 </tr>
                 <tr class="log-row severity-info">
                   <td class="log-timestamp">2026-03-13 14:05:00</td>
@@ -333,8 +330,7 @@
                   <td class="log-origin">192.168.1.107 | Mobile-User-06</td>
                   <td class="log-details">Sessão encerrada</td>
                   <td class="log-user">system</td>
-                  <td class="log-severity severity-badge info"
-                    title="Evento de sistema padrão - Operação normal e esperada">ℹ️ Info</td>
+                  <td class="log-severity severity-badge info" title="Evento padrão do sistema">ℹ️ Info</td>
                 </tr>
                 <tr class="log-row severity-warning">
                   <td class="log-timestamp">2026-03-13 13:58:19</td>
@@ -342,8 +338,7 @@
                   <td class="log-origin">192.168.1.102 | Laptop-Equipe-02</td>
                   <td class="log-details">Consumo de banda acima de 50% da capacidade</td>
                   <td class="log-user">system</td>
-                  <td class="log-severity severity-badge warning"
-                    title="Aviso importante - Requer atenção do administrador">⚠️ Aviso</td>
+                  <td class="log-severity severity-badge warning" title="Alerta de tráfego de rede">⚠️ Aviso</td>
                 </tr>
                 <tr class="log-row severity-info">
                   <td class="log-timestamp">2026-03-13 13:45:07</td>
@@ -351,8 +346,7 @@
                   <td class="log-origin">192.168.1.108 | Teste-IP-07</td>
                   <td class="log-details">Dispositivo bloqueado por política de segurança</td>
                   <td class="log-user">kaua.heronides</td>
-                  <td class="log-severity severity-badge warning"
-                    title="Aviso importante - Requer atenção do administrador">⚠️ Aviso</td>
+                  <td class="log-severity severity-badge warning" title="Alerta de tráfego de rede">⚠️ Aviso</td>
                 </tr>
                 <tr class="log-row severity-info">
                   <td class="log-timestamp">2026-03-13 13:30:55</td>
@@ -360,8 +354,7 @@
                   <td class="log-origin">192.168.1.109 | Teste-IP-08</td>
                   <td class="log-details">Dispositivo liberado após análise</td>
                   <td class="log-user">admin</td>
-                  <td class="log-severity severity-badge info"
-                    title="Evento de sistema padrão - Operação normal e esperada">ℹ️ Info</td>
+                  <td class="log-severity severity-badge info" title="Evento padrão do sistema">ℹ️ Info</td>
                 </tr>
                 <tr class="log-row severity-warning">
                   <td class="log-timestamp">2026-03-13 13:15:22</td>
@@ -369,8 +362,7 @@
                   <td class="log-origin">192.168.1.110 | Tablet-Vendas-01</td>
                   <td class="log-details">Tráfego suspeito detectado</td>
                   <td class="log-user">system</td>
-                  <td class="log-severity severity-badge warning"
-                    title="Aviso importante - Requer atenção do administrador">⚠️ Aviso</td>
+                  <td class="log-severity severity-badge warning" title="Alerta de tráfego de rede">⚠️ Aviso</td>
                 </tr>
                 <tr class="log-row severity-error">
                   <td class="log-timestamp">2026-03-13 13:05:10</td>
@@ -379,7 +371,7 @@
                   <td class="log-details">Múltiplas tentativas de acesso falhadas</td>
                   <td class="log-user">system</td>
                   <td class="log-severity severity-badge error"
-                    title="Erro crítico - Ação imediata necessária para resolver">❌ Crítico</td>
+                    title="Alerta de alta prioridade: Intervenção imediata necessária">❌ Crítico</td>
                 </tr>
                 <tr class="log-row severity-info">
                   <td class="log-timestamp">2026-03-13 12:55:45</td>
@@ -387,8 +379,7 @@
                   <td class="log-origin">192.168.1.112 | Console-Admin-01</td>
                   <td class="log-details">Sessão de administrador iniciada</td>
                   <td class="log-user">maria.silva</td>
-                  <td class="log-severity severity-badge info"
-                    title="Evento de sistema padrão - Operação normal e esperada">ℹ️ Info</td>
+                  <td class="log-severity severity-badge info" title="Evento padrão do sistema">ℹ️ Info</td>
                 </tr>
                 <tr class="log-row severity-warning">
                   <td class="log-timestamp">2026-03-13 12:45:33</td>
@@ -396,8 +387,7 @@
                   <td class="log-origin">192.168.1.113 | Teste-IP-09</td>
                   <td class="log-details">Dispositivo bloqueado por inatividade</td>
                   <td class="log-user">admin</td>
-                  <td class="log-severity severity-badge warning"
-                    title="Aviso importante - Requer atenção do administrador">⚠️ Aviso</td>
+                  <td class="log-severity severity-badge warning" title="Alerta de tráfego de rede">⚠️ Aviso</td>
                 </tr>
                 <tr class="log-row severity-info">
                   <td class="log-timestamp">2026-03-13 12:35:20</td>
@@ -405,8 +395,7 @@
                   <td class="log-origin">192.168.1.114 | Desktop-RH-01</td>
                   <td class="log-details">Limite de banda atualizado para 150 Mbps</td>
                   <td class="log-user">haniel.maia</td>
-                  <td class="log-severity severity-badge info"
-                    title="Evento de sistema padrão - Operação normal e esperada">ℹ️ Info</td>
+                  <td class="log-severity severity-badge info">ℹ️ Info</td>
                 </tr>
                 <tr class="log-row severity-info">
                   <td class="log-timestamp">2026-03-13 12:25:08</td>
@@ -414,8 +403,7 @@
                   <td class="log-origin">192.168.1.115 | Mobile-User-07</td>
                   <td class="log-details">Dispositivo desconectado</td>
                   <td class="log-user">system</td>
-                  <td class="log-severity severity-badge info"
-                    title="Evento de sistema padrão - Operação normal e esperada">ℹ️ Info</td>
+                  <td class="log-severity severity-badge info" title="Evento padrão do sistema">ℹ️ Info</td>
                 </tr>
                 <tr class="log-row severity-warning">
                   <td class="log-timestamp">2026-03-13 12:15:42</td>
@@ -423,8 +411,7 @@
                   <td class="log-origin">192.168.1.116 | Impressora-Admin-02</td>
                   <td class="log-details">Consumo anormal de banda detectado</td>
                   <td class="log-user">system</td>
-                  <td class="log-severity severity-badge warning"
-                    title="Aviso importante - Requer atenção do administrador">⚠️ Aviso</td>
+                  <td class="log-severity severity-badge warning" title="Alerta de tráfego de rede">⚠️ Aviso</td>
                 </tr>
                 <tr class="log-row severity-info">
                   <td class="log-timestamp">2026-03-13 12:05:15</td>
@@ -432,8 +419,7 @@
                   <td class="log-origin">192.168.1.117 | Notebook-Dev-06</td>
                   <td class="log-details">Dispositivo conectado com sucesso</td>
                   <td class="log-user">joao.calheiros</td>
-                  <td class="log-severity severity-badge info"
-                    title="Evento de sistema padrão - Operação normal e esperada">ℹ️ Info</td>
+                  <td class="log-severity severity-badge info">ℹ️ Info</td>
                 </tr>
                 <tr class="log-row severity-error">
                   <td class="log-timestamp">2026-03-13 11:55:30</td>
@@ -442,7 +428,7 @@
                   <td class="log-details">Tentativa de bypass de segurança bloqueada</td>
                   <td class="log-user">system</td>
                   <td class="log-severity severity-badge error"
-                    title="Erro crítico - Ação imediata necessária para resolver">❌ Crítico</td>
+                    title="Alerta de alta prioridade: Intervenção imediata necessária">❌ Crítico</td>
                 </tr>
                 <tr class="log-row severity-info">
                   <td class="log-timestamp">2026-03-13 11:45:22</td>
@@ -450,8 +436,7 @@
                   <td class="log-origin">192.168.1.119 | Teste-IP-11</td>
                   <td class="log-details">Dispositivo desbloqueado por administrador</td>
                   <td class="log-user">admin</td>
-                  <td class="log-severity severity-badge info"
-                    title="Evento de sistema padrão - Operação normal e esperada">ℹ️ Info</td>
+                  <td class="log-severity severity-badge info" title="Evento padrão do sistema">ℹ️ Info</td>
                 </tr>
                 <tr class="log-row severity-warning">
                   <td class="log-timestamp">2026-03-13 11:35:10</td>
@@ -459,8 +444,7 @@
                   <td class="log-origin">192.168.1.120 | Desktop-Financeiro-01</td>
                   <td class="log-details">Acesso a recursos críticos detectado</td>
                   <td class="log-user">system</td>
-                  <td class="log-severity severity-badge warning"
-                    title="Aviso importante - Requer atenção do administrador">⚠️ Aviso</td>
+                  <td class="log-severity severity-badge warning" title="Alerta de tráfego de rede">⚠️ Aviso</td>
                 </tr>
                 <tr class="log-row severity-info">
                   <td class="log-timestamp">2026-03-13 11:25:45</td>
@@ -476,7 +460,7 @@
                   <td class="log-origin">192.168.1.122 | Mobile-User-08</td>
                   <td class="log-details">Usuário desconectado</td>
                   <td class="log-user">system</td>
-                  <td class="log-severity severity-badge info">ℹ️ Info</td>
+                  <td class="log-severity severity-badge info" title="Evento padrão do sistema">ℹ️ Info</td>
                 </tr>
                 <tr class="log-row severity-warning">
                   <td class="log-timestamp">2026-03-13 11:05:55</td>
@@ -484,7 +468,7 @@
                   <td class="log-origin">192.168.1.123 | Teste-IP-12</td>
                   <td class="log-details">Dispositivo bloqueado por comportamento anormal</td>
                   <td class="log-user">kaua.heronides</td>
-                  <td class="log-severity severity-badge warning">⚠️ Aviso</td>
+                  <td class="log-severity severity-badge warning" title="Alerta de tráfego de rede">⚠️ Aviso</td>
                 </tr>
                 <tr class="log-row severity-error">
                   <td class="log-timestamp">2026-03-13 10:55:20</td>
@@ -492,7 +476,8 @@
                   <td class="log-origin">192.168.1.124 | Servidor-VPN-01</td>
                   <td class="log-details">Certificado SSL expirado - Ação requerida</td>
                   <td class="log-user">system</td>
-                  <td class="log-severity severity-badge error">❌ Crítico</td>
+                  <td class="log-severity severity-badge error"
+                    title="Alerta de alta prioridade: Intervenção imediata necessária">❌ Crítico</td>
                 </tr>
                 <tr class="log-row severity-info">
                   <td class="log-timestamp">2026-03-13 10:45:12</td>
@@ -500,7 +485,7 @@
                   <td class="log-origin">192.168.1.125 | Workstation-01</td>
                   <td class="log-details">Estação de trabalho conectada</td>
                   <td class="log-user">joao.calheiros</td>
-                  <td class="log-severity severity-badge info">ℹ️ Info</td>
+                  <td class="log-severity severity-badge info" title="Evento padrão do sistema">ℹ️ Info</td>
                 </tr>
                 <tr class="log-row severity-warning">
                   <td class="log-timestamp">2026-03-13 10:35:44</td>
@@ -508,7 +493,7 @@
                   <td class="log-origin">192.168.1.126 | Scanner-Rede-01</td>
                   <td class="log-details">Atividade de scanning detectada</td>
                   <td class="log-user">system</td>
-                  <td class="log-severity severity-badge warning">⚠️ Aviso</td>
+                  <td class="log-severity severity-badge warning" title="Alerta de tráfego de rede">⚠️ Aviso</td>
                 </tr>
                 <tr class="log-row severity-info">
                   <td class="log-timestamp">2026-03-13 10:25:30</td>
@@ -524,7 +509,7 @@
                   <td class="log-origin">192.168.1.128 | Router-Principal-01</td>
                   <td class="log-details">Regras de firewall atualizadas</td>
                   <td class="log-user">haniel.maia</td>
-                  <td class="log-severity severity-badge info">ℹ️ Info</td>
+                  <td class="log-severity severity-badge info" title="Evento padrão do sistema">ℹ️ Info</td>
                 </tr>
                 <tr class="log-row severity-info">
                   <td class="log-timestamp">2026-03-13 10:05:05</td>
@@ -532,7 +517,7 @@
                   <td class="log-origin">192.168.1.129 | Mobile-User-09</td>
                   <td class="log-details">Dispositivo desconectado da rede</td>
                   <td class="log-user">system</td>
-                  <td class="log-severity severity-badge info">ℹ️ Info</td>
+                  <td class="log-severity severity-badge info" title="Evento padrão do sistema">ℹ️ Info</td>
                 </tr>
                 <tr class="log-row severity-warning">
                   <td class="log-timestamp">2026-03-13 09:55:40</td>
@@ -540,7 +525,7 @@
                   <td class="log-origin">192.168.1.130 | Laptop-Equipe-03</td>
                   <td class="log-details">Padrão anormal de uso detectado</td>
                   <td class="log-user">system</td>
-                  <td class="log-severity severity-badge warning">⚠️ Aviso</td>
+                  <td class="log-severity severity-badge warning" title="Alerta de tráfego de rede">⚠️ Aviso</td>
                 </tr>
                 <tr class="log-row severity-error">
                   <td class="log-timestamp">2026-03-13 09:45:25</td>
@@ -548,7 +533,8 @@
                   <td class="log-origin">192.168.1.131 | Teste-IP-14</td>
                   <td class="log-details">Malware suspeito bloqueado</td>
                   <td class="log-user">system</td>
-                  <td class="log-severity severity-badge error">❌ Crítico</td>
+                  <td class="log-severity severity-badge error"
+                    title="Alerta de alta prioridade: Intervenção imediata necessária">❌ Crítico</td>
                 </tr>
                 <tr class="log-row severity-info">
                   <td class="log-timestamp">2026-03-13 09:35:12</td>
@@ -556,7 +542,7 @@
                   <td class="log-origin">192.168.1.132 | Notebook-Dev-07</td>
                   <td class="log-details">Novo dispositivo adicionado à rede</td>
                   <td class="log-user">joao.calheiros</td>
-                  <td class="log-severity severity-badge info">ℹ️ Info</td>
+                  <td class="log-severity severity-badge info" title="Evento padrão do sistema">ℹ️ Info</td>
                 </tr>
                 <tr class="log-row severity-warning">
                   <td class="log-timestamp">2026-03-13 09:25:50</td>
@@ -564,7 +550,7 @@
                   <td class="log-origin">192.168.1.133 | Teste-IP-15</td>
                   <td class="log-details">Dispositivo bloqueado por violação de política</td>
                   <td class="log-user">admin</td>
-                  <td class="log-severity severity-badge warning">⚠️ Aviso</td>
+                  <td class="log-severity severity-badge warning" title="Alerta de tráfego de rede">⚠️ Aviso</td>
                 </tr>
                 <tr class="log-row severity-info">
                   <td class="log-timestamp">2026-03-13 09:15:35</td>
@@ -572,7 +558,7 @@
                   <td class="log-origin">192.168.1.134 | Desktop-Marketing-01</td>
                   <td class="log-details">Política de acesso modificada</td>
                   <td class="log-user">maria.silva</td>
-                  <td class="log-severity severity-badge info">ℹ️ Info</td>
+                  <td class="log-severity severity-badge info" title="Evento padrão do sistema">ℹ️ Info</td>
                 </tr>
                 <tr class="log-row severity-info">
                   <td class="log-timestamp">2026-03-13 09:05:20</td>
@@ -580,7 +566,7 @@
                   <td class="log-origin">192.168.1.135 | Mobile-User-10</td>
                   <td class="log-details">Sessão finalizada automaticamente</td>
                   <td class="log-user">system</td>
-                  <td class="log-severity severity-badge info">ℹ️ Info</td>
+                  <td class="log-severity severity-badge info" title="Evento padrão do sistema">ℹ️ Info</td>
                 </tr>
                 <tr class="log-row severity-warning">
                   <td class="log-timestamp">2026-03-13 08:55:45</td>
@@ -588,7 +574,8 @@
                   <td class="log-origin">192.168.1.136 | Servidor-Mail-01</td>
                   <td class="log-details">Limite de conexões simultâneas atingido</td>
                   <td class="log-user">system</td>
-                  <td class="log-severity severity-badge warning">⚠️ Aviso</td>
+                  <td class="log-severity severity-badge error"
+                    title="Alerta de alta prioridade: Intervenção imediata necessária">❌ Crítico</td>
                 </tr>
                 <tr class="log-row severity-info">
                   <td class="log-timestamp">2026-03-13 08:45:30</td>
@@ -596,7 +583,7 @@
                   <td class="log-origin">192.168.1.137 | Teste-IP-16</td>
                   <td class="log-details">Dispositivo liberado com novo perfil de segurança</td>
                   <td class="log-user">admin</td>
-                  <td class="log-severity severity-badge info">ℹ️ Info</td>
+                  <td class="log-severity severity-badge info" title="Evento padrão do sistema">ℹ️ Info</td>
                 </tr>
                 <tr class="log-row severity-error">
                   <td class="log-timestamp">2026-03-13 08:35:15</td>
@@ -604,7 +591,8 @@
                   <td class="log-origin">192.168.1.138 | Teste-IP-17</td>
                   <td class="log-details">Ataque DDoS mitigado com sucesso</td>
                   <td class="log-user">system</td>
-                  <td class="log-severity severity-badge error">❌ Crítico</td>
+                  <td class="log-severity severity-badge error"
+                    title="Alerta de alta prioridade: Intervenção imediata necessária">❌ Crítico</td>
                 </tr>
               </tbody>
             </table>
@@ -748,180 +736,6 @@
       document.querySelectorAll('.user-email').forEach(el => el.textContent = user.email || el.textContent);
       document.querySelectorAll('.user-role').forEach(el => el.textContent = user.role === 'ADMIN' ? 'Administrador' : 'Usuário');
     })();
-  </script>
-
-  <!-- DYNAMIC LOGS TABLE -->
-  <script>
-    /**
-     * Renderiza a tabela de logs com dados dinâmicos
-     */
-    function renderLogsTable(logs) {
-      const tbody = document.querySelector('.logs-table tbody');
-      if (!tbody) return;
-
-      tbody.innerHTML = '';
-
-      logs.forEach(log => {
-        const row = document.createElement('tr');
-        const severityMap = {
-          'INFO': 'info',
-          'WARNING': 'warning',
-          'ERROR': 'error',
-          'CRITICAL': 'error'
-        };
-        const severityClass = severityMap[log.severity] || 'info';
-        const severityEmoji = {
-          'INFO': 'ℹ️',
-          'WARNING': '⚠️',
-          'ERROR': '❌',
-          'CRITICAL': '❌'
-        };
-        const severityLabel = {
-          'INFO': 'Info',
-          'WARNING': 'Aviso',
-          'ERROR': 'Erro',
-          'CRITICAL': 'Crítico'
-        };
-
-        row.className = `log-row severity-${severityClass}`;
-        row.innerHTML = `
-          <td class="log-timestamp">${formatDateTime(log.timestamp)}</td>
-          <td class="log-event">${formatEventType(log.eventType)}</td>
-          <td class="log-origin">${log.origin}</td>
-          <td class="log-details">${log.details}</td>
-          <td class="log-user">${log.user}</td>
-          <td class="log-severity severity-badge ${severityClass}">${severityEmoji[log.severity] || ''} ${severityLabel[log.severity]}</td>
-        `;
-
-        tbody.appendChild(row);
-      });
-    }
-
-    /**
-     * Formata tipo de evento
-     */
-    function formatEventType(eventType) {
-      const typeMap = {
-        'CONNECTION': 'Conexão',
-        'DISCONNECTION': 'Desconexão',
-        'BLOCK': 'Bloqueio de Dispositivo',
-        'UNBLOCK': 'Liberação de Dispositivo',
-        'RENAME': 'Renomeação',
-        'LOGIN': 'Login',
-        'LOGOUT': 'Logout',
-        'CONFIG_CHANGE': 'Alteração de Configuração',
-        'SECURITY_ALERT': 'Evento de Segurança'
-      };
-      return typeMap[eventType] || eventType;
-    }
-
-    /**
-     * Formata data e hora
-     */
-    function formatDateTime(date) {
-      if (!(date instanceof Date)) {
-        date = new Date(date);
-      }
-      const year = date.getFullYear();
-      const month = String(date.getMonth() + 1).padStart(2, '0');
-      const day = String(date.getDate()).padStart(2, '0');
-      const hours = String(date.getHours()).padStart(2, '0');
-      const minutes = String(date.getMinutes()).padStart(2, '0');
-      const seconds = String(date.getSeconds()).padStart(2, '0');
-      return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-    }
-
-    /**
-     * Aplica filtros aos logs
-     */
-    function applyFilters() {
-      const search = document.getElementById('filter-search').value;
-      const eventType = document.getElementById('filter-event-type').value;
-      const dateStart = document.getElementById('filter-date-start').value;
-      const dateEnd = document.getElementById('filter-date-end').value;
-      const device = document.getElementById('filter-device').value;
-
-      const criteria = {};
-      if (search) criteria.search = search;
-      if (eventType) criteria.eventType = eventType;
-      if (dateStart) criteria.dateStart = dateStart;
-      if (dateEnd) criteria.dateEnd = dateEnd;
-      if (device) criteria.search = (criteria.search || '') + ' ' + device;
-
-      const filteredLogs = dataService.filterLogs(criteria);
-      renderLogsTable(filteredLogs);
-    }
-
-    // Inicializa a tabela
-    document.addEventListener('DOMContentLoaded', function () {
-      // Renderiza todos os logs inicialmente
-      const allLogs = dataService.getLogs(50);
-      renderLogsTable(allLogs);
-
-      // Event listeners para filtros
-      const form = document.getElementById('logs-filters-form');
-      if (form) {
-        form.addEventListener('submit', (e) => {
-          e.preventDefault();
-          applyFilters();
-        });
-
-        form.addEventListener('reset', () => {
-          setTimeout(() => {
-            const allLogs = dataService.getLogs(50);
-            renderLogsTable(allLogs);
-          }, 0);
-        });
-      }
-
-      // Export CSV
-      const btnExportCSV = document.querySelector('.btn-export-csv');
-      if (btnExportCSV) {
-        btnExportCSV.addEventListener('click', () => {
-          const csv = dataService.exportLogsCSV();
-          downloadFile(csv, 'logs_export.csv', 'text/csv');
-        });
-      }
-
-      // Export PDF (simulado - apenas download CSV para demonstração)
-      const btnExportPDF = document.querySelector('.btn-export-pdf');
-      if (btnExportPDF) {
-        btnExportPDF.addEventListener('click', () => {
-          alert('Exportação em PDF seria feita aqui com uma biblioteca como jsPDF.\nPor enquanto, use a exportação CSV.');
-        });
-      }
-
-      // Auto-atualiza logs a cada 30 segundos
-      setInterval(() => {
-        // Adiciona um novo log simulado
-        const eventTypes = ['CONNECTION', 'DISCONNECTION', 'BLOCK', 'UNBLOCK', 'CONFIG_CHANGE'];
-        const randomEvent = eventTypes[Math.floor(Math.random() * eventTypes.length)];
-        dataService.addLog({
-          eventType: randomEvent,
-          origin: `192.168.1.${Math.floor(Math.random() * 255)} | Device-${Math.floor(Math.random() * 100)}`,
-          details: 'Evento simulado durante apresentação',
-          user: 'admin',
-          severity: Math.random() > 0.7 ? 'WARNING' : 'INFO'
-        });
-
-        // Recarrega a tabela
-        const allLogs = dataService.getLogs(50);
-        renderLogsTable(allLogs);
-      }, 30000);
-    });
-
-    /**
-     * Helper para download de arquivo
-     */
-    function downloadFile(content, filename, type) {
-      const element = document.createElement('a');
-      element.setAttribute('href', 'data:' + type + ';charset=utf-8,' + encodeURIComponent(content));
-      element.setAttribute('download', filename);
-      element.style.display = 'none';
-      document.body.appendChild(element);
-      element.click();
-      document.body.removeChild(element);
-    }
   </script>
 </body>
 

@@ -9,10 +9,6 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="/src/styles/home.css">
   <link rel="icon" href="/src/public/favicon-32x32.png" type="image/png">
-  <!-- Mock Data & Data Service -->
-  <script src="/src/mockData.js"></script>
-  <script src="/src/dataService.js"></script>
-  <script src="/src/authGuard.js"></script>
 </head>
 
 <body>
@@ -300,217 +296,7 @@
                   <th scope="col">Ações</th>
                 </tr>
               </thead>
-              <tbody>
-                <tr class="device-row">
-                  <td class="device-ip">192.168.1.101</td>
-                  <td class="device-name">Desktop-TI-01</td>
-                  <td class="device-bandwidth">45.2</td>
-                  <td class="device-status status-online">Online</td>
-                  <td class="device-actions">
-                    <th>
-                      <button class="btn-action btn-action-block"
-                      aria-label="Bloquear dispositivo Laptop-Equipe-02">Bloquear</button>
-                      <button class="btn-action btn-action-rename"
-                      aria-label="Renomear dispositivo Laptop-Equipe-02">Renomear</button>
-                    </th>
-                  </td>
-                </tr>
-                <tr class="device-row">
-                  <td class="device-ip">192.168.1.102</td>
-                  <td class="device-name">Laptop-Equipe-02</td>
-                  <td class="device-bandwidth">78.5</td>
-                  <td class="device-status status-online">Online</td>
-                  <td class="device-actions">
-                  <th>
-                    <button class="btn-action btn-action-block"
-                      aria-label="Bloquear dispositivo Laptop-Equipe-02">Bloquear</button>
-                    <button class="btn-action btn-action-rename"
-                      aria-label="Renomear dispositivo Laptop-Equipe-02">Renomear</button>
-                  </th>
-                  </td>
-                </tr>
-                <tr class="device-row">
-                  <td class="device-ip">192.168.1.103</td>
-                  <td class="device-name">Servidor-Web-01</td>
-                  <td class="device-bandwidth">234.8</td>
-                  <td class="device-status status-online">Online</td>
-                  <td class="device-actions">
-                    <th>
-                      <button class="btn-action btn-action-block"
-                      aria-label="Bloquear dispositivo Servidor-Web-01">Bloquear</button>
-                      <button class="btn-action btn-action-rename"
-                      aria-label="Renomear dispositivo Servidor-Web-01">Renomear</button>
-                    </th>
-                  </td>
-                </tr>
-                <tr class="device-row">
-                  <td class="device-ip">192.168.1.104</td>
-                  <td class="device-name">Impressora-Rede-03</td>
-                  <td class="device-bandwidth">12.3</td>
-                  <td class="device-status status-online">Online</td>
-                  <td class="device-actions">
-                    <th>
-                      <button class="btn-action btn-action-block"
-                      aria-label="Bloquear dispositivo Impressora-Rede-03">Bloquear</button>
-                    <button class="btn-action btn-action-rename"
-                      aria-label="Renomear dispositivo Impressora-Rede-03">Renomear</button>
-                  </th>
-                  </td>
-                </tr>
-                <tr class="device-row">
-                  <td class="device-ip">192.168.1.105</td>
-                  <td class="device-name">Mobile-Admin-04</td>
-                  <td class="device-bandwidth">28.7</td>
-                  <td class="device-status status-offline">Offline</td>
-                  <td class="device-actions">
-                  <th>
-                    <button class="btn-action btn-action-block"
-                      aria-label="Bloquear dispositivo Mobile-Admin-04">Bloquear</button>
-                    <button class="btn-action btn-action-rename"
-                      aria-label="Renomear dispositivo Mobile-Admin-04">Renomear</button>
-                  </th>
-                  </td>
-                </tr>
-                <tr class="device-row">
-                  <td class="device-ip">192.168.1.106</td>
-                  <td class="device-name">Laptop-Equipe-05</td>
-                  <td class="device-bandwidth">61.4</td>
-                  <td class="device-status status-online">Online</td>
-                  <td class="device-actions">
-                  <th>
-                    <button class="btn-action btn-action-block"
-                      aria-label="Bloquear dispositivo Laptop-Equipe-05">Bloquear</button>
-                    <button class="btn-action btn-action-rename"
-                      aria-label="Renomear dispositivo Laptop-Equipe-05">Renomear</button>
-                  </th>
-                  </td>
-                </tr>
-                <tr class="device-row">
-                  <td class="device-ip">192.168.1.107</td>
-                  <td class="device-name">Servidor-BD-02</td>
-                  <td class="device-bandwidth">312.6</td>
-                  <td class="device-status status-online">Online</td>
-                  <td class="device-actions">
-                  <th>
-                    <button class="btn-action btn-action-block"
-                      aria-label="Bloquear dispositivo Servidor-BD-02">Bloquear</button>
-                    <button class="btn-action btn-action-rename"
-                      aria-label="Renomear dispositivo Servidor-BD-02">Renomear</button>
-                  </th>
-                  </td>
-                </tr>
-                <tr class="device-row">
-                  <td class="device-ip">192.168.1.108</td>
-                  <td class="device-name">Camera-IP-01</td>
-                  <td class="device-bandwidth">8.9</td>
-                  <td class="device-status status-online">Online</td>
-                  <td class="device-actions">
-                  <th>
-                    <button class="btn-action btn-action-block"
-                      aria-label="Bloquear dispositivo Camera-IP-01">Bloquear</button>
-                    <button class="btn-action btn-action-rename"
-                      aria-label="Renomear dispositivo Camera-IP-01">Renomear</button>
-                  </th>
-                  </td>
-                </tr>
-                <tr class="device-row">
-                  <td class="device-ip">192.168.1.109</td>
-                  <td class="device-name">Switch-Core-01</td>
-                  <td class="device-bandwidth">489.1</td>
-                  <td class="device-status status-online">Online</td>
-                  <td class="device-actions">
-                  <th>
-                    <button class="btn-action btn-action-block"
-                      aria-label="Bloquear dispositivo Switch-Core-01">Bloquear</button>
-                    <button class="btn-action btn-action-rename"
-                      aria-label="Renomear dispositivo Switch-Core-01">Renomear</button>
-                  </th>
-                  </td>
-                </tr>
-                <tr class="device-row">
-                  <td class="device-ip">192.168.1.110</td>
-                  <td class="device-name">Desktop-RH-06</td>
-                  <td class="device-bandwidth">33.5</td>
-                  <td class="device-status status-offline">Offline</td>
-                  <td class="device-actions">
-                  <th>
-                    <button class="btn-action btn-action-block"
-                      aria-label="Bloquear dispositivo Desktop-RH-06">Bloquear</button>
-                    <button class="btn-action btn-action-rename"
-                      aria-label="Renomear dispositivo Desktop-RH-06">Renomear</button>
-                  </th>
-                  </td>
-                </tr>
-                <tr class="device-row">
-                  <td class="device-ip">192.168.1.111</td>
-                  <td class="device-name">VoIP-Telefone-07</td>
-                  <td class="device-bandwidth">4.2</td>
-                  <td class="device-status status-online">Online</td>
-                  <td class="device-actions">
-                  <th>
-                    <button class="btn-action btn-action-block"
-                      aria-label="Bloquear dispositivo VoIP-Telefone-07">Bloquear</button>
-                    <button class="btn-action btn-action-rename"
-                      aria-label="Renomear dispositivo VoIP-Telefone-07">Renomear</button>
-                  </th>
-                  </td>
-                </tr>
-                <tr class="device-row">
-                  <td class="device-ip">192.168.1.112</td>
-                  <td class="device-name">NAS-Storage-01</td>
-                  <td class="device-bandwidth">156.3</td>
-                  <td class="device-status status-online">Online</td>
-                  <td class="device-actions">
-                  <th>
-                    <button class="btn-action btn-action-block"
-                      aria-label="Bloquear dispositivo NAS-Storage-01">Bloquear</button>
-                    <button class="btn-action btn-action-rename"
-                      aria-label="Renomear dispositivo NAS-Storage-01">Renomear</button>
-                  </th>
-                  </td>
-                </tr>
-                <tr class="device-row">
-                  <td class="device-ip">192.168.1.113</td>
-                  <td class="device-name">Mobile-Vendas-08</td>
-                  <td class="device-bandwidth">19.8</td>
-                  <td class="device-status status-offline">Offline</td>
-                  <td class="device-actions">
-                  <th>
-                    <button class="btn-action btn-action-block"
-                      aria-label="Bloquear dispositivo Mobile-Vendas-08">Bloquear</button>
-                    <button class="btn-action btn-action-rename"
-                      aria-label="Renomear dispositivo Mobile-Vendas-08">Renomear</button>
-                  </th>
-                  </td>
-                </tr>
-                <tr class="device-row">
-                  <td class="device-ip">192.168.1.114</td>
-                  <td class="device-name">Firewall-Edge-01</td>
-                  <td class="device-bandwidth">521.7</td>
-                  <td class="device-status status-online">Online</td>
-                  <td class="device-actions">
-                  <th>
-                    <button class="btn-action btn-action-block"
-                      aria-label="Bloquear dispositivo Firewall-Edge-01">Bloquear</button>
-                    <button class="btn-action btn-action-rename"
-                      aria-label="Renomear dispositivo Firewall-Edge-01">Renomear</button>
-                  </th>
-                  </td>
-                </tr>
-                <tr class="device-row">
-                  <td class="device-ip">192.168.1.115</td>
-                  <td class="device-name">Laptop-Financeiro-09</td>
-                  <td class="device-bandwidth">47.0</td>
-                  <td class="device-status status-online">Online</td>
-                  <td class="device-actions">
-                  <th>
-                    <button class="btn-action btn-action-block"
-                      aria-label="Bloquear dispositivo Laptop-Financeiro-09">Bloquear</button>
-                    <button class="btn-action btn-action-rename"
-                      aria-label="Renomear dispositivo Laptop-Financeiro-09">Renomear</button>
-                  </th>
-                  </td>
-                </tr>
+              <tbody id="devices-tbody">
               </tbody>
             </table>
           </div>
@@ -677,31 +463,161 @@
     </div>
   </div>
 
-  <script>
+  <script type="module">
+    import {
+      getDevices,
+      updateDevice,
+      deleteDevice
+    } from '/src/dataService.js';
+
+    // ── DOM ELEMENTS ──────────────────────────────────────────────────────────
     const btnRefresh = document.querySelector('.btn-refresh');
     const btnNotifications = document.querySelector('.btn-notifications');
     const btnUser = document.querySelector('.btn-user');
+    const devicesTableBody = document.querySelector('.devices-table tbody');
     const notificationsDropdown = document.getElementById('notifications-dropdown');
     const userProfileDropdown = document.getElementById('user-profile-dropdown');
     const closeNotifications = document.getElementById('close-notifications');
     const closeProfile = document.getElementById('close-profile');
 
-    // Função para fechar todos os dropdowns
+    // Modal elements
+    const modalBlock = document.getElementById('modal-block');
+    const modalBlockTitle = document.getElementById('modal-block-title');
+    const modalBlockIcon = document.getElementById('modal-block-icon');
+    const modalBlockSub = document.getElementById('modal-block-sub');
+    const modalBlockConfirm = document.getElementById('modal-block-confirm');
+    const modalBlockCancel = document.getElementById('modal-block-cancel');
+
+    const modalRename = document.getElementById('modal-rename');
+    const modalRenameSub = document.getElementById('modal-rename-sub');
+    const modalRenameInput = document.getElementById('modal-rename-input');
+    const modalRenameConfirm = document.getElementById('modal-rename-confirm');
+    const modalRenameCancel = document.getElementById('modal-rename-cancel');
+
+    let _blockRow = null;
+    let _renameRow = null;
+    let devicesData = [];
+
+    // ── FUNÇÕES AUXILIARES ────────────────────────────────────────────────────
     function closeAllDropdowns() {
-      if (notificationsDropdown) {
-        notificationsDropdown.style.display = 'none';
-      }
-      if (userProfileDropdown) {
-        userProfileDropdown.style.display = 'none';
+      if (notificationsDropdown) notificationsDropdown.style.display = 'none';
+      if (userProfileDropdown) userProfileDropdown.style.display = 'none';
+    }
+
+    function getStatusClass(status) {
+      if (status === 'Online') return 'status-online';
+      if (status === 'Offline') return 'status-offline';
+      if (status === 'Blocked') return 'status-blocked';
+      return 'status-offline';
+    }
+
+    // ── CARREGAR DISPOSITIVOS DA API ──────────────────────────────────────────
+    async function loadDevices() {
+      try {
+        devicesData = await getDevices();
+        renderDevicesTable();
+        console.log('✅ Dispositivos carregados:', devicesData);
+      } catch (error) {
+        console.error('❌ Erro ao carregar dispositivos:', error);
+        devicesTableBody.innerHTML = '<tr><td colspan="5" style="text-align: center; padding: 20px;">Erro ao carregar dispositivos</td></tr>';
       }
     }
 
-    if (btnRefresh) {
-      btnRefresh.addEventListener('click', function () {
-        location.reload();
+    function renderDevicesTable() {
+      devicesTableBody.innerHTML = '';
+
+      devicesData.forEach(device => {
+        // Criar <tr>
+        const row = document.createElement('tr');
+        row.className = 'device-row';
+        row.dataset.deviceId = device.id;
+
+        // Célula 1: IP Address
+        const tdIp = document.createElement('td');
+        tdIp.className = 'device-ip';
+        tdIp.textContent = device.ip;
+        row.appendChild(tdIp);
+
+        // Célula 2: Nome do Dispositivo
+        const tdName = document.createElement('td');
+        tdName.className = 'device-name';
+        tdName.textContent = device.hostname;
+        row.appendChild(tdName);
+
+        // Célula 3: Consumo (Mbps) - com data-id para rastreamento
+        const tdBandwidth = document.createElement('td');
+        tdBandwidth.className = 'device-bandwidth';
+        tdBandwidth.dataset.deviceId = device.id;
+        tdBandwidth.dataset.originalBandwidth = device.bandwidth.toFixed(1);
+        tdBandwidth.textContent = device.bandwidth.toFixed(1);
+        row.appendChild(tdBandwidth);
+
+        // Célula 4: Status (com badge)
+        const tdStatus = document.createElement('td');
+        const statusClass = getStatusClass(device.status);
+        const statusBadge = document.createElement('span');
+        statusBadge.className = `device-status ${statusClass}`;
+        statusBadge.textContent = device.status;
+        tdStatus.appendChild(statusBadge);
+        row.appendChild(tdStatus);
+
+        // Célula 5: Ações (Bloquear / Renomear)
+        const tdActions = document.createElement('td');
+        tdActions.className = 'device-actions';
+
+        // Botão Bloquear/Desbloquear
+        const btnBlock = document.createElement('button');
+        btnBlock.className = 'btn-action btn-action-block';
+        btnBlock.textContent = device.status === 'Blocked' ? 'Desbloquear' : 'Bloquear';
+        btnBlock.setAttribute('aria-label', `${device.status === 'Blocked' ? 'Desbloquear' : 'Bloquear'} ${device.hostname}`);
+        tdActions.appendChild(btnBlock);
+
+        // Botão Renomear
+        const btnRename = document.createElement('button');
+        btnRename.className = 'btn-action btn-action-rename';
+        btnRename.textContent = 'Renomear';
+        btnRename.setAttribute('aria-label', `Renomear ${device.hostname}`);
+        tdActions.appendChild(btnRename);
+
+        row.appendChild(tdActions);
+        devicesTableBody.appendChild(row);
       });
     }
 
+    /**
+     * Atualiza apenas as células de consumo com variação ±2%
+     * Simula tráfego real sem renderizar a tabela inteira
+     */
+    async function updateBandwidthMetrics() {
+      try {
+        const devices = await getDevices();
+        const bandwidthCells = document.querySelectorAll('[data-device-id][data-original-bandwidth]');
+
+        bandwidthCells.forEach(cell => {
+          const deviceId = parseInt(cell.dataset.deviceId);
+          const device = devices.find(d => d.id === deviceId);
+
+          if (device) {
+            // Aplicar variação aleatória de ±2%
+            const variation = (Math.random() - 0.5) * 0.04; // ±2%
+            const newValue = device.bandwidth * (1 + variation);
+            cell.textContent = newValue.toFixed(1);
+          }
+        });
+      } catch (error) {
+        console.error('[updateBandwidthMetrics] Erro:', error);
+      }
+    }
+
+    // Iniciar atualização de métricas a cada 3 segundos
+    setInterval(updateBandwidthMetrics, 3000);
+
+    // ── REFRESH ──────────────────────────────────────────────────────────────
+    if (btnRefresh) {
+      btnRefresh.addEventListener('click', loadDevices);
+    }
+
+    // ── NOTIFICAÇÕES ──────────────────────────────────────────────────────────
     if (btnNotifications) {
       btnNotifications.addEventListener('click', function () {
         closeAllDropdowns();
@@ -711,6 +627,7 @@
       });
     }
 
+    // ── PERFIL DO USUÁRIO ─────────────────────────────────────────────────────
     if (btnUser) {
       btnUser.addEventListener('click', function (e) {
         e.preventDefault();
@@ -721,13 +638,8 @@
       });
     }
 
-    if (closeNotifications) {
-      closeNotifications.addEventListener('click', closeAllDropdowns);
-    }
-
-    if (closeProfile) {
-      closeProfile.addEventListener('click', closeAllDropdowns);
-    }
+    if (closeNotifications) closeNotifications.addEventListener('click', closeAllDropdowns);
+    if (closeProfile) closeProfile.addEventListener('click', closeAllDropdowns);
 
     document.addEventListener('click', function (e) {
       if (!e.target.closest('.header-actions') && !e.target.closest('.notifications-dropdown') && !e.target.closest('.user-profile-dropdown')) {
@@ -735,21 +647,16 @@
       }
     });
 
-    // ── BLOQUEAR / DESBLOQUEAR ──────────────────────────────────────────
-    const modalBlock = document.getElementById('modal-block');
-    const modalBlockTitle = document.getElementById('modal-block-title');
-    const modalBlockIcon = document.getElementById('modal-block-icon');
-    const modalBlockSub = document.getElementById('modal-block-sub');
-    const modalBlockConfirm = document.getElementById('modal-block-confirm');
-    const modalBlockCancel = document.getElementById('modal-block-cancel');
-    let _blockRow = null;
-
+    // ── BLOQUEAR / DESBLOQUEAR ───────────────────────────────────────────────
     document.querySelector('.devices-table').addEventListener('click', function (e) {
       const btn = e.target.closest('.btn-action-block');
       if (!btn) return;
+
       _blockRow = btn.closest('tr');
-      const name = _blockRow.querySelector('.device-name').textContent;
-      const isBlocked = _blockRow.dataset.blocked === 'true';
+      const deviceId = parseInt(_blockRow.dataset.deviceId);
+      const device = devicesData.find(d => d.id === deviceId);
+      const name = device.hostname;
+      const isBlocked = device.status === 'Blocked';
 
       if (isBlocked) {
         modalBlockIcon.textContent = '🔓';
@@ -764,30 +671,31 @@
         modalBlockConfirm.textContent = 'Bloquear';
         modalBlockConfirm.className = 'dev-modal-btn dev-modal-btn-danger';
       }
+
       modalBlock.classList.add('open');
       modalBlockConfirm.focus();
     });
 
-    modalBlockConfirm.addEventListener('click', function () {
+    modalBlockConfirm.addEventListener('click', async function () {
       if (!_blockRow) return;
-      const isBlocked = _blockRow.dataset.blocked === 'true';
-      const statusCell = _blockRow.querySelector('.device-status');
-      const blockBtn = _blockRow.querySelector('.btn-action-block');
 
-      if (isBlocked) {
-        // restore original status stored in dataset
-        const prev = _blockRow.dataset.prevStatus || 'Online';
-        statusCell.textContent = prev;
-        statusCell.className = 'device-status ' + (prev === 'Online' ? 'status-online' : 'status-offline');
-        blockBtn.textContent = 'Bloquear';
-        _blockRow.dataset.blocked = 'false';
-      } else {
-        _blockRow.dataset.prevStatus = statusCell.textContent;
-        statusCell.textContent = 'Bloqueado';
-        statusCell.className = 'device-status status-blocked';
-        blockBtn.textContent = 'Desbloquear';
-        _blockRow.dataset.blocked = 'true';
+      const deviceId = parseInt(_blockRow.dataset.deviceId);
+      const device = devicesData.find(d => d.id === deviceId);
+      const isBlocked = device.status === 'Blocked';
+
+      try {
+        const newStatus = isBlocked ? 'Online' : 'Blocked';
+        await updateDevice(deviceId, { status: newStatus });
+
+        // Atualizar dados locais
+        device.status = newStatus;
+        renderDevicesTable();
+
+        console.log(`✅ Dispositivo ${deviceId} atualizado para ${newStatus}`);
+      } catch (error) {
+        console.error('❌ Erro ao atualizar dispositivo:', error);
       }
+
       modalBlock.classList.remove('open');
       _blockRow = null;
     });
@@ -800,19 +708,16 @@
       });
     });
 
-    // ── RENOMEAR ────────────────────────────────────────────────────────
-    const modalRename = document.getElementById('modal-rename');
-    const modalRenameSub = document.getElementById('modal-rename-sub');
-    const modalRenameInput = document.getElementById('modal-rename-input');
-    const modalRenameConfirm = document.getElementById('modal-rename-confirm');
-    const modalRenameCancel = document.getElementById('modal-rename-cancel');
-    let _renameRow = null;
-
+    // ── RENOMEAR ──────────────────────────────────────────────────────────────
     document.querySelector('.devices-table').addEventListener('click', function (e) {
       const btn = e.target.closest('.btn-action-rename');
       if (!btn) return;
+
       _renameRow = btn.closest('tr');
-      const currentName = _renameRow.querySelector('.device-name').textContent;
+      const deviceId = parseInt(_renameRow.dataset.deviceId);
+      const device = devicesData.find(d => d.id === deviceId);
+      const currentName = device.hostname;
+
       modalRenameSub.textContent = `Nome atual: ${currentName}`;
       modalRenameInput.value = currentName;
       modalRename.classList.add('open');
@@ -820,24 +725,40 @@
       modalRenameInput.select();
     });
 
-    modalRenameConfirm.addEventListener('click', function () {
+    modalRenameConfirm.addEventListener('click', async function () {
       if (!_renameRow) return;
+
       const newName = modalRenameInput.value.trim();
-      if (!newName) { modalRenameInput.focus(); return; }
-      const nameCell = _renameRow.querySelector('.device-name');
-      nameCell.textContent = newName;
-      // update aria-labels on both buttons
-      _renameRow.querySelectorAll('.btn-action').forEach(b => {
-        const action = b.classList.contains('btn-action-block') ? 'Bloquear' : 'Renomear';
-        b.setAttribute('aria-label', `${action} dispositivo ${newName}`);
-      });
+      if (!newName) {
+        modalRenameInput.focus();
+        return;
+      }
+
+      const deviceId = parseInt(_renameRow.dataset.deviceId);
+
+      try {
+        await updateDevice(deviceId, { hostname: newName });
+
+        // Atualizar dados locais
+        const device = devicesData.find(d => d.id === deviceId);
+        device.hostname = newName;
+        renderDevicesTable();
+
+        console.log(`✅ Dispositivo ${deviceId} renomeado para ${newName}`);
+      } catch (error) {
+        console.error('❌ Erro ao renomear dispositivo:', error);
+      }
+
       modalRename.classList.remove('open');
       _renameRow = null;
     });
 
     modalRenameInput.addEventListener('keydown', function (e) {
       if (e.key === 'Enter') modalRenameConfirm.click();
-      if (e.key === 'Escape') { modalRename.classList.remove('open'); _renameRow = null; }
+      if (e.key === 'Escape') {
+        modalRename.classList.remove('open');
+        _renameRow = null;
+      }
     });
 
     [modalRenameCancel, modalRename].forEach(el => {
@@ -849,7 +770,7 @@
       });
     });
 
-    // ── CARREGAR PERFIL DINÂMICO ────────────────────────────────────────────────────────
+    // ── CARREGAR PERFIL DINÂMICO ──────────────────────────────────────────────
     (function () {
       const raw = localStorage.getItem('neyes_user');
       if (!raw) return;
@@ -858,139 +779,10 @@
       document.querySelectorAll('.user-email').forEach(el => el.textContent = user.email || el.textContent);
       document.querySelectorAll('.user-role').forEach(el => el.textContent = user.role === 'ADMIN' ? 'Administrador' : 'Usuário');
     })();
-  </script>
 
-  <!-- DYNAMIC DEVICES TABLE -->
-  <script>
-    /**
-     * Renderiza a tabela de dispositivos com dados dinâmicos
-     */
-    function renderDevicesTable() {
-      const tbody = document.querySelector('.devices-table tbody');
-      if (!tbody) return;
-
-      const devices = dataService.getDevices();
-      tbody.innerHTML = '';
-
-      devices.forEach(device => {
-        const row = document.createElement('tr');
-        row.className = 'device-row';
-        row.dataset.deviceId = device.id;
-        row.dataset.blocked = device.blocked ? 'true' : 'false';
-        row.dataset.prevStatus = device.status === 'ONLINE' ? 'Online' : 'Offline';
-
-        const statusClass = device.blocked ? 'status-blocked' : (device.status === 'ONLINE' ? 'status-online' : 'status-offline');
-        const statusText = device.blocked ? 'Bloqueado' : (device.status === 'ONLINE' ? 'Online' : 'Offline');
-        const blockBtnText = device.blocked ? 'Desbloquear' : 'Bloquear';
-
-        row.innerHTML = `
-          <td class="device-ip">${device.ip}</td>
-          <td class="device-name">${device.hostname}</td>
-          <td class="device-bandwidth">${device.bandwidth.toFixed(1)}</td>
-          <td class="device-status ${statusClass}">${statusText}</td>
-          <td class="device-actions">
-            <button class="btn-action btn-action-block" aria-label="Bloquear/Desbloquear dispositivo ${device.hostname}">${blockBtnText}</button>
-            <button class="btn-action btn-action-rename" aria-label="Renomear dispositivo ${device.hostname}">Renomear</button>
-            <button class="btn-action btn-action-delete" aria-label="Deletar dispositivo ${device.hostname}">Deletar</button>
-          </td>
-        `;
-
-        tbody.appendChild(row);
-      });
-
-      // Anexa event listeners para os botões de deletar
-      document.querySelectorAll('.btn-action-delete').forEach(btn => {
-        btn.addEventListener('click', function () {
-          const row = this.closest('tr');
-          const deviceId = parseInt(row.dataset.deviceId);
-          const deviceName = row.querySelector('.device-name').textContent;
-
-          if (confirm(`Tem certeza que deseja deletar o dispositivo "${deviceName}"?`)) {
-            dataService.deleteDevice(deviceId);
-            row.style.animation = 'fadeOut 0.3s ease-out';
-            setTimeout(() => {
-              row.remove();
-              dataService.addNotification('Dispositivo removido', `${deviceName} foi removido da rede`, 'warning');
-            }, 300);
-          }
-        });
-      });
-    }
-
-    /**
-     * Adiciona um novo dispositivo (simulado)
-     */
-    function addNewDevice() {
-      const deviceCount = dataService.getDevices().length;
-      const newHostname = `Device-New-${deviceCount + 1}`;
-      const newIP = `192.168.1.${120 + deviceCount}`;
-
-      dataService.addDevice(newHostname, newIP);
-      renderDevicesTable();
-      dataService.addNotification('Dispositivo adicionado', `${newHostname} foi adicionado à rede`, 'success');
-    }
-
-    // Inicializa a tabela
-    document.addEventListener('DOMContentLoaded', function () {
-      renderDevicesTable();
-
-      // Adiciona botão para simular adição de dispositivos (apenas para apresentação)
-      const header = document.querySelector('.devices-section');
-      if (header) {
-        const addBtn = document.createElement('button');
-        addBtn.className = 'btn-refresh';
-        addBtn.style.marginLeft = '10px';
-        addBtn.innerHTML = '➕ Adicionar Dispositivo';
-        addBtn.title = 'Adicionar um novo dispositivo simulado';
-        addBtn.addEventListener('click', addNewDevice);
-
-        const sectionTitle = header.querySelector('.section-title');
-        if (sectionTitle) {
-          sectionTitle.parentNode.insertBefore(addBtn, sectionTitle.nextSibling);
-        }
-      }
-
-      // Atualiza a tabela a cada 15 segundos (simulação de atualização)
-      setInterval(() => {
-        const tableRows = document.querySelectorAll('.devices-table tbody tr');
-        tableRows.forEach(row => {
-          const deviceId = parseInt(row.dataset.deviceId);
-          const device = dataService.getDevice(deviceId);
-          if (device) {
-            // Atualiza bandwidth com variação
-            device.bandwidth = Math.max(0, device.bandwidth + (Math.random() - 0.5) * 50);
-            row.querySelector('.device-bandwidth').textContent = device.bandwidth.toFixed(1);
-          }
-        });
-      }, 15000);
-    });
-
-    // Adiciona CSS para animação de fade out
-    const style = document.createElement('style');
-    style.textContent = `
-      @keyframes fadeOut {
-        from { opacity: 1; transform: translateX(0); }
-        to { opacity: 0; transform: translateX(-20px); }
-      }
-      .btn-action-delete {
-        background-color: #ef4444;
-        color: white;
-        padding: 6px 12px;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        font-size: 12px;
-        transition: all 0.2s;
-      }
-      .btn-action-delete:hover {
-        background-color: #dc2626;
-        transform: scale(1.05);
-      }
-      .btn-action-delete:active {
-        transform: scale(0.95);
-      }
-    `;
-    document.head.appendChild(style);
+    // ── INICIALIZAR ───────────────────────────────────────────────────────────
+    console.log('🚀 Iniciando N Eyes Devices Page...');
+    loadDevices();
   </script>
 </body>
 
