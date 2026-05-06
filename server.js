@@ -71,7 +71,7 @@ app.use((req, res, next) => {
 app.listen(PORT, () => {
   console.log(`
 ╔═══════════════════════════════════════════════════════════╗
-║         🛡️  N EYES - MONITORAMENTO DE TRÁFEGO  🛡️         ║
+║            N EYES - MONITORAMENTO DE TRÁFEGO              ║
 ╚═══════════════════════════════════════════════════════════╝
 
 ✅ Servidor rodando em http://localhost:${PORT}
