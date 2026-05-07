@@ -611,6 +611,158 @@
     </main>
   </div>
 
+  <!-- FILTERS & LOGS RENDERING - Module Script (Seção 3 & 4 do APRESENTACAO.md) -->
+  <script type="module">
+    import { getLogs } from '../dataService.js';
+
+    /**
+     * Renderiza tabela de logs com segurança
+     * Segue Seção 4 do APRESENTACAO.md: usar createElement() e appendChild()
+     * Nunca usar innerHTML para conteúdo dinâmico
+     */
+    async function renderLogsTable(filters = {}) {
+      try {
+        // Buscar logs filtrados (Seção 3.3: Fetch API com tratamento de erros)
+        const logs = await getLogs(filters);
+
+        // Limpar tbody - único uso seguro de innerHTML (limpeza)
+        const logsTableBody = document.querySelector('.logs-table tbody');
+        if (!logsTableBody) {
+          console.error('Tabela de logs não encontrada');
+          return;
+        }
+        logsTableBody.innerHTML = ''; // ← Seguro: apenas limpeza
+
+        // Renderizar cada log
+        logs.forEach(log => {
+          // Passo 1: Criar linha (Seção 4.2)
+          const row = document.createElement('tr');
+          row.className = `log-row severity-${log.severity}`;
+
+          // Passo 2: Criar célula de timestamp (Seção 4.3)
+          const tdTimestamp = document.createElement('td');
+          tdTimestamp.className = 'log-timestamp';
+          const timestamp = new Date(log.timestamp).toLocaleString('pt-BR');
+          tdTimestamp.textContent = timestamp; // ← Seguro: textContent, não innerHTML
+          row.appendChild(tdTimestamp);
+
+          // Passo 3: Criar célula de tipo de evento
+          const tdEventType = document.createElement('td');
+          tdEventType.className = 'log-event';
+          tdEventType.textContent = log.type || 'N/A'; // ← textContent
+          row.appendChild(tdEventType);
+
+          // Passo 4: Criar célula de origem (IP/Dispositivo)
+          const tdOrigin = document.createElement('td');
+          tdOrigin.className = 'log-origin';
+          const originText = log.deviceName || 'Desconhecido';
+          tdOrigin.textContent = originText; // ← textContent
+          row.appendChild(tdOrigin);
+
+          // Passo 5: Criar célula de detalhes
+          const tdDetails = document.createElement('td');
+          tdDetails.className = 'log-details';
+          tdDetails.textContent = log.message || 'Sem descrição'; // ← textContent
+          row.appendChild(tdDetails);
+
+          // Passo 6: Criar célula de usuário
+          const tdUser = document.createElement('td');
+          tdUser.className = 'log-user';
+          tdUser.textContent = log.user || 'system'; // ← textContent
+          row.appendChild(tdUser);
+
+          // Passo 7: Criar célula de severidade com badge
+          const tdSeverity = document.createElement('td');
+          tdSeverity.className = 'log-severity';
+
+          const severityBadge = document.createElement('span');
+          severityBadge.className = `severity-badge ${log.severity}`;
+          const severityLabel = getSeverityLabel(log.severity);
+          severityBadge.textContent = severityLabel; // ← textContent
+          severityBadge.title = getSeverityTitle(log.severity);
+
+          tdSeverity.appendChild(severityBadge);
+          row.appendChild(tdSeverity);
+
+          // Passo 8: Adicionar linha à tabela (Seção 4.6)
+          logsTableBody.appendChild(row);
+        });
+
+        console.log(`✓ Tabela renderizada com ${logs.length} logs`);
+      } catch (error) {
+        console.error('Erro ao renderizar logs:', error);
+      }
+    }
+
+    /**
+     * Mapear labels de severidade
+     */
+    function getSeverityLabel(severity) {
+      const labels = {
+        'info': 'ℹ️ Info',
+        'warning': '⚠️ Aviso',
+        'error': '❌ Crítico'
+      };
+      return labels[severity] || severity;
+    }
+
+    function getSeverityTitle(severity) {
+      const titles = {
+        'info': 'Evento padrão do sistema',
+        'warning': 'Alerta de tráfego de rede',
+        'error': 'Alerta de alta prioridade: Intervenção imediata necessária'
+      };
+      return titles[severity] || '';
+    }
+
+    /**
+     * Capturar evento submit do formulário com preventDefault()
+     * Seção 6.1 do APRESENTACAO.md: Event Delegation
+     */
+    const logsFiltersForm = document.getElementById('logs-filters-form');
+    if (logsFiltersForm) {
+      logsFiltersForm.addEventListener('submit', async (e) => {
+        // Seção 6.2: preventDefault() para evitar redirecionamento
+        e.preventDefault();
+
+        // Capturar valores dos filtros
+        const keyword = document.getElementById('filter-search')?.value || '';
+        const eventType = document.getElementById('filter-event-type')?.value || '';
+        const device = document.getElementById('filter-device')?.value || '';
+        const dateStart = document.getElementById('filter-date-start')?.value || '';
+        const dateEnd = document.getElementById('filter-date-end')?.value || '';
+
+        // Construir objeto de filtros
+        const filters = {
+          keyword,
+          eventType,
+          device,
+          dateStart,
+          dateEnd
+        };
+
+        console.log('Filtros aplicados:', filters);
+
+        // Re-renderizar tabela com filtros
+        await renderLogsTable(filters);
+      });
+
+      // Botão de reset do formulário
+      const resetBtn = logsFiltersForm.querySelector('button[type="reset"]');
+      if (resetBtn) {
+        resetBtn.addEventListener('click', () => {
+          // Renderizar sem filtros após reset
+          setTimeout(() => {
+            renderLogsTable({});
+          }, 10);
+        });
+      }
+    }
+
+    // Inicializar: renderizar todos os logs na primeira vez
+    renderLogsTable();
+  </script>
+
   <!-- DROPDOWN FUNCTIONALITY SCRIPT -->
   <script>
     const userProfileBtn = document.querySelector('.header-actions .btn-user');

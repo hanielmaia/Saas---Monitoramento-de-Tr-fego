@@ -203,6 +203,78 @@ export async function getDevices() {
 - `response.ok` verifica se status está entre 200-299
 - Erros HTTP (404, 500, etc.) são detectados explicitamente
 
+### 3.3b Busca com Filtros - getLogs()
+
+```javascript
+export async function getLogs(filters = {}) {
+    try {
+        // Fetch da API - busca todos os logs
+        const response = await fetch(`${API_BASE_URL}/logs`);
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        let logs = await response.json();
+
+        // Filtrar por palavra-chave em JavaScript (Seção 7.5)
+        if (filters.keyword && filters.keyword.trim()) {
+            const kw = filters.keyword.toLowerCase();
+            logs = logs.filter(log =>
+                (log.deviceName && log.deviceName.toLowerCase().includes(kw)) ||
+                (log.message && log.message.toLowerCase().includes(kw)) ||
+                (log.type && log.type.toLowerCase().includes(kw))
+            );
+        }
+
+        // Filtrar por tipo de evento
+        if (filters.eventType && filters.eventType.trim()) {
+            logs = logs.filter(log => log.type === filters.eventType);
+        }
+
+        // Filtrar por dispositivo (IP ou nome)
+        if (filters.device && filters.device.trim()) {
+            const dev = filters.device.toLowerCase();
+            logs = logs.filter(log =>
+                (log.deviceName && log.deviceName.toLowerCase().includes(dev))
+            );
+        }
+
+        // Filtrar por data de início (Seção 7.5: lógica de comparação de datas)
+        if (filters.dateStart) {
+            const startDate = new Date(filters.dateStart);
+            startDate.setHours(0, 0, 0, 0);
+            const startTime = startDate.getTime();
+            logs = logs.filter(log => new Date(log.timestamp).getTime() >= startTime);
+        }
+
+        // Filtrar por data de fim (incluir todo o dia da data fim)
+        if (filters.dateEnd) {
+            const endDate = new Date(filters.dateEnd);
+            endDate.setHours(23, 59, 59, 999); // Incluir até o final do dia
+            const endTime = endDate.getTime();
+            logs = logs.filter(log => new Date(log.timestamp).getTime() <= endTime);
+        }
+
+        return logs;
+    } catch (error) {
+        handleError('getLogs', error);
+    }
+}
+```
+
+**Estratégia de Filtragem:**
+1. **Fetch:** Busca todos os logs uma única vez da API
+2. **Filtragem em JavaScript:** Aplicar múltiplos filtros localmente (mais rápido)
+3. **Comparação de Datas:** Converte strings ISO 8601 em timestamps para comparação numérica
+4. **Array.filter():** Retorna novo array sem modificar original
+
+**Exemplo de uso:**
+```javascript
+const logs = await getLogs({
+    keyword: 'bloqueio',
+    dateStart: '2026-03-13',
+    dateEnd: '2026-03-14',
+    eventType: 'bloqueio'
+});
+```
+
 ### 3.4 Operação POST/PATCH - Atualizar Dados
 
 ```javascript
@@ -483,30 +555,119 @@ devicesTableBody.appendChild(row);
 </tbody>
 ```
 
-### 4.2 Renderização de Tabela de Logs
+### 4.2 Renderização Segura de Tabela de Logs
 
-Mesmo padrão aplicado a logs:
+A renderização de logs segue o padrão de **DOM seguro** usando apenas `createElement()` e `appendChild()`:
 
 ```javascript
-function renderLogsTable() {
-    logsTableBody.innerHTML = '';
-    
-    logsData.forEach(log => {
-        const row = document.createElement('tr');
-        
-        const tdTimestamp = document.createElement('td');
-        tdTimestamp.textContent = new Date(log.timestamp).toLocaleString();
-        row.appendChild(tdTimestamp);
-        
-        const tdDevice = document.createElement('td');
-        tdDevice.textContent = log.deviceName;
-        row.appendChild(tdDevice);
-        
-        // ... mais células ...
-        
-        logsTableBody.appendChild(row);
-    });
+/**
+ * Renderiza tabela de logs com filtros
+ * Segue padrão seguro: createElement() + appendChild() + textContent
+ * Nunca usa innerHTML para conteúdo dinâmico
+ */
+async function renderLogsTable(filters = {}) {
+    try {
+        // Passo 1: Buscar logs filtrados da API (Seção 3.3b)
+        const logs = await getLogs(filters);
+
+        // Passo 2: Limpar tbody - único uso seguro de innerHTML (limpeza)
+        const logsTableBody = document.querySelector('.logs-table tbody');
+        logsTableBody.innerHTML = ''; // ← Seguro: apenas limpeza
+
+        // Passo 3: Renderizar cada log
+        logs.forEach(log => {
+            // Criar linha de tabela
+            const row = document.createElement('tr');
+            row.className = `log-row severity-${log.severity}`;
+
+            // Criar célula de timestamp
+            const tdTimestamp = document.createElement('td');
+            tdTimestamp.className = 'log-timestamp';
+            const timestamp = new Date(log.timestamp).toLocaleString('pt-BR');
+            tdTimestamp.textContent = timestamp; // ← Seguro: textContent, não innerHTML
+            row.appendChild(tdTimestamp);
+
+            // Criar célula de tipo de evento
+            const tdEventType = document.createElement('td');
+            tdEventType.className = 'log-event';
+            tdEventType.textContent = log.type || 'N/A'; // ← textContent
+            row.appendChild(tdEventType);
+
+            // Criar célula de dispositivo
+            const tdDevice = document.createElement('td');
+            tdDevice.className = 'log-origin';
+            tdDevice.textContent = log.deviceName || 'Desconhecido'; // ← textContent
+            row.appendChild(tdDevice);
+
+            // Criar célula de detalhes
+            const tdDetails = document.createElement('td');
+            tdDetails.className = 'log-details';
+            tdDetails.textContent = log.message || 'Sem descrição'; // ← textContent
+            row.appendChild(tdDetails);
+
+            // Criar célula de usuário
+            const tdUser = document.createElement('td');
+            tdUser.className = 'log-user';
+            tdUser.textContent = log.user || 'system'; // ← textContent
+            row.appendChild(tdUser);
+
+            // Criar célula de severidade com badge
+            const tdSeverity = document.createElement('td');
+            tdSeverity.className = 'log-severity';
+            
+            const severityBadge = document.createElement('span');
+            severityBadge.className = `severity-badge ${log.severity}`;
+            severityBadge.textContent = getSeverityLabel(log.severity);
+            severityBadge.title = getSeverityTitle(log.severity);
+            
+            tdSeverity.appendChild(severityBadge);
+            row.appendChild(tdSeverity);
+
+            // Passo 4: Adicionar linha à tabela
+            logsTableBody.appendChild(row);
+        });
+
+        console.log(`✓ Tabela renderizada com ${logs.length} logs`);
+    } catch (error) {
+        console.error('Erro ao renderizar logs:', error);
+    }
 }
+
+function getSeverityLabel(severity) {
+    const labels = {
+        'info': 'ℹ️ Info',
+        'warning': '⚠️ Aviso',
+        'error': '❌ Crítico'
+    };
+    return labels[severity] || severity;
+}
+```
+
+**Padrão Seguro de Renderização:**
+1. ✅ `document.createElement()` - Cria elementos sem parsing de HTML
+2. ✅ `.textContent` - Insere texto literal (não processa tags)
+3. ✅ `.appendChild()` - Adiciona elemento ao DOM com segurança
+4. ✅ Nunca usa `.innerHTML` para conteúdo dinâmico
+
+**Por que é seguro?**
+- Previne **XSS (Cross-Site Scripting):** Texto é sempre tratado como literal
+- Não processa HTML/JavaScript injentado
+- Segue OWASP recommendations para DOM safety
+
+**Resultado HTML gerado:**
+```html
+<tbody>
+  <tr class="log-row severity-info">
+    <td class="log-timestamp">13/03/2026 14:32:45</td>
+    <td class="log-event">Conexão</td>
+    <td class="log-origin">PC Sala</td>
+    <td class="log-details">Dispositivo conectado à rede</td>
+    <td class="log-user">joao.calheiros</td>
+    <td class="log-severity">
+      <span class="severity-badge info">ℹ️ Info</span>
+    </td>
+  </tr>
+</tbody>
 ```
 
 ### 4.3 Atualização Parcial - Métricas em Tempo Real
@@ -791,6 +952,126 @@ document.querySelector('.devices-table').addEventListener('click', function (e) 
 ```
 
 **Diferença:** Abre modal com input para digitação
+
+### 6.3 Tratamento de Formulário de Filtros com preventDefault()
+
+Arquivo: [src/pages/logs.html](src/pages/logs.html)
+
+#### Passo 1: Capturar Evento Submit com preventDefault()
+
+```javascript
+const logsFiltersForm = document.getElementById('logs-filters-form');
+
+logsFiltersForm.addEventListener('submit', async (e) => {
+    // Prevenir comportamento padrão (redirecionamento/reload)
+    e.preventDefault(); // ← CRÍTICO: sem isso, página recarrega!
+    
+    // ... capturar filtros ...
+    // ... renderizar tabela ...
+});
+```
+
+**Por que preventDefault() é crucial?**
+- Padrão HTML: `<form>` ao ser enviado recarrega a página
+- `preventDefault()` bloqueia esse comportamento
+- Permite processar dados em JavaScript sem reload
+
+#### Passo 2: Capturar Valores dos Inputs
+
+```javascript
+logsFiltersForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    // Capturar valores conforme Seção 6.1 (Event Delegation)
+    const keyword = document.getElementById('filter-search')?.value || '';
+    const eventType = document.getElementById('filter-event-type')?.value || '';
+    const device = document.getElementById('filter-device')?.value || '';
+    const dateStart = document.getElementById('filter-date-start')?.value || '';
+    const dateEnd = document.getElementById('filter-date-end')?.value || '';
+
+    // Construir objeto de filtros
+    const filters = {
+        keyword,      // Busca por palavra-chave
+        eventType,    // Filtro por tipo de evento
+        device,       // Filtro por dispositivo
+        dateStart,    // Data de início (YYYY-MM-DD)
+        dateEnd       // Data de fim (YYYY-MM-DD)
+    };
+
+    console.log('Filtros aplicados:', filters);
+});
+```
+
+**Técnicas:**
+- `getElementById()` - Seleciona campos de formulário
+- `?.value` - Optional chaining para segurança
+- `|| ''` - Valor padrão se campo vazio
+
+#### Passo 3: Chamar Função de Renderização
+
+```javascript
+logsFiltersForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    // ... capturar valores ...
+
+    // Re-renderizar tabela com filtros (Seção 4.2)
+    await renderLogsTable(filters);
+});
+```
+
+**Fluxo:**
+1. Usuário clica em "Aplicar Filtros"
+2. `preventDefault()` bloqueia reload
+3. Valores são capturados
+4. `renderLogsTable(filters)` é chamado
+5. Logs são buscados com `getLogs(filters)` (Seção 3.3b)
+6. Tabela é re-renderizada com `createElement()` + `appendChild()`
+
+#### Passo 4: Limpar Filtros
+
+```javascript
+const resetBtn = logsFiltersForm.querySelector('button[type="reset"]');
+if (resetBtn) {
+    resetBtn.addEventListener('click', () => {
+        // setTimeout para executar APÓS reset do formulário
+        setTimeout(() => {
+            renderLogsTable({});  // Re-renderizar sem filtros
+        }, 10);
+    });
+}
+```
+
+**Nota:** `setTimeout` é necessário porque `reset` dispara DEPOIS do evento click.
+
+#### Passo 5: Inicializar Renderização
+
+```javascript
+// Ao carregar página, renderizar todos os logs (sem filtros)
+renderLogsTable();
+```
+
+**Resultado:**
+```
+┌─────────────────────────────────────────┐
+│ Filtros de Busca                        │
+├─────────────────────────────────────────┤
+│ Palavra-chave: [____________]           │
+│ Data Início: [__________]               │
+│ Data Fim: [__________]                  │
+│ Tipo: [Todos ▼]                         │
+│ [Aplicar Filtros] [Limpar Filtros]      │
+└─────────────────────────────────────────┘
+             ↓ preventDefault()
+┌─────────────────────────────────────────┐
+│ Registros de Atividades (Tabela)        │
+├─────────────────────────────────────────┤
+│ Timestamp | Tipo | Dispositivo | ...    │
+│ 14:32:45  | Conexão | PC Sala  | ...    │
+│ 14:28:12  | Bloqueio | Servidor| ...    │
+│ ...                                      │
+└─────────────────────────────────────────┘
+```
 
 ### 6.4 Tratamento de Refresh
 
