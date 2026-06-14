@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="N Eyes - Dashboard de Monitoramento de Tráfego de Rede em Tempo Real">
+  <title>N Eyes | Dashboard</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/home.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="icon" href="/favicon-32x32.png" type="image/png">
+</head>
+
+<body>
+  <!-- Carregar scripts de configuração primeiro -->
+  <script src="/js/config.js"></script>
+  <script src="/js/utils/helpers.js"></script>
+  <script src="/js/utils/validators.js"></script>
+  <script src="/js/services/api.service.js"></script>
+  <script src="/js/services/auth.service.js"></script>
+  <script src="/js/services/device.service.js"></script>
+  <script src="/js/guards/authGuard.js"></script>
+
+  <div class="app-container">
+    <!-- SIDEBAR -->
+    <aside class="sidebar" aria-label="Menu de navegação principal">
+      <header class="sidebar-header">
+        <h1 class="logo">N Eyes</h1>
+        <p class="tagline">Monitoramento de Rede</p>
+      </header>
+
+      <nav class="sidebar-nav">
+        <ul class="nav-menu">
+          <li class="nav-item">
+            <a href="/pages/home.html" class="nav-link active" aria-label="Ir para Dashboard">
+              <span class="icon">📊</span>
+              <span class="text">Dashboard</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="/pages/devices.html" class="nav-link" aria-label="Ir para Dispositivos">
+              <span class="icon">🖥️</span>
+              <span class="text">Dispositivos</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="/pages/logs.html" class="nav-link" aria-label="Ir para Logs de Atividades">
+              <span class="icon">📋</span>
+              <span class="text">Logs</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="/pages/config.html" class="nav-link" aria-label="Ir para Configurações">
+              <span class="icon">⚙️</span>
+              <span class="text">Configurações</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <footer class="sidebar-footer">
+        <div class="user-profile">
+          <div class="user-avatar">J</div>
+          <div class="user-info">
+            <span class="user-name" id="userName">João</span>
+            <span class="user-role" id="userRole">Admin</span>
+          </div>
+        </div>
+        <div class="sidebar-actions">
+          <a href="/pages/edit-profile.html" class="action-btn" title="Editar perfil">👤</a>
+          <button class="action-btn" id="logoutBtn" title="Sair">🚪</button>
+        </div>
+      </footer>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+      <!-- NAVBAR -->
+      <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+        <div class="container-fluid">
+          <h2 class="navbar-brand">Dashboard</h2>
+          <div class="navbar-text">
+            <span id="currentTime"></span>
+          </div>
+        </div>
+      </nav>
+
+      <!-- PAGE CONTENT -->
+      <div class="content-wrapper">
+        <section class="dashboard-section">
+          <h3>Bem-vindo ao N Eyes!</h3>
+          
+          <div class="stats-grid mt-4">
+            <div class="stat-card">
+              <div class="stat-label">Dispositivos Online</div>
+              <div class="stat-value" id="devicesOnline">-</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">Dispositivos Offline</div>
+              <div class="stat-value" id="devicesOffline">-</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">Tráfego Médio</div>
+              <div class="stat-value" id="avgTraffic">-</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">Alertas</div>
+              <div class="stat-value" id="alertCount">-</div>
+            </div>
+          </div>
+
+          <div class="chart-container mt-5">
+            <h4>Tráfego em Tempo Real</h4>
+            <canvas id="trafficChart"></canvas>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // Proteger página
+    if (!authGuard.protect()) {
+      throw new Error('Não autorizado');
+    }
+
+    // Carregar dados do usuário
+    function loadUserData() {
+      const user = authGuard.getCurrentUser();
+      if (user) {
+        document.getElementById('userName').textContent = user.name || 'Usuário';
+        document.getElementById('userRole').textContent = user.role || 'User';
+        document.querySelector('.user-avatar').textContent = user.name.charAt(0).toUpperCase();
+      }
+    }
+
+    // Atualizar hora
+    function updateTime() {
+      const now = new Date();
+      document.getElementById('currentTime').textContent = formatDate(now);
+    }
+
+    // Carregar estatísticas
+    async function loadStats() {
+      try {
+        const stats = await getDeviceStats();
+        document.getElementById('devicesOnline').textContent = stats.online;
+        document.getElementById('devicesOffline').textContent = stats.offline;
+        document.getElementById('avgTraffic').textContent = formatBytes(stats.avgBandwidth * 1000000, 1);
+      } catch (error) {
+        console.error('Erro ao carregar estatísticas:', error);
+        showNotification('Erro ao carregar dados', 'danger');
+      }
+    }
+
+    // Logout
+    document.getElementById('logoutBtn').addEventListener('click', async () => {
+      if (confirm('Tem certeza que deseja sair?')) {
+        await authGuard.logout();
+      }
+    });
+
+    // Inicializar
+    loadUserData();
+    loadStats();
+    updateTime();
+    setInterval(updateTime, 1000);
+  </script>
+</body>
+
+</html>

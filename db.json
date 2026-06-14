@@ -1,4 +1,57 @@
 {
+    "users": [
+        {
+            "id": 1,
+            "name": "João Calheiros",
+            "email": "joao@test.com",
+            "passwordHash": "$2b$10$O9QmsPewBLSNCP0DjHg2OPST9/PgBkqquzi8Abn/xZyqK5uQm2IBi",
+            "role": "ADMIN",
+            "createdAt": "2026-05-01T10:00:00Z"
+        },
+        {
+            "id": 2,
+            "name": "Maria Silva",
+            "email": "maria@test.com",
+            "passwordHash": "$2b$10$O9QmsPewBLSNCP0DjHg2OPST9/PgBkqquzi8Abn/xZyqK5uQm2IBi",
+            "role": "USER",
+            "createdAt": "2026-05-02T11:30:00Z"
+        },
+        {
+            "id": 3,
+            "name": "Haniel Maia",
+            "email": "haniel@test.com",
+            "passwordHash": "$2b$10$O9QmsPewBLSNCP0DjHg2OPST9/PgBkqquzi8Abn/xZyqK5uQm2IBi",
+            "role": "MODERATOR",
+            "createdAt": "2026-05-02T15:45:00Z"
+        }
+    ],
+    "sessions": [
+        {
+            "id": 1,
+            "userId": 1,
+            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInJvbGUiOiJBRE1JTiJ9.EjZSIgw8jcZpL9RqJ7V8jK2lW0hQ5nM3pP8rS6tT9uU",
+            "expiresAt": "2026-06-15T10:00:00Z",
+            "createdAt": "2026-06-14T10:00:00Z"
+        }
+    ],
+    "settings": [
+        {
+            "id": 1,
+            "alertThreshold": 80,
+            "scanFrequency": 30,
+            "quarantineEnabled": false,
+            "allowedIpRange": "192.168.0.0/16",
+            "monitoredPorts": "80,443,8080",
+            "retentionDays": 30,
+            "autoArchive": true,
+            "minPasswordLength": 6,
+            "requireUppercase": false,
+            "requireNumbers": false,
+            "requireSpecialChars": false,
+            "createdAt": "2026-05-01T00:00:00Z",
+            "updatedAt": "2026-06-14T10:00:00Z"
+        }
+    ],
     "devices": [
         {
             "id": 1,

@@ -44,9 +44,24 @@ app.use((req, res, next) => {
     return next();
   }
 
-  let filePath = path.join(__dirname, req.url);
+  let filePath;
+  
+  // Página inicial
   if (req.url === '/' || req.url === '') {
     filePath = path.join(__dirname, 'src/pages/login.html');
+  } 
+  // Se for um arquivo .html, procura em src/pages/
+  else if (req.url.endsWith('.html')) {
+    const fileName = path.basename(req.url);
+    filePath = path.join(__dirname, 'src/pages', fileName);
+  }
+  // Se for um arquivo CSS/JS/IMG que começa com /src/, serve normalmente
+  else if (req.url.startsWith('/src/')) {
+    filePath = path.join(__dirname, req.url);
+  }
+  // Outros arquivos estáticos
+  else {
+    filePath = path.join(__dirname, req.url);
   }
 
   const extname = path.extname(filePath).toLowerCase();
@@ -56,7 +71,7 @@ app.use((req, res, next) => {
     if (err) {
       if (err.code === 'ENOENT') {
         res.writeHead(404, { 'Content-Type': 'text/html' });
-        res.end('<h1>Página não encontrada</h1>', 'utf-8');
+        res.end('<h1>Página não encontrada</h1><p>Arquivo: ' + filePath + '</p>', 'utf-8');
       } else {
         res.writeHead(500, { 'Content-Type': 'text/html' });
         res.end('<h1>Erro do servidor</h1>', 'utf-8');

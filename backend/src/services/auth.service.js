@@ -1,47 +1,60 @@
+/**
+ * Auth Service - N Eyes
+ * Lógica de autenticação (register, login, logout)
+ */
+
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const prisma = require('../config/prisma');
+const UserModel = require('../models/User.model');
 
+/**
+ * Registra novo usuário
+ */
 async function register({ name, email, password }) {
-  const existing = await prisma.user.findUnique({ where: { email } });
+  // Verificar se usuário já existe
+  const existing = UserModel.findByEmail(email);
   if (existing) {
-    throw new Error('E-mail já cadastrado.');
+    throw new Error('E-mail já cadastrado');
   }
 
+  // Hashear senha
   const passwordHash = await bcrypt.hash(password, 10);
 
-  const user = await prisma.user.create({
-    data: { name, email, passwordHash },
-    select: { id: true, name: true, email: true, role: true, createdAt: true },
+  // Criar usuário com role padrão
+  const user = UserModel.create({
+    name,
+    email,
+    passwordHash,
+    role: 'USER'
   });
 
-  return user;
+  // Retornar sem a senha
+  const { passwordHash: _, ...userWithoutPassword } = user;
+  return userWithoutPassword;
 }
 
+/**
+ * Faz login do usuário
+ */
 async function login({ email, password }) {
-  const user = await prisma.user.findUnique({ where: { email } });
+  // Encontrar usuário
+  const user = UserModel.findByEmail(email);
   if (!user) {
-    throw new Error('Credenciais inválidas.');
+    throw new Error('Credenciais inválidas');
   }
 
+  // Verificar senha
   const valid = await bcrypt.compare(password, user.passwordHash);
   if (!valid) {
-    throw new Error('Credenciais inválidas.');
+    throw new Error('Credenciais inválidas');
   }
 
+  // Gerar token JWT
   const token = jwt.sign(
-    { userId: user.id, role: user.role },
-    process.env.JWT_SECRET,
-    { expiresIn: '8h' }
+    { userId: user.id, role: user.role, email: user.email },
+    process.env.JWT_SECRET || 'seu_secret_aqui',
+    { expiresIn: process.env.JWT_EXPIRATION || '8h' }
   );
-
-  await prisma.session.create({
-    data: {
-      userId: user.id,
-      token,
-      expiresAt: new Date(Date.now() + 8 * 60 * 60 * 1000),
-    },
-  });
 
   return {
     token,
@@ -49,26 +62,36 @@ async function login({ email, password }) {
       id: user.id,
       name: user.name,
       email: user.email,
-      role: user.role,
-    },
+      role: user.role
+    }
   };
 }
 
-async function me(userId) {
-  const user = await prisma.user.findUnique({
-    where: { id: userId },
-    select: { id: true, name: true, email: true, role: true, createdAt: true },
-  });
-
+/**
+ * Obtém dados do usuário logado
+ */
+function me(userId) {
+  const user = UserModel.findById(userId);
   if (!user) {
-    throw new Error('Usuário não encontrado.');
+    throw new Error('Usuário não encontrado');
   }
 
-  return user;
+  const { passwordHash: _, ...userWithoutPassword } = user;
+  return userWithoutPassword;
 }
 
-async function logout(token) {
-  await prisma.session.deleteMany({ where: { token } });
+/**
+ * Faz logout (simples, sem salvar sessão)
+ */
+function logout() {
+  // Em um sistema real, invalidaríamos o token aqui
+  // Por enquanto, apenas retornamos sucesso
+  return true;
 }
 
-module.exports = { register, login, me, logout };
+module.exports = {
+  register,
+  login,
+  me,
+  logout
+};

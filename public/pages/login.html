@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="N Eyes - Login de Acesso ao Sistema de Monitoramento de Rede">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/login.css">
+  <title>N Eyes | Login</title>
+  <link rel="icon" href="/favicon-32x32.png" type="image/png">
+
+</head>
+
+<body>
+  <!-- Carregar scripts de configuração primeiro -->
+  <script src="/js/config.js"></script>
+  <script src="/js/utils/helpers.js"></script>
+  <script src="/js/utils/validators.js"></script>
+  <script src="/js/services/api.service.js"></script>
+  <script src="/js/services/auth.service.js"></script>
+  <script src="/js/guards/authGuard.js"></script>
+
+  <main class="login-shell" aria-label="Página de login N Eyes">
+    <section class="brand">
+      <h1>N Eyes</h1>
+      <p>Acesso ao Sistema</p>
+    </section>
+
+    <form class="login-form" id="loginForm" aria-label="Formulário de login" novalidate>
+      <div class="mb-3">
+        <label for="email" class="form-label">E-mail</label>
+        <input 
+          type="email" 
+          class="form-control" 
+          id="email" 
+          name="email" 
+          placeholder="Ex: joao@test.com" 
+          required 
+          autocomplete="email">
+        <div class="invalid-feedback"></div>
+      </div>
+      <div class="mb-3">
+        <label for="password" class="form-label">Senha</label>
+        <input 
+          type="password" 
+          class="form-control" 
+          id="password" 
+          name="password" 
+          placeholder="Sua senha" 
+          required 
+          autocomplete="current-password">
+        <div class="invalid-feedback"></div>
+      </div>
+      <div id="loginError" class="alert alert-danger" role="alert" style="display:none;"></div>
+      <button type="submit" id="loginBtn" class="btn btn-primary w-100">Entrar</button>
+    </form>
+
+    <p class="login-help">
+      Não tem conta? <a href="register.html">Cadastre-se</a> para acessar o painel.
+    </p>
+
+    <p class="login-footer">Painel de monitoramento de rede N Eyes</p>
+  </main>
+
+  <script>
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      const btn = document.getElementById('loginBtn');
+      const errorEl = document.getElementById('loginError');
+
+      // Validar formulário
+      const validation = validateLoginForm({ email, password });
+      if (!validation.valid) {
+        displayFormErrors('loginForm', validation.errors);
+        return;
+      }
+
+      btn.disabled = true;
+      btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Entrando...';
+      errorEl.style.display = 'none';
+
+      try {
+        const result = await login(email, password);
+        errorEl.style.display = 'none';
+        
+        // Redirecionar para home
+        showNotification('Login realizado com sucesso!', 'success', 2000);
+        setTimeout(() => {
+          authGuard.redirectAfterLogin();
+        }, 500);
+
+      } catch (error) {
+        clearFormErrors('loginForm');
+        errorEl.textContent = error.message || 'Erro ao fazer login. Verifique suas credenciais.';
+        errorEl.style.display = 'block';
+        btn.disabled = false;
+        btn.textContent = 'Entrar';
+      }
+    });
+
+    // Verificar se já está logado
+    if (authGuard.isAuthenticated()) {
+      window.location.href = '/pages/home.html';
+    }
+  </script>
+</body>
+
+</html>
