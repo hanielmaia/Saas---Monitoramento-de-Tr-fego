@@ -1,10 +1,11 @@
 import 'dotenv/config';
-import app from './app';
+import app from './app.js';
 
-const port: number = parseInt(process.env.PORT || '3000', 10);
-const host: string = process.env.HOST || 'localhost';
+const port = parseInt(process.env.PORT ?? '3000', 10);
+const host = process.env.HOST ?? 'localhost';
 
 app.listen(port, host, () => {
-  console.log(`✅ Servidor rodando em http://${host}:${port}`);
-  console.log(`📝 Ambiente: ${process.env.NODE_ENV || 'development'}`);
+  console.log(`\n✅ Servidor iniciado`);
+  console.log(`📡 URL: http://${host}:${port}`);
+  console.log(`📝 Ambiente: ${process.env.NODE_ENV ?? 'development'}\n`);
 });

@@ -18,5 +18,8 @@
     "license": "MIT",
     "dependencies": {
         "json-server": "^0.17.4"
+    },
+    "devDependencies": {
+        "tsx": "^4.22.4"
     }
 }

@@ -1,16 +1,14 @@
 {
   "name": "backend",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "type": "commonjs",
+  "description": "N Eyes - Backend API",
+  "main": "dist/server.js",
+  "type": "module",
   "scripts": {
+    "dev": "tsx watch src/server.ts",
     "build": "tsc",
-    "dev": "nodemon --exec ts-node src/server.ts",
     "start": "node dist/server.js",
-    "start:ts": "ts-node src/server.ts",
-    "stop": "kill-port 3000",
-    "status": "node -e \"require('http').get('http://localhost:3000/api/health',r=>{console.log('✅ RODANDO');process.exit(0)}).on('error',()=>{console.log('⛔ PARADO');process.exit(1)})\""
+    "stop": "kill-port 3000"
   },
   "keywords": [],
   "author": "",
@@ -26,8 +24,7 @@
     "@types/express": "^4.17.21",
     "@types/node": "^20.10.6",
     "kill-port": "^2.0.1",
-    "nodemon": "^3.1.14",
-    "ts-node": "^10.9.2",
+    "tsx": "^4.7.0",
     "typescript": "^5.3.3"
   }
 }
