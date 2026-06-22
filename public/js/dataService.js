@@ -1,16 +1,15 @@
 /**
  * Data Service - N Eyes
  * Serviço centralizado para chamadas à API do backend
- * Substitui o arquivo /src/dataService.js que não é acessível no frontend
+ * Usa apiCall() de api.service.js para garantir autenticação e tratamento de erros
  */
-
-const API_BASE_URL = '/api';
 
 /**
  * ═══════════════════════════════════════════════════════════════
  * TRATAMENTO DE ERROS
  * ═══════════════════════════════════════════════════════════════
  */
+
 class APIError extends Error {
     constructor(message, status, data) {
         super(message);
@@ -19,18 +18,18 @@ class APIError extends Error {
     }
 }
 
-async function handleAPIResponse(response) {
-    const data = await response.json();
-
-    if (!response.ok) {
-        throw new APIError(
-            data.message || `HTTP Error: ${response.status}`,
-            response.status,
-            data
-        );
+/**
+ * Normaliza resposta da API
+ * @param {Object} response - Resposta do apiCall
+ * @returns {Object} Dados normalizados
+ */
+function normalizeResponse(response) {
+    // Se a resposta tem um objeto 'data', retorna apenas os dados
+    if (response && response.data) {
+        return response.data;
     }
-
-    return data;
+    // Senão, retorna a resposta inteira
+    return response;
 }
 
 /**
@@ -45,16 +44,12 @@ async function handleAPIResponse(response) {
  */
 export async function getDevices() {
     try {
-        const response = await fetch(`${API_BASE_URL}/devices`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            credentials: 'include',
+        // ✅ USA apiCall() que inclui Authorization: Bearer <token>
+        const result = await apiCall('/devices', {
+            method: 'GET'
         });
 
-        const result = await handleAPIResponse(response);
-        return result.data || result;
+        return normalizeResponse(result);
     } catch (error) {
         console.error('[getDevices] Erro:', error);
         throw error;
@@ -67,16 +62,12 @@ export async function getDevices() {
  */
 export async function getDeviceStats() {
     try {
-        const response = await fetch(`${API_BASE_URL}/devices/stats`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            credentials: 'include',
+        // ✅ USA apiCall() que inclui Authorization: Bearer <token>
+        const result = await apiCall('/devices/stats', {
+            method: 'GET'
         });
 
-        const result = await handleAPIResponse(response);
-        return result.data || result;
+        return normalizeResponse(result);
     } catch (error) {
         console.error('[getDeviceStats] Erro:', error);
         throw error;
@@ -90,16 +81,12 @@ export async function getDeviceStats() {
  */
 export async function getDeviceById(id) {
     try {
-        const response = await fetch(`${API_BASE_URL}/devices/${id}`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            credentials: 'include',
+        // ✅ USA apiCall() que inclui Authorization: Bearer <token>
+        const result = await apiCall(`/devices/${id}`, {
+            method: 'GET'
         });
 
-        const result = await handleAPIResponse(response);
-        return result.data || result;
+        return normalizeResponse(result);
     } catch (error) {
         console.error('[getDeviceById] Erro:', error);
         throw error;
@@ -113,17 +100,13 @@ export async function getDeviceById(id) {
  */
 export async function createDevice(deviceData) {
     try {
-        const response = await fetch(`${API_BASE_URL}/devices`, {
+        // ✅ USA apiCall() que inclui Authorization: Bearer <token>
+        const result = await apiCall('/devices', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(deviceData),
-            credentials: 'include',
+            body: deviceData
         });
 
-        const result = await handleAPIResponse(response);
-        return result.data || result;
+        return normalizeResponse(result);
     } catch (error) {
         console.error('[createDevice] Erro:', error);
         throw error;
@@ -138,17 +121,13 @@ export async function createDevice(deviceData) {
  */
 export async function updateDevice(id, updates) {
     try {
-        const response = await fetch(`${API_BASE_URL}/devices/${id}`, {
+        // ✅ USA apiCall() que inclui Authorization: Bearer <token>
+        const result = await apiCall(`/devices/${id}`, {
             method: 'PATCH',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(updates),
-            credentials: 'include',
+            body: updates
         });
 
-        const result = await handleAPIResponse(response);
-        return result.data || result;
+        return normalizeResponse(result);
     } catch (error) {
         console.error('[updateDevice] Erro:', error);
         throw error;
@@ -162,16 +141,12 @@ export async function updateDevice(id, updates) {
  */
 export async function deleteDevice(id) {
     try {
-        const response = await fetch(`${API_BASE_URL}/devices/${id}`, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            credentials: 'include',
+        // ✅ USA apiCall() que inclui Authorization: Bearer <token>
+        const result = await apiCall(`/devices/${id}`, {
+            method: 'DELETE'
         });
 
-        const result = await handleAPIResponse(response);
-        return result.data || result;
+        return normalizeResponse(result);
     } catch (error) {
         console.error('[deleteDevice] Erro:', error);
         throw error;
@@ -192,25 +167,25 @@ export async function deleteDevice(id) {
 export async function getLogs(filters = {}) {
     try {
         // Construir query string
-        const queryParams = new URLSearchParams();
-        if (filters.keyword) queryParams.append('keyword', filters.keyword);
-        if (filters.eventType) queryParams.append('eventType', filters.eventType);
-        if (filters.device) queryParams.append('device', filters.device);
-        if (filters.dateStart) queryParams.append('dateStart', filters.dateStart);
-        if (filters.dateEnd) queryParams.append('dateEnd', filters.dateEnd);
+        let endpoint = '/logs';
+        const params = new URLSearchParams();
+        
+        if (filters.keyword) params.append('keyword', filters.keyword);
+        if (filters.eventType) params.append('eventType', filters.eventType);
+        if (filters.device) params.append('device', filters.device);
+        if (filters.dateStart) params.append('dateStart', filters.dateStart);
+        if (filters.dateEnd) params.append('dateEnd', filters.dateEnd);
 
-        const url = `${API_BASE_URL}/logs${queryParams.toString() ? '?' + queryParams.toString() : ''}`;
+        if (params.toString()) {
+            endpoint += '?' + params.toString();
+        }
 
-        const response = await fetch(url, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            credentials: 'include',
+        // ✅ USA apiCall() que inclui Authorization: Bearer <token>
+        const result = await apiCall(endpoint, {
+            method: 'GET'
         });
 
-        const result = await handleAPIResponse(response);
-        return result.data || result;
+        return normalizeResponse(result);
     } catch (error) {
         console.error('[getLogs] Erro:', error);
         throw error;
@@ -224,16 +199,12 @@ export async function getLogs(filters = {}) {
  */
 export async function getLogById(id) {
     try {
-        const response = await fetch(`${API_BASE_URL}/logs/${id}`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            credentials: 'include',
+        // ✅ USA apiCall() que inclui Authorization: Bearer <token>
+        const result = await apiCall(`/logs/${id}`, {
+            method: 'GET'
         });
 
-        const result = await handleAPIResponse(response);
-        return result.data || result;
+        return normalizeResponse(result);
     } catch (error) {
         console.error('[getLogById] Erro:', error);
         throw error;
@@ -247,17 +218,13 @@ export async function getLogById(id) {
  */
 export async function createLog(logData) {
     try {
-        const response = await fetch(`${API_BASE_URL}/logs`, {
+        // ✅ USA apiCall() que inclui Authorization: Bearer <token>
+        const result = await apiCall('/logs', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(logData),
-            credentials: 'include',
+            body: logData
         });
 
-        const result = await handleAPIResponse(response);
-        return result.data || result;
+        return normalizeResponse(result);
     } catch (error) {
         console.error('[createLog] Erro:', error);
         throw error;
@@ -271,19 +238,188 @@ export async function createLog(logData) {
  */
 export async function deleteLog(id) {
     try {
-        const response = await fetch(`${API_BASE_URL}/logs/${id}`, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            credentials: 'include',
+        // ✅ USA apiCall() que inclui Authorization: Bearer <token>
+        const result = await apiCall(`/logs/${id}`, {
+            method: 'DELETE'
         });
 
-        const result = await handleAPIResponse(response);
-        return result.data || result;
+        return normalizeResponse(result);
     } catch (error) {
         console.error('[deleteLog] Erro:', error);
         throw error;
+    }
+}
+
+/**
+ * ═══════════════════════════════════════════════════════════════
+ * CONFIGURAÇÕES
+ * ═══════════════════════════════════════════════════════════════
+ */
+
+/**
+ * Busca configurações
+ * @returns {Promise<Object>} Configurações
+ */
+export async function getSettings() {
+    try {
+        // ✅ USA apiCall() que inclui Authorization: Bearer <token>
+        const result = await apiCall('/settings', {
+            method: 'GET'
+        });
+
+        return normalizeResponse(result);
+    } catch (error) {
+        console.error('[getSettings] Erro:', error);
+        throw error;
+    }
+}
+
+/**
+ * Atualiza configurações
+ * @param {Object} updates - Dados a atualizar
+ * @returns {Promise<Object>} Configurações atualizadas
+ */
+export async function updateSettings(updates) {
+    try {
+        // ✅ USA apiCall() que inclui Authorization: Bearer <token>
+        const result = await apiCall('/settings', {
+            method: 'PATCH',
+            body: updates
+        });
+
+        return normalizeResponse(result);
+    } catch (error) {
+        console.error('[updateSettings] Erro:', error);
+        throw error;
+    }
+}
+
+/**
+ * ═══════════════════════════════════════════════════════════════
+ * USUÁRIOS
+ * ═══════════════════════════════════════════════════════════════
+ */
+
+/**
+ * Busca dados do usuário logado
+ * @returns {Promise<Object>} Dados do usuário
+ */
+export async function getCurrentUser() {
+    try {
+        // ✅ USA apiCall() que inclui Authorization: Bearer <token>
+        const result = await apiCall('/auth/me', {
+            method: 'GET'
+        });
+
+        return normalizeResponse(result);
+    } catch (error) {
+        console.error('[getCurrentUser] Erro:', error);
+        throw error;
+    }
+}
+
+/**
+ * Atualiza dados do usuário logado
+ * @param {Object} updates - Dados a atualizar
+ * @returns {Promise<Object>} Usuário atualizado
+ */
+export async function updateUser(updates) {
+    try {
+        // ✅ USA apiCall() que inclui Authorization: Bearer <token>
+        const result = await apiCall('/users/me', {
+            method: 'PATCH',
+            body: updates
+        });
+
+        return normalizeResponse(result);
+    } catch (error) {
+        console.error('[updateUser] Erro:', error);
+        throw error;
+    }
+}
+
+/**
+ * ═══════════════════════════════════════════════════════════════
+ * AUTENTICAÇÃO
+ * ═══════════════════════════════════════════════════════════════
+ */
+
+/**
+ * Faz login
+ * ⚠️ NOTA: Preferir usar auth.service.js para manter consistência
+ * @param {string} email - Email do usuário
+ * @param {string} password - Senha do usuário
+ * @returns {Promise<Object>} Resposta de login (token, user)
+ */
+export async function login(email, password) {
+    try {
+        // ✅ USA apiCall() que inclui Authorization: Bearer <token>
+        // Login é a única chamada que NÃO inclui token (ainda não autenticado)
+        const result = await apiCall('/auth/login', {
+            method: 'POST',
+            body: { email, password }
+        });
+
+        // Salvar token e usuário após login bem-sucedido
+        if (result.token && result.user) {
+            localStorage.setItem(CONFIG.STORAGE.TOKEN_KEY, result.token);
+            localStorage.setItem(CONFIG.STORAGE.USER_KEY, JSON.stringify(result.user));
+        }
+
+        return normalizeResponse(result);
+    } catch (error) {
+        console.error('[login] Erro:', error);
+        throw error;
+    }
+}
+
+/**
+ * Faz registro/cadastro
+ * @param {string} name - Nome do usuário
+ * @param {string} email - Email do usuário
+ * @param {string} password - Senha do usuário
+ * @returns {Promise<Object>} Resposta de registro
+ */
+export async function register(name, email, password) {
+    try {
+        // ✅ USA apiCall() que inclui Authorization: Bearer <token>
+        // Registro é a única chamada que NÃO inclui token (ainda não autenticado)
+        const result = await apiCall('/auth/register', {
+            method: 'POST',
+            body: { name, email, password }
+        });
+
+        return normalizeResponse(result);
+    } catch (error) {
+        console.error('[register] Erro:', error);
+        throw error;
+    }
+}
+
+/**
+ * Faz logout
+ * @returns {Promise<void>}
+ */
+export async function logout() {
+    try {
+        // ✅ USA apiCall() que inclui Authorization: Bearer <token>
+        // Tentar notificar servidor
+        await apiCall('/auth/logout', {
+            method: 'POST'
+        }).catch(() => {
+            // Se falhar, continuar mesmo assim
+        });
+
+        // Limpar localStorage
+        localStorage.removeItem(CONFIG.STORAGE.TOKEN_KEY);
+        localStorage.removeItem(CONFIG.STORAGE.USER_KEY);
+
+        return true;
+    } catch (error) {
+        // Sempre limpar dados locais mesmo se erro
+        localStorage.removeItem(CONFIG.STORAGE.TOKEN_KEY);
+        localStorage.removeItem(CONFIG.STORAGE.USER_KEY);
+        return true;
     }
 }
 
@@ -300,6 +436,7 @@ export async function deleteLog(id) {
  */
 export async function getMetrics() {
     try {
+        // ✅ USA getDevices() que usa apiCall()
         const devices = await getDevices();
 
         if (!Array.isArray(devices) || devices.length === 0) {
@@ -332,6 +469,7 @@ export async function getMetrics() {
         };
     } catch (error) {
         console.error('[getMetrics] Erro:', error);
+        // Retornar valores padrão em caso de erro
         return {
             download: 0,
             upload: 0,
@@ -339,104 +477,5 @@ export async function getMetrics() {
             devicesOffline: 0,
             devicesBlocked: 0,
         };
-    }
-}
-
-/**
- * ═══════════════════════════════════════════════════════════════
- * AUTENTICAÇÃO
- * ═══════════════════════════════════════════════════════════════
- */
-
-/**
- * Faz login
- * @param {string} email - Email do usuário
- * @param {string} password - Senha do usuário
- * @returns {Promise<Object>} Resposta de login (token, user)
- */
-export async function login(email, password) {
-    try {
-        const response = await fetch(`${API_BASE_URL}/auth/login`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ email, password }),
-            credentials: 'include',
-        });
-
-        const result = await handleAPIResponse(response);
-        return result.data || result;
-    } catch (error) {
-        console.error('[login] Erro:', error);
-        throw error;
-    }
-}
-
-/**
- * Faz logout
- * @returns {Promise<void>}
- */
-export async function logout() {
-    try {
-        const response = await fetch(`${API_BASE_URL}/auth/logout`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            credentials: 'include',
-        });
-
-        const result = await handleAPIResponse(response);
-        return result.data || result;
-    } catch (error) {
-        console.error('[logout] Erro:', error);
-        throw error;
-    }
-}
-
-/**
- * Busca dados do usuário logado
- * @returns {Promise<Object>} Dados do usuário
- */
-export async function getMe() {
-    try {
-        const response = await fetch(`${API_BASE_URL}/auth/me`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            credentials: 'include',
-        });
-
-        const result = await handleAPIResponse(response);
-        return result.data || result;
-    } catch (error) {
-        console.error('[getMe] Erro:', error);
-        throw error;
-    }
-}
-
-/**
- * Registra um novo usuário
- * @param {Object} userData - Dados do usuário (name, email, password)
- * @returns {Promise<Object>} Usuário criado
- */
-export async function register(userData) {
-    try {
-        const response = await fetch(`${API_BASE_URL}/auth/register`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(userData),
-            credentials: 'include',
-        });
-
-        const result = await handleAPIResponse(response);
-        return result.data || result;
-    } catch (error) {
-        console.error('[register] Erro:', error);
-        throw error;
     }
 }
