@@ -1,19 +1,56 @@
-const { getSettings, saveSettings } = require('../services/settings.service');
+/**
+ * Settings Controller - N Eyes
+ * Endpoints de configurações
+ */
 
-async function index(req, res) {
+const { getSettings, updateSettings } = require('../services/settings.service');
+
+/**
+ * GET /api/settings
+ * Obtém configurações atuais
+ */
+function index(req, res, next) {
   try {
-    res.json(await getSettings());
+    const settings = getSettings();
+
+    return res.status(200).json({
+      status: 'success',
+      data: settings
+    });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    next(err);
   }
 }
 
-async function save(req, res) {
+/**
+ * PATCH /api/settings
+ * Atualiza configurações
+ */
+function save(req, res, next) {
   try {
-    res.json({ message: 'Configurações salvas.', settings: await saveSettings(req.body) });
+    const data = req.body;
+
+    // Validações básicas
+    if (Object.keys(data).length === 0) {
+      return res.status(400).json({
+        status: 'error',
+        message: 'Nenhum campo para atualizar'
+      });
+    }
+
+    const settings = updateSettings(data);
+
+    return res.status(200).json({
+      status: 'success',
+      message: 'Configurações atualizadas com sucesso',
+      data: settings
+    });
   } catch (err) {
-    res.status(400).json({ error: err.message });
+    next(err);
   }
 }
 
-module.exports = { index, save };
+module.exports = {
+  index,
+  save
+};

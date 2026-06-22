@@ -1,35 +1,95 @@
-const prisma = require('../config/prisma');
+/**
+ * Users Service - N Eyes
+ * Lógica de operações com usuários
+ */
+
 const bcrypt = require('bcrypt');
+const UserModel = require('../models/User.model');
 
-async function updateProfile(userId, { name, email, currentPassword, newPassword }) {
-  const user = await prisma.user.findUnique({ where: { id: userId } });
-  if (!user) throw new Error('Usuário não encontrado.');
-
-  // Validar senha atual se fornecida
-  if (currentPassword) {
-    const valid = await bcrypt.compare(currentPassword, user.password);
-    if (!valid) throw new Error('Senha atual incorreta.');
-  }
-
-  const data = {};
-  if (name) data.name = name;
-  if (email && email !== user.email) {
-    const exists = await prisma.user.findUnique({ where: { email } });
-    if (exists) throw new Error('Este e-mail já está em uso.');
-    data.email = email;
-  }
-  if (newPassword) {
-    if (!currentPassword) throw new Error('Informe a senha atual para trocar a senha.');
-    data.password = await bcrypt.hash(newPassword, 10);
-  }
-
-  const updated = await prisma.user.update({
-    where: { id: userId },
-    data,
-    select: { id: true, name: true, email: true, role: true },
+/**
+ * Obtém todos os usuários (sem senhas)
+ */
+function getAllUsers() {
+  const users = UserModel.findAll();
+  return users.map(u => {
+    const { passwordHash: _, ...user } = u;
+    return user;
   });
-
-  return updated;
 }
 
-module.exports = { updateProfile };
+/**
+ * Obtém usuário por ID (sem senha)
+ */
+function getUserById(userId) {
+  const user = UserModel.findById(userId);
+  if (!user) {
+    throw new Error('Usuário não encontrado');
+  }
+
+  const { passwordHash: _, ...userWithoutPassword } = user;
+  return userWithoutPassword;
+}
+
+/**
+ * Atualiza perfil do usuário
+ */
+async function updateProfile(userId, { name, email, currentPassword, newPassword }) {
+  const user = UserModel.findById(userId);
+  if (!user) {
+    throw new Error('Usuário não encontrado');
+  }
+
+  // Validar senha atual se fornecida
+  if (currentPassword || newPassword) {
+    if (!currentPassword) {
+      throw new Error('Informe a senha atual para trocar a senha');
+    }
+
+    const valid = await bcrypt.compare(currentPassword, user.passwordHash);
+    if (!valid) {
+      throw new Error('Senha atual incorreta');
+    }
+  }
+
+  const updateData = {};
+
+  if (name && name.trim()) {
+    updateData.name = name.trim();
+  }
+
+  if (email && email !== user.email) {
+    const exists = UserModel.findByEmail(email);
+    if (exists) {
+      throw new Error('Este e-mail já está em uso');
+    }
+    updateData.email = email;
+  }
+
+  if (newPassword) {
+    updateData.passwordHash = await bcrypt.hash(newPassword, 10);
+  }
+
+  const updated = UserModel.update(userId, updateData);
+  const { passwordHash: _, ...userWithoutPassword } = updated;
+  return userWithoutPassword;
+}
+
+/**
+ * Deleta usuário
+ */
+function deleteUser(userId) {
+  const user = UserModel.findById(userId);
+  if (!user) {
+    throw new Error('Usuário não encontrado');
+  }
+
+  UserModel.remove(userId);
+  return { success: true, id: userId };
+}
+
+module.exports = {
+  getAllUsers,
+  getUserById,
+  updateProfile,
+  deleteUser
+};
