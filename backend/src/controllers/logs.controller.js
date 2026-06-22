@@ -63,19 +63,6 @@ function createLog(req, res, next) {
   try {
     const { deviceId, deviceName, message, severity, type } = req.body;
 
-    // Validar entrada
-    if (!deviceId || !deviceName || !message) {
-      return res.status(400).json({
-        status: 'error',
-        message: 'deviceId, deviceName e message são obrigatórios',
-        errors: {
-          deviceId: !deviceId ? 'Obrigatório' : null,
-          deviceName: !deviceName ? 'Obrigatório' : null,
-          message: !message ? 'Obrigatório' : null
-        }
-      });
-    }
-
     const log = logsService.createLog({
       deviceId,
       deviceName,

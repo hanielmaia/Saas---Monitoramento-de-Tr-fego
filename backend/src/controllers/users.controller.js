@@ -4,7 +4,6 @@
  */
 
 const { getAllUsers, getUserById, updateProfile, deleteUser } = require('../services/users.service');
-const { validateName, validateEmail } = require('../utils/validation');
 
 /**
  * GET /api/users
@@ -79,25 +78,6 @@ function getById(req, res, next) {
 async function updateMe(req, res, next) {
   try {
     const { name, email, currentPassword, newPassword } = req.body;
-
-    // Validações básicas
-    const errors = {};
-
-    if (name && !validateName(name).valid) {
-      errors.name = 'Nome deve ter mínimo 2 caracteres';
-    }
-
-    if (email && !validateEmail(email)) {
-      errors.email = 'Email inválido';
-    }
-
-    if (Object.keys(errors).length > 0) {
-      return res.status(400).json({
-        status: 'error',
-        message: 'Erro de validação',
-        errors
-      });
-    }
 
     const user = await updateProfile(req.userId, {
       name,

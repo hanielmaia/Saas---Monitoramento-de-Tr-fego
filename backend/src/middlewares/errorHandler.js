@@ -19,8 +19,10 @@ class APIError extends Error {
  * Middleware de tratamento de erros
  * Deve ser o ÚLTIMO middleware a ser registrado
  */
+const logger = require('../utils/logger.cjs');
+
 function errorHandler(err, req, res, next) {
-  console.error('[ERROR]', err);
+  logger.error({ err, path: req.path, method: req.method, body: req.body }, 'Unhandled error');
 
   // Erro de validação
   if (err.details && typeof err.details === 'object') {

@@ -1,11 +1,13 @@
 import 'dotenv/config';
 import app from './app.js';
+import { createRequire } from 'module';
+
+const require = createRequire(import.meta.url);
+const logger = require('./utils/logger.cjs');
 
 const port = parseInt(process.env.PORT ?? '3000', 10);
 const host = process.env.HOST ?? 'localhost';
 
 app.listen(port, host, () => {
-  console.log(`\n✅ Servidor iniciado`);
-  console.log(`📡 URL: http://${host}:${port}`);
-  console.log(`📝 Ambiente: ${process.env.NODE_ENV ?? 'development'}\n`);
+  logger.info({ host, port, environment: process.env.NODE_ENV ?? 'development' }, 'Servidor iniciado');
 });

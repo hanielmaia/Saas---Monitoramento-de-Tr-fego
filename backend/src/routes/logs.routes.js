@@ -6,6 +6,8 @@
 const { Router } = require('express');
 const logsController = require('../controllers/logs.controller');
 const { authMiddleware } = require('../middlewares/auth');
+const { validateRequest } = require('../middlewares/validateRequest');
+const { logCreateSchema } = require('../utils/joiSchemas');
 
 const router = Router();
 
@@ -19,7 +21,7 @@ router.get('/', logsController.getAllLogs);
 router.get('/:id', logsController.getLogById);
 
 // POST - Criar novo log
-router.post('/', logsController.createLog);
+router.post('/', validateRequest(logCreateSchema), logsController.createLog);
 
 // DELETE - Deletar log
 router.delete('/:id', logsController.deleteLog);

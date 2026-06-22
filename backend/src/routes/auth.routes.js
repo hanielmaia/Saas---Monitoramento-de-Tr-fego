@@ -6,14 +6,16 @@
 const { Router } = require('express');
 const authController = require('../controllers/auth.controller');
 const { authMiddleware } = require('../middlewares/auth');
+const { validateRequest } = require('../middlewares/validateRequest');
+const { registerSchema, loginSchema } = require('../utils/joiSchemas');
 
 const router = Router();
 
 // POST - Registrar novo usuário (sem autenticação)
-router.post('/register', authController.register);
+router.post('/register', validateRequest(registerSchema), authController.register);
 
 // POST - Fazer login (sem autenticação)
-router.post('/login', authController.login);
+router.post('/login', validateRequest(loginSchema), authController.login);
 
 // GET - Dados do usuário logado (protegido)
 router.get('/me', authMiddleware, authController.me);

@@ -6,6 +6,8 @@
 const { Router } = require('express');
 const devicesController = require('../controllers/devices.controller');
 const { authMiddleware, authorizeRole } = require('../middlewares/auth');
+const { validateRequest } = require('../middlewares/validateRequest');
+const { deviceCreateSchema, deviceUpdateSchema } = require('../utils/joiSchemas');
 
 const router = Router();
 
@@ -22,10 +24,10 @@ router.get('/stats', devicesController.getDeviceStats);
 router.get('/:id', devicesController.getDeviceById);
 
 // POST - Criar novo dispositivo (apenas admin)
-router.post('/', authorizeRole('ADMIN'), devicesController.createDevice);
+router.post('/', authorizeRole('ADMIN'), validateRequest(deviceCreateSchema), devicesController.createDevice);
 
 // PATCH - Atualizar dispositivo (apenas admin)
-router.patch('/:id', authorizeRole('ADMIN'), devicesController.updateDevice);
+router.patch('/:id', authorizeRole('ADMIN'), validateRequest(deviceUpdateSchema), devicesController.updateDevice);
 
 // DELETE - Deletar dispositivo (apenas admin)
 router.delete('/:id', authorizeRole('ADMIN'), devicesController.deleteDevice);

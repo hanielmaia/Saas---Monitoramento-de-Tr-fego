@@ -4,7 +4,6 @@
  */
 
 const authService = require('../services/auth.service');
-const { validateRegister, validateLogin } = require('../utils/validation');
 
 /**
  * POST /api/auth/register
@@ -13,16 +12,6 @@ const { validateRegister, validateLogin } = require('../utils/validation');
 async function register(req, res, next) {
   try {
     const { name, email, password } = req.body;
-
-    // Validar entrada
-    const validation = validateRegister({ name, email, password });
-    if (!validation.valid) {
-      return res.status(400).json({
-        status: 'error',
-        message: 'Erro de validação',
-        errors: validation.errors
-      });
-    }
 
     // Registrar usuário
     const user = await authService.register({ name, email, password });
@@ -44,16 +33,6 @@ async function register(req, res, next) {
 async function login(req, res, next) {
   try {
     const { email, password } = req.body;
-
-    // Validar entrada
-    const validation = validateLogin({ email, password });
-    if (!validation.valid) {
-      return res.status(400).json({
-        status: 'error',
-        message: 'Erro de validação',
-        errors: validation.errors
-      });
-    }
 
     // Fazer login
     const result = await authService.login({ email, password });
