@@ -4,33 +4,33 @@
       "id": 1,
       "name": "João Calheiros",
       "email": "joao@test.com",
-      "passwordHash": "$2b$10$O9QmsPewBLSNCP0DjHg2OPST9/PgBkqquzi8Abn/xZyqK5uQm2IBi",
+      "passwordHash": "$2b$10$YNdNsK8fx6qcbEGnSO7TUO9AkxCFAEcaF0YW8y3zZxW7yr4UEMRd2",
       "role": "ADMIN",
       "createdAt": "2026-05-01T10:00:00Z"
     },
     {
       "id": 2,
-      "name": "Maria Silva",
-      "email": "maria@test.com",
-      "passwordHash": "$2b$10$O9QmsPewBLSNCP0DjHg2OPST9/PgBkqquzi8Abn/xZyqK5uQm2IBi",
-      "role": "USER",
-      "createdAt": "2026-05-02T11:30:00Z"
-    },
-    {
-      "id": 3,
       "name": "Haniel Maia",
       "email": "haniel@test.com",
-      "passwordHash": "$2b$10$O9QmsPewBLSNCP0DjHg2OPST9/PgBkqquzi8Abn/xZyqK5uQm2IBi",
+      "passwordHash": "$2b$10$YNdNsK8fx6qcbEGnSO7TUO9AkxCFAEcaF0YW8y3zZxW7yr4UEMRd2",
       "role": "MODERATOR",
       "createdAt": "2026-05-02T15:45:00Z"
     },
     {
-      "id": 4,
-      "name": "Test User",
-      "email": "testuser@example.com",
-      "passwordHash": "$2b$10$INUXjdF5x1LeHsvFHRcIiuR6/S/X4ZNOvi.tMlyuPh.cAmeM8cr.K",
+      "id": 3,
+      "name": "Jessé Alves",
+      "email": "jesse@test.com",
+      "passwordHash": "$2b$10$YNdNsK8fx6qcbEGnSO7TUO9AkxCFAEcaF0YW8y3zZxW7yr4UEMRd2",
       "role": "USER",
-      "createdAt": "2026-06-14T18:20:16.754Z"
+      "createdAt": "2026-06-21T08:00:00Z"
+    },
+    {
+      "id": 4,
+      "name": "Kauã Heronides",
+      "email": "kaua@test.com",
+      "passwordHash": "$2b$10$YNdNsK8fx6qcbEGnSO7TUO9AkxCFAEcaF0YW8y3zZxW7yr4UEMRd2",
+      "role": "USER",
+      "createdAt": "2026-06-21T08:15:00Z"
     }
   ],
   "sessions": [
