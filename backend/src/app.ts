@@ -1,7 +1,11 @@
 import express, { Request, Response } from 'express';
 import cors from 'cors';
 import { createRequire } from 'module';
+import { fileURLToPath } from 'url';
+import path from 'path';
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 const require = createRequire(import.meta.url);
 
 // Importar rotas
@@ -12,6 +16,9 @@ const settingsRoutes = require('./routes/settings.routes.js');
 const usersRoutes = require('./routes/users.routes.js');
 
 const app = express();
+
+// Ensina o Express a ler a pasta public que está dois níveis para trás
+app.use(express.static(path.join(__dirname, '../../public')));
 
 /**
  * Middleware: Body Parser
