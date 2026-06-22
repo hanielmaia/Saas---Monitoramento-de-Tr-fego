@@ -1,58 +1,125 @@
-const authService = require('../services/auth.service');
+/**
+ * Auth Controller - N Eyes
+ * Endpoints de autenticação (register, login, logout, me)
+ */
 
-async function register(req, res) {
+const authService = require('../services/auth.service');
+const { validateRegister, validateLogin } = require('../utils/validation');
+
+/**
+ * POST /api/auth/register
+ * Registra novo usuário
+ */
+async function register(req, res, next) {
   try {
     const { name, email, password } = req.body;
 
-    if (!name || !email || !password) {
-      return res.status(400).json({ error: 'Nome, e-mail e senha são obrigatórios.' });
+    // Validar entrada
+    const validation = validateRegister({ name, email, password });
+    if (!validation.valid) {
+      return res.status(400).json({
+        status: 'error',
+        message: 'Erro de validação',
+        errors: validation.errors
+      });
     }
 
-    if (password.length < 6) {
-      return res.status(400).json({ error: 'A senha deve ter pelo menos 6 caracteres.' });
-    }
-
+    // Registrar usuário
     const user = await authService.register({ name, email, password });
-    return res.status(201).json({ message: 'Usuário criado com sucesso.', user });
+
+    return res.status(201).json({
+      status: 'success',
+      message: 'Usuário criado com sucesso',
+      user
+    });
   } catch (err) {
-    return res.status(400).json({ error: err.message });
+    next(err);
   }
 }
 
-async function login(req, res) {
+/**
+ * POST /api/auth/login
+ * Faz login do usuário
+ */
+async function login(req, res, next) {
   try {
     const { email, password } = req.body;
 
-    if (!email || !password) {
-      return res.status(400).json({ error: 'E-mail e senha são obrigatórios.' });
+    // Validar entrada
+    const validation = validateLogin({ email, password });
+    if (!validation.valid) {
+      return res.status(400).json({
+        status: 'error',
+        message: 'Erro de validação',
+        errors: validation.errors
+      });
     }
 
+    // Fazer login
     const result = await authService.login({ email, password });
-    return res.status(200).json(result);
-  } catch (err) {
-    return res.status(401).json({ error: err.message });
-  }
-}
 
-async function me(req, res) {
-  try {
-    const user = await authService.me(req.userId);
-    return res.status(200).json(user);
+    return res.status(200).json({
+      status: 'success',
+      message: 'Login realizado com sucesso',
+      ...result
+    });
   } catch (err) {
-    return res.status(404).json({ error: err.message });
-  }
-}
-
-async function logout(req, res) {
-  try {
-    const token = req.headers.authorization?.split(' ')[1];
-    if (token) {
-      await authService.logout(token);
+    if (err.message === 'Credenciais inválidas') {
+      return res.status(401).json({
+        status: 'error',
+        message: err.message
+      });
     }
-    return res.status(200).json({ message: 'Logout realizado com sucesso.' });
-  } catch (err) {
-    return res.status(500).json({ error: 'Erro ao fazer logout.' });
+    next(err);
   }
 }
 
-module.exports = { register, login, me, logout };
+/**
+ * GET /api/auth/me
+ * Obtém dados do usuário logado
+ */
+function me(req, res, next) {
+  try {
+    const user = authService.me(req.userId);
+
+    return res.status(200).json({
+      status: 'success',
+      user
+    });
+  } catch (err) {
+    if (err.message === 'Usuário não encontrado') {
+      return res.status(404).json({
+        status: 'error',
+        message: err.message
+      });
+    }
+    next(err);
+  }
+}
+
+/**
+ * POST /api/auth/logout
+ * Faz logout do usuário
+ */
+function logout(req, res) {
+  try {
+    authService.logout();
+
+    return res.status(200).json({
+      status: 'success',
+      message: 'Logout realizado com sucesso'
+    });
+  } catch (err) {
+    return res.status(500).json({
+      status: 'error',
+      message: 'Erro ao fazer logout'
+    });
+  }
+}
+
+module.exports = {
+  register,
+  login,
+  me,
+  logout
+};

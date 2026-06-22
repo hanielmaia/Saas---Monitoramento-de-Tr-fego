@@ -1,22 +1,60 @@
 const jwt = require('jsonwebtoken');
+const { APIError } = require('./errorHandler');
 
+/**
+ * Middleware de Autenticação JWT
+ * Verifica token e extrai dados do usuário
+ */
 function authMiddleware(req, res, next) {
   const authHeader = req.headers.authorization;
 
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
-    return res.status(401).json({ error: 'Token não fornecido.' });
+    return res.status(401).json({
+      status: 'error',
+      message: 'Token não fornecido ou formato inválido'
+    });
   }
 
   const token = authHeader.split(' ')[1];
 
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'seu_secret_aqui');
     req.userId = decoded.userId;
     req.userRole = decoded.role;
+    req.user = decoded;
     next();
-  } catch {
-    return res.status(401).json({ error: 'Token inválido ou expirado.' });
+  } catch (error) {
+    if (error.name === 'TokenExpiredError') {
+      return res.status(401).json({
+        status: 'error',
+        message: 'Token expirado'
+      });
+    }
+
+    return res.status(401).json({
+      status: 'error',
+      message: 'Token inválido'
+    });
   }
 }
 
-module.exports = authMiddleware;
+/**
+ * Middleware de Autorização por Role
+ * @param {...string} allowedRoles - Roles permitidos
+ */
+function authorizeRole(...allowedRoles) {
+  return (req, res, next) => {
+    if (!req.userRole || !allowedRoles.includes(req.userRole)) {
+      return res.status(403).json({
+        status: 'error',
+        message: 'Acesso negado. Você não tem permissão para acessar este recurso.'
+      });
+    }
+    next();
+  };
+}
+
+module.exports = {
+  authMiddleware,
+  authorizeRole
+};
