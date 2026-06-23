@@ -169,7 +169,7 @@ export async function getLogs(filters = {}) {
         // Construir query string
         let endpoint = '/logs';
         const params = new URLSearchParams();
-        
+
         if (filters.keyword) params.append('keyword', filters.keyword);
         if (filters.eventType) params.append('eventType', filters.eventType);
         if (filters.device) params.append('device', filters.device);
