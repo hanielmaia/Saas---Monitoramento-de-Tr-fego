@@ -18,7 +18,8 @@ function authMiddleware(req, res, next) {
   const token = authHeader.split(' ')[1];
 
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'seu_secret_aqui');
+    // JWT_SECRET é obrigatório e validado em server.ts
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
     req.userId = decoded.userId;
     req.userRole = decoded.role;
     req.user = decoded;
