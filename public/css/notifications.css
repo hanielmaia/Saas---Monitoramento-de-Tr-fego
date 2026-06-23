@@ -1,0 +1,135 @@
+/**
+ * Notifications CSS - N Eyes
+ * Estilos para notificações de erro, aviso e sucesso
+ */
+
+/* Container da notificação */
+.api-notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    min-width: 300px;
+    max-width: 450px;
+    border-radius: 6px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    z-index: 9999;
+    animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(400px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* Container interno */
+.api-notification__container {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 20px;
+}
+
+/* Ícone */
+.api-notification__icon {
+    flex-shrink: 0;
+    font-size: 20px;
+}
+
+/* Mensagem */
+.api-notification__message {
+    flex: 1;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+/* Botão fechar */
+.api-notification__close {
+    flex-shrink: 0;
+    background: none;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+}
+
+.api-notification__close:hover {
+    opacity: 1;
+}
+
+/* Variante: ERROR (vermelho) */
+.api-notification--error {
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    color: #721c24;
+}
+
+.api-notification--error .api-notification__close {
+    color: #721c24;
+}
+
+/* Variante: WARNING (amarelo) */
+.api-notification--warning {
+    background-color: #fff3cd;
+    border: 1px solid #ffeeba;
+    color: #856404;
+}
+
+.api-notification--warning .api-notification__close {
+    color: #856404;
+}
+
+/* Variante: INFO (azul) */
+.api-notification--info {
+    background-color: #d1ecf1;
+    border: 1px solid #bee5eb;
+    color: #0c5460;
+}
+
+.api-notification--info .api-notification__close {
+    color: #0c5460;
+}
+
+/* Variante: SUCCESS (verde) */
+.api-notification--success {
+    background-color: #d4edda;
+    border: 1px solid #c3e6cb;
+    color: #155724;
+}
+
+.api-notification--success .api-notification__close {
+    color: #155724;
+}
+
+/* Responsivo: Mobile */
+@media (max-width: 640px) {
+    .api-notification {
+        top: 10px;
+        right: 10px;
+        left: 10px;
+        min-width: auto;
+        max-width: none;
+    }
+
+    .api-notification__message {
+        font-size: 13px;
+    }
+}
+
+/* Responsivo: Tablets */
+@media (max-width: 1024px) {
+    .api-notification {
+        max-width: 400px;
+    }
+}

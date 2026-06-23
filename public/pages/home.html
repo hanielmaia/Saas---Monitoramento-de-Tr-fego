@@ -7,9 +7,17 @@
   <meta name="description" content="N Eyes - Dashboard de Monitoramento de Tráfego de Rede em Tempo Real">
   <title>N Eyes | Dashboard</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="/src/styles/home.css">
+  <link rel="stylesheet" href="/css/home.css">
+  <link rel="stylesheet" href="/css/notifications.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <link rel="icon" href="/src/public/favicon-32x32.png" type="image/png">
+  <!-- ✅ Carregar config.js ANTES dos módulos -->
+  <script src="/js/config.js"></script>
+  <!-- ✅ Carregar api.service.js como script normal para escopo global -->
+  <script src="/js/services/api.service.js"></script>
+  <!-- ✅ Carregar auth.service.js como script normal -->
+  <script src="/js/services/auth.service.js"></script>
+  <!-- ✅ Carregar dataService.js como script normal -->
+  <script src="/js/dataService.js"></script>
 </head>
 
 <body>
@@ -406,273 +414,277 @@
       document.querySelectorAll('.user-role').forEach(el => el.textContent = user.role === 'ADMIN' ? 'Administrador' : 'Usuário');
     })();
   </script>
-</body>
 
-</html>
-<script type="module">
-  import { getMetrics, getDevices } from '/src/dataService.js';
+  <script>
+    // ✅ Agora que config.js, api.service.js e dataService.js estão carregados globalmente,
+    // podemos usar getMetrics() e getDevices() diretamente aqui
 
-  // ─────────────────── TRAFFIC CHART ───────────────────
-  const ctx = document.getElementById('trafficChart').getContext('2d');
-  let trafficChart = new Chart(ctx, {
-    type: 'line',
-    data: {
-      labels: ['14:00', '14:10', '14:20', '14:30', '14:40', '14:50', '15:00'],
-      datasets: [
-        {
-          label: 'Download (Mbps)',
-          data: [180, 220, 195, 260, 240, 280, 245],
-          borderColor: '#9333ea',
-          backgroundColor: 'rgba(147, 51, 234, 0.15)',
-          fill: true,
-          tension: 0.4
+    // ─────────────────── TRAFFIC CHART ───────────────────
+    const ctx = document.getElementById('trafficChart').getContext('2d');
+    let trafficChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: ['14:00', '14:10', '14:20', '14:30', '14:40', '14:50', '15:00'],
+        datasets: [
+          {
+            label: 'Download (Mbps)',
+            data: [180, 220, 195, 260, 240, 280, 245],
+            borderColor: '#9333ea',
+            backgroundColor: 'rgba(147, 51, 234, 0.15)',
+            fill: true,
+            tension: 0.4
+          },
+          {
+            label: 'Upload (Mbps)',
+            data: [90, 110, 105, 130, 120, 140, 128],
+            borderColor: '#22d3ee',
+            backgroundColor: 'rgba(34, 211, 238, 0.15)',
+            fill: true,
+            tension: 0.4
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            labels: {
+              color: '#8b8fa3',
+              font: { family: 'Rajdhani', size: 12 }
+            }
+          }
         },
-        {
-          label: 'Upload (Mbps)',
-          data: [90, 110, 105, 130, 120, 140, 128],
-          borderColor: '#22d3ee',
-          backgroundColor: 'rgba(34, 211, 238, 0.15)',
-          fill: true,
-          tension: 0.4
-        }
-      ]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: {
-          labels: {
-            color: '#8b8fa3',
-            font: { family: 'Rajdhani', size: 12 }
+        scales: {
+          x: {
+            ticks: { color: '#8b8fa3', font: { family: 'Rajdhani', size: 11 } },
+            grid: { color: 'rgba(147,51,234,0.1)' }
+          },
+          y: {
+            ticks: { color: '#8b8fa3', font: { family: 'Rajdhani', size: 11 } },
+            grid: { color: 'rgba(147,51,234,0.1)' }
           }
         }
-      },
-      scales: {
-        x: {
-          ticks: { color: '#8b8fa3', font: { family: 'Rajdhani', size: 11 } },
-          grid: { color: 'rgba(147,51,234,0.1)' }
-        },
-        y: {
-          ticks: { color: '#8b8fa3', font: { family: 'Rajdhani', size: 11 } },
-          grid: { color: 'rgba(147,51,234,0.1)' }
+      }
+    });
+
+    /**
+     * Atualiza as métricas do dashboard em tempo real
+     * Busca dados da API, aplica variação aleatória e atualiza o DOM
+     */
+    async function updateDashboardMetrics() {
+      try {
+        const metrics = await getMetrics();
+        const devices = await getDevices();
+
+        if (!metrics) return;
+
+        // Adiciona variação aleatória de ±5% ao download
+        const downloadVariation = (Math.random() - 0.5) * 0.1; // ±5%
+        const downloadValue = metrics.download * (1 + downloadVariation);
+
+        // Adiciona variação aleatória de ±5% ao upload
+        const uploadVariation = (Math.random() - 0.5) * 0.1; // ±5%
+        const uploadValue = metrics.upload * (1 + uploadVariation);
+
+        // Conta dispositivos online
+        const devicesConnected = devices.filter(d => d.status === 'Online').length;
+
+        // Atualiza DOM com textContent (sem innerHTML)
+        const downloadCard = document.getElementById('download-metric');
+        if (downloadCard) {
+          const metricValue = downloadCard.querySelector('.metric-value');
+          if (metricValue) {
+            metricValue.textContent = downloadValue.toFixed(1);
+          }
         }
+
+        const uploadCard = document.getElementById('upload-metric');
+        if (uploadCard) {
+          const metricValue = uploadCard.querySelector('.metric-value');
+          if (metricValue) {
+            metricValue.textContent = uploadValue.toFixed(1);
+          }
+        }
+
+        const devicesCard = document.getElementById('devices-metric');
+        if (devicesCard) {
+          const metricValue = devicesCard.querySelector('.metric-value');
+          if (metricValue) {
+            metricValue.textContent = devicesConnected.toString();
+          }
+        }
+
+        // Atualiza gráfico com novos dados
+        const now = new Date();
+        const currentTime = now.getHours() + ':' + (now.getMinutes() < 10 ? '0' : '') + now.getMinutes();
+
+        trafficChart.data.labels.push(currentTime);
+        if (trafficChart.data.labels.length > 7) {
+          trafficChart.data.labels.shift();
+        }
+
+        trafficChart.data.datasets[0].data.push(downloadValue);
+        if (trafficChart.data.datasets[0].data.length > 7) {
+          trafficChart.data.datasets[0].data.shift();
+        }
+
+        trafficChart.data.datasets[1].data.push(uploadValue);
+        if (trafficChart.data.datasets[1].data.length > 7) {
+          trafficChart.data.datasets[1].data.shift();
+        }
+
+        trafficChart.update();
+
+      } catch (error) {
+        console.error('[updateDashboardMetrics] Erro ao atualizar métricas:', error);
       }
     }
-  });
 
-  /**
-   * Atualiza as métricas do dashboard em tempo real
-   * Busca dados da API, aplica variação aleatória e atualiza o DOM
-   */
-  async function updateDashboardMetrics() {
-    try {
-      const metrics = await getMetrics();
-      const devices = await getDevices();
+    // Executa atualização a cada 4 segundos
+    setInterval(updateDashboardMetrics, 4000);
 
-      if (!metrics) return;
-
-      // Adiciona variação aleatória de ±5% ao download
-      const downloadVariation = (Math.random() - 0.5) * 0.1; // ±5%
-      const downloadValue = metrics.download * (1 + downloadVariation);
-
-      // Adiciona variação aleatória de ±5% ao upload
-      const uploadVariation = (Math.random() - 0.5) * 0.1; // ±5%
-      const uploadValue = metrics.upload * (1 + uploadVariation);
-
-      // Conta dispositivos online
-      const devicesConnected = devices.filter(d => d.status === 'Online').length;
-
-      // Atualiza DOM com textContent (sem innerHTML)
-      const downloadCard = document.getElementById('download-metric');
-      if (downloadCard) {
-        const metricValue = downloadCard.querySelector('.metric-value');
-        if (metricValue) {
-          metricValue.textContent = downloadValue.toFixed(1);
+    // ─────────────────── MALICIOUS TRAFFIC CHART ───────────────────
+    const ctxMalicious = document.getElementById('maliciousTrafficChart').getContext('2d');
+    let maliciousTrafficChart = new Chart(ctxMalicious, {
+      type: 'line',
+      data: {
+        labels: ['14:00', '14:10', '14:20', '14:30', '14:40', '14:50', '15:00'],
+        datasets: [
+          {
+            label: 'Tentativas Bloqueadas',
+            data: [12, 18, 8, 24, 15, 31, 22],
+            borderColor: '#ef4444',
+            backgroundColor: 'rgba(239, 68, 68, 0.15)',
+            fill: true,
+            tension: 0.4
+          },
+          {
+            label: 'IPs Suspeitos',
+            data: [3, 5, 2, 7, 4, 9, 6],
+            borderColor: '#facc15',
+            backgroundColor: 'rgba(250, 204, 21, 0.15)',
+            fill: true,
+            tension: 0.4
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            labels: {
+              color: '#8b8fa3',
+              font: { family: 'Rajdhani', size: 12 }
+            }
+          }
+        },
+        scales: {
+          x: {
+            ticks: { color: '#8b8fa3', font: { family: 'Rajdhani', size: 11 } },
+            grid: { color: 'rgba(147,51,234,0.1)' }
+          },
+          y: {
+            ticks: { color: '#8b8fa3', font: { family: 'Rajdhani', size: 11 } },
+            grid: { color: 'rgba(147,51,234,0.1)' }
+          }
         }
       }
+    });
 
-      const uploadCard = document.getElementById('upload-metric');
-      if (uploadCard) {
-        const metricValue = uploadCard.querySelector('.metric-value');
-        if (metricValue) {
-          metricValue.textContent = uploadValue.toFixed(1);
-        }
-      }
-
-      const devicesCard = document.getElementById('devices-metric');
-      if (devicesCard) {
-        const metricValue = devicesCard.querySelector('.metric-value');
-        if (metricValue) {
-          metricValue.textContent = devicesConnected.toString();
-        }
-      }
-
-      // Atualiza gráfico com novos dados
+    function generateMaliciousTrafficData() {
       const now = new Date();
       const currentTime = now.getHours() + ':' + (now.getMinutes() < 10 ? '0' : '') + now.getMinutes();
 
-      trafficChart.data.labels.push(currentTime);
-      if (trafficChart.data.labels.length > 7) {
-        trafficChart.data.labels.shift();
+      maliciousTrafficChart.data.labels.push(currentTime);
+      if (maliciousTrafficChart.data.labels.length > 7) {
+        maliciousTrafficChart.data.labels.shift();
       }
 
-      trafficChart.data.datasets[0].data.push(downloadValue);
-      if (trafficChart.data.datasets[0].data.length > 7) {
-        trafficChart.data.datasets[0].data.shift();
+      // Tentativas bloqueadas (0-35)
+      const blockedAttempts = Math.floor(Math.random() * 35);
+      maliciousTrafficChart.data.datasets[0].data.push(blockedAttempts);
+      if (maliciousTrafficChart.data.datasets[0].data.length > 7) {
+        maliciousTrafficChart.data.datasets[0].data.shift();
       }
 
-      trafficChart.data.datasets[1].data.push(uploadValue);
-      if (trafficChart.data.datasets[1].data.length > 7) {
-        trafficChart.data.datasets[1].data.shift();
+      // IPs suspeitos (0-10)
+      const suspiciousIPs = Math.floor(Math.random() * 10);
+      maliciousTrafficChart.data.datasets[1].data.push(suspiciousIPs);
+      if (maliciousTrafficChart.data.datasets[1].data.length > 7) {
+        maliciousTrafficChart.data.datasets[1].data.shift();
       }
 
-      trafficChart.update();
-
-    } catch (error) {
-      console.error('[updateDashboardMetrics] Erro ao atualizar métricas:', error);
+      maliciousTrafficChart.update();
     }
-  }
 
-  // Executa atualização a cada 4 segundos
-  setInterval(updateDashboardMetrics, 4000);
+    // Atualiza o gráfico malicioso a cada 5 segundos
+    setInterval(generateMaliciousTrafficData, 5000);
 
-  // ─────────────────── MALICIOUS TRAFFIC CHART ───────────────────
-  const ctxMalicious = document.getElementById('maliciousTrafficChart').getContext('2d');
-  let maliciousTrafficChart = new Chart(ctxMalicious, {
-    type: 'line',
-    data: {
-      labels: ['14:00', '14:10', '14:20', '14:30', '14:40', '14:50', '15:00'],
-      datasets: [
-        {
-          label: 'Tentativas Bloqueadas',
-          data: [12, 18, 8, 24, 15, 31, 22],
-          borderColor: '#ef4444',
-          backgroundColor: 'rgba(239, 68, 68, 0.15)',
-          fill: true,
-          tension: 0.4
-        },
-        {
-          label: 'IPs Suspeitos',
-          data: [3, 5, 2, 7, 4, 9, 6],
-          borderColor: '#facc15',
-          backgroundColor: 'rgba(250, 204, 21, 0.15)',
-          fill: true,
-          tension: 0.4
+    // Funções para os dropdowns da top-bar
+    document.addEventListener('DOMContentLoaded', function () {
+      // Elementos dos botões
+      const btnRefresh = document.querySelector('.btn-refresh');
+      const btnNotifications = document.querySelector('.btn-notifications');
+      const btnUser = document.querySelector('.btn-user');
+
+      // Elementos dos dropdowns
+      const notificationsDropdown = document.getElementById('notifications-dropdown');
+      const userProfileDropdown = document.getElementById('user-profile-dropdown');
+
+      // Botões de fechar
+      const closeNotifications = document.getElementById('close-notifications');
+      const closeProfile = document.getElementById('close-profile');
+
+      // Função para fechar dropdowns
+      function closeAllDropdowns() {
+        notificationsDropdown.style.display = 'none';
+        userProfileDropdown.style.display = 'none';
+      }
+
+      // Event listener para botão de refresh
+      if (btnRefresh) {
+        btnRefresh.addEventListener('click', function () {
+          location.reload();
+        });
+      }
+
+      // Event listener para botão de notificações
+      if (btnNotifications) {
+        btnNotifications.addEventListener('click', function () {
+          closeAllDropdowns();
+          notificationsDropdown.style.display = notificationsDropdown.style.display === 'block' ? 'none' : 'block';
+        });
+      }
+
+      // Event listener para botão de usuário
+      if (btnUser) {
+        btnUser.addEventListener('click', function (e) {
+          e.preventDefault(); // Previne o link padrão
+          closeAllDropdowns();
+          userProfileDropdown.style.display = userProfileDropdown.style.display === 'block' ? 'none' : 'block';
+        });
+      }
+
+      // Event listeners para fechar dropdowns
+      if (closeNotifications) {
+        closeNotifications.addEventListener('click', closeAllDropdowns);
+      }
+
+      if (closeProfile) {
+        closeProfile.addEventListener('click', closeAllDropdowns);
+      }
+
+      // Fechar dropdowns ao clicar fora deles
+      document.addEventListener('click', function (e) {
+        if (!e.target.closest('.header-actions') && !e.target.closest('.notifications-dropdown') && !e.target.closest('.user-profile-dropdown')) {
+          closeAllDropdowns();
         }
-      ]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: {
-          labels: {
-            color: '#8b8fa3',
-            font: { family: 'Rajdhani', size: 12 }
-          }
-        }
-      },
-      scales: {
-        x: {
-          ticks: { color: '#8b8fa3', font: { family: 'Rajdhani', size: 11 } },
-          grid: { color: 'rgba(147,51,234,0.1)' }
-        },
-        y: {
-          ticks: { color: '#8b8fa3', font: { family: 'Rajdhani', size: 11 } },
-          grid: { color: 'rgba(147,51,234,0.1)' }
-        }
-      }
-    }
-  });
-
-  function generateMaliciousTrafficData() {
-    const now = new Date();
-    const currentTime = now.getHours() + ':' + (now.getMinutes() < 10 ? '0' : '') + now.getMinutes();
-
-    maliciousTrafficChart.data.labels.push(currentTime);
-    if (maliciousTrafficChart.data.labels.length > 7) {
-      maliciousTrafficChart.data.labels.shift();
-    }
-
-    // Tentativas bloqueadas (0-35)
-    const blockedAttempts = Math.floor(Math.random() * 35);
-    maliciousTrafficChart.data.datasets[0].data.push(blockedAttempts);
-    if (maliciousTrafficChart.data.datasets[0].data.length > 7) {
-      maliciousTrafficChart.data.datasets[0].data.shift();
-    }
-
-    // IPs suspeitos (0-10)
-    const suspiciousIPs = Math.floor(Math.random() * 10);
-    maliciousTrafficChart.data.datasets[1].data.push(suspiciousIPs);
-    if (maliciousTrafficChart.data.datasets[1].data.length > 7) {
-      maliciousTrafficChart.data.datasets[1].data.shift();
-    }
-
-    maliciousTrafficChart.update();
-  }
-
-  // Atualiza o gráfico malicioso a cada 5 segundos
-  setInterval(generateMaliciousTrafficData, 5000);
-
-  // Funções para os dropdowns da top-bar
-  document.addEventListener('DOMContentLoaded', function () {
-    // Elementos dos botões
-    const btnRefresh = document.querySelector('.btn-refresh');
-    const btnNotifications = document.querySelector('.btn-notifications');
-    const btnUser = document.querySelector('.btn-user');
-
-    // Elementos dos dropdowns
-    const notificationsDropdown = document.getElementById('notifications-dropdown');
-    const userProfileDropdown = document.getElementById('user-profile-dropdown');
-
-    // Botões de fechar
-    const closeNotifications = document.getElementById('close-notifications');
-    const closeProfile = document.getElementById('close-profile');
-
-    // Função para fechar dropdowns
-    function closeAllDropdowns() {
-      notificationsDropdown.style.display = 'none';
-      userProfileDropdown.style.display = 'none';
-    }
-
-    // Event listener para botão de refresh
-    if (btnRefresh) {
-      btnRefresh.addEventListener('click', function () {
-        location.reload();
       });
-    }
-
-    // Event listener para botão de notificações
-    if (btnNotifications) {
-      btnNotifications.addEventListener('click', function () {
-        closeAllDropdowns();
-        notificationsDropdown.style.display = notificationsDropdown.style.display === 'block' ? 'none' : 'block';
-      });
-    }
-
-    // Event listener para botão de usuário
-    if (btnUser) {
-      btnUser.addEventListener('click', function (e) {
-        e.preventDefault(); // Previne o link padrão
-        closeAllDropdowns();
-        userProfileDropdown.style.display = userProfileDropdown.style.display === 'block' ? 'none' : 'block';
-      });
-    }
-
-    // Event listeners para fechar dropdowns
-    if (closeNotifications) {
-      closeNotifications.addEventListener('click', closeAllDropdowns);
-    }
-
-    if (closeProfile) {
-      closeProfile.addEventListener('click', closeAllDropdowns);
-    }
-
-    // Fechar dropdowns ao clicar fora deles
-    document.addEventListener('click', function (e) {
-      if (!e.target.closest('.header-actions') && !e.target.closest('.notifications-dropdown') && !e.target.closest('.user-profile-dropdown')) {
-        closeAllDropdowns();
-      }
     });
-  });</script>
+  </script>
+
+</body>
+
+</html>

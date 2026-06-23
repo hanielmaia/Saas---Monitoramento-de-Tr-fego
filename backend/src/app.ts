@@ -5,7 +5,11 @@ import rateLimit from 'express-rate-limit';
 import xssClean from 'xss-clean';
 import mongoSanitize from 'express-mongo-sanitize';
 import { createRequire } from 'module';
+import { fileURLToPath } from 'url';
+import path from 'path';
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 const require = createRequire(import.meta.url);
 
 // Importar rotas
@@ -19,6 +23,9 @@ const { errorHandler, notFoundHandler } = require('./middlewares/errorHandler.js
 const logger = require('./utils/logger.cjs');
 
 const app = express();
+
+// Ensina o Express a ler a pasta public que está dois níveis para trás
+app.use(express.static(path.join(__dirname, '../../public')));
 
 /**
  * Segurança e hardening

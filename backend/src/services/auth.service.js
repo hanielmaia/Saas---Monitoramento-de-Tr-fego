@@ -50,9 +50,10 @@ async function login({ email, password }) {
   }
 
   // Gerar token JWT
+  // JWT_SECRET é obrigatório e validado em server.ts
   const token = jwt.sign(
     { userId: user.id, role: user.role, email: user.email },
-    process.env.JWT_SECRET || 'seu_secret_aqui',
+    process.env.JWT_SECRET,
     { expiresIn: process.env.JWT_EXPIRATION || '8h' }
   );
 

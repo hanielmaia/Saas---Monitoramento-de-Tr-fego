@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>N Eyes - Monitoramento de Tráfego</title>
+    <link rel="stylesheet" href="css/login.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            text-align: center;
+            color: white;
+        }
+
+        h1 {
+            font-size: 3em;
+            margin: 0 0 10px 0;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        p {
+            font-size: 1.2em;
+            margin: 0 0 30px 0;
+            opacity: 0.9;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 40px;
+            background: #00d4ff;
+            color: #000;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            margin: 10px;
+            border: none;
+            cursor: pointer;
+            font-size: 1em;
+        }
+
+        .btn:hover {
+            background: #00f0ff;
+            transform: scale(1.05);
+        }
+
+        .btn.secondary {
+            background: transparent;
+            border: 2px solid #00d4ff;
+            color: #00d4ff;
+        }
+
+        .btn.secondary:hover {
+            background: #00d4ff;
+            color: #000;
+        }
+
+        .loading {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top: 4px solid #00d4ff;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>👁️ N Eyes</h1>
+        <p>Sistema de Monitoramento de Tráfego de Rede</p>
+
+        <button class="btn" onclick="redirectToLogin()">Entrar</button>
+        <button class="btn secondary" onclick="checkStatus()">Status da API</button>
+
+        <div id="status" style="margin-top: 20px; font-size: 0.9em;"></div>
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>Verificando servidor...</p>
+        </div>
+    </div>
+
+    <script>
+        function redirectToLogin() {
+            window.location.href = '/pages/login.html';
+        }
+
+        async function checkStatus() {
+            const loadingEl = document.getElementById('loading');
+            const statusEl = document.getElementById('status');
+
+            loadingEl.style.display = 'block';
+            statusEl.innerHTML = '';
+
+            try {
+                const response = await fetch('/api/health');
+                const data = await response.json();
+
+                if (response.ok) {
+                    statusEl.innerHTML = `
+                        <div style="color: #00ff00;">
+                            ✅ Servidor Online<br>
+                            Ambiente: ${data.environment}<br>
+                            ${data.message}
+                        </div>
+                    `;
+                } else {
+                    statusEl.innerHTML = '❌ Servidor respondeu com erro';
+                }
+            } catch (err) {
+                statusEl.innerHTML = '❌ Erro ao conectar ao servidor';
+                console.error(err);
+            } finally {
+                loadingEl.style.display = 'none';
+            }
+        }
+
+        // Verificar automaticamente ao carregar
+        window.addEventListener('load', () => {
+            checkStatus();
+        });
+    </script>
+</body>
+
+</html>

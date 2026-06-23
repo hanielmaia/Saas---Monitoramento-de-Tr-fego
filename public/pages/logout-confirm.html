@@ -1,14 +1,16 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="N Eyes - Confirmação de Saída">
   <title>N Eyes - Confirmar Saída</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="/src/styles/logout-confirm.css">
-  <link rel="icon" href="/src/public/favicon-32x32.png" type="image/png">
+  <link rel="stylesheet" href="/css/logout-confirm.css">
+  <link rel="stylesheet" href="/css/notifications.css">
 </head>
+
 <body>
   <div class="app-container">
     <!-- LOGOUT MODAL OVERLAY -->
@@ -22,7 +24,7 @@
 
         <div class="modal-body">
           <div class="logout-icon" aria-hidden="true">⚠️</div>
-          
+
           <p class="logout-message">
             Você tem certeza que deseja sair da plataforma N Eyes?
           </p>
@@ -49,19 +51,11 @@
         </div>
 
         <div class="modal-footer">
-          <button 
-            class="btn-logout-confirm" 
-            id="btn-confirm-logout" 
-            aria-label="Confirmar saída da plataforma"
-          >
+          <button class="btn-logout-confirm" id="btn-confirm-logout" aria-label="Confirmar saída da plataforma">
             Confirmar Saída
           </button>
-          <a 
-            href="home.html#dashboard" 
-            class="btn-cancel"
-            id="btn-cancel-logout"
-            aria-label="Cancelar saída e voltar ao Dashboard"
-          >
+          <a href="home.html#dashboard" class="btn-cancel" id="btn-cancel-logout"
+            aria-label="Cancelar saída e voltar ao Dashboard">
             Voltar ao Dashboard
           </a>
         </div>
@@ -179,24 +173,18 @@
 
             <div class="logout-warnings">
               <p class="warning-message">
-                <strong>⚠️ Aviso Importante:</strong> Todos os dados não salvos serão perdidos. Certifique-se de salvar seu trabalho antes de continuar.
+                <strong>⚠️ Aviso Importante:</strong> Todos os dados não salvos serão perdidos. Certifique-se de salvar
+                seu trabalho antes de continuar.
               </p>
             </div>
           </div>
 
           <div class="logout-actions">
-            <button 
-              class="btn-logout-confirm btn-large" 
-              id="btn-page-confirm-logout"
-              aria-label="Confirmar saída do sistema"
-            >
+            <button class="btn-logout-confirm btn-large" id="btn-page-confirm-logout"
+              aria-label="Confirmar saída do sistema">
               ✓ Confirmar Saída
             </button>
-            <a 
-              href="Teste.html" 
-              class="btn-cancel btn-large"
-              aria-label="Cancelar e voltar ao Dashboard"
-            >
+            <a href="Teste.html" class="btn-cancel btn-large" aria-label="Cancelar e voltar ao Dashboard">
               ← Voltar ao Dashboard
             </a>
           </div>
@@ -216,7 +204,7 @@
 
   <script>
     // Simple logout functionality demonstration
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
       const confirmBtn = document.getElementById('btn-confirm-logout');
       const cancelBtn = document.getElementById('btn-cancel-logout');
       const pageConfirmBtn = document.getElementById('btn-page-confirm-logout');
@@ -224,7 +212,7 @@
 
       // Modal version
       if (confirmBtn) {
-        confirmBtn.addEventListener('click', function() {
+        confirmBtn.addEventListener('click', function () {
           // Clear any session data and redirect to login page (relative path ensures it works from any folder)
           sessionStorage.clear();
           localStorage.clear();
@@ -235,7 +223,7 @@
       if (cancelBtn || modalClose) {
         [cancelBtn, modalClose].forEach(btn => {
           if (btn) {
-            btn.addEventListener('click', function() {
+            btn.addEventListener('click', function () {
               window.history.back();
             });
           }
@@ -244,7 +232,7 @@
 
       // Page version
       if (pageConfirmBtn) {
-        pageConfirmBtn.addEventListener('click', function() {
+        pageConfirmBtn.addEventListener('click', function () {
           sessionStorage.clear();
           localStorage.clear();
           window.location.href = 'login.html';
@@ -253,4 +241,5 @@
     });
   </script>
 </body>
+
 </html>
