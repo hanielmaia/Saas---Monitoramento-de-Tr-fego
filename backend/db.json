@@ -65,34 +65,37 @@
       "id": 1,
       "ip": "192.168.1.100",
       "hostname": "Laptop-Equipe-01",
-      "status": "Blocked",
+      "status": "Online",
       "bandwidth": 45.2,
-      "lastSeen": "2026-06-23T00:37:36.496Z",
-      "updatedAt": "2026-06-23T00:37:36.502Z"
+      "lastSeen": "2026-06-23T00:50:20.247Z",
+      "updatedAt": "2026-06-23T00:50:20.249Z"
     },
     {
       "id": 2,
       "ip": "192.168.1.101",
       "hostname": "Laptop-Equipe-02",
-      "status": "Online",
+      "status": "Blocked",
       "bandwidth": 78.6,
-      "lastSeen": "2026-05-03T14:31:45Z"
+      "lastSeen": "2026-06-23T00:50:26.454Z",
+      "updatedAt": "2026-06-23T00:50:26.456Z"
     },
     {
       "id": 3,
       "ip": "192.168.1.102",
       "hostname": "Servidor-Web-01",
-      "status": "Online",
+      "status": "Blocked",
       "bandwidth": 234.8,
-      "lastSeen": "2026-05-03T14:33:10Z"
+      "lastSeen": "2026-06-23T00:50:24.094Z",
+      "updatedAt": "2026-06-23T00:50:24.096Z"
     },
     {
       "id": 4,
       "ip": "192.168.1.103",
       "hostname": "Impressora-Rede-03",
-      "status": "Online",
+      "status": "Blocked",
       "bandwidth": 12.3,
-      "lastSeen": "2026-05-03T14:30:22Z"
+      "lastSeen": "2026-06-23T00:50:28.772Z",
+      "updatedAt": "2026-06-23T00:50:28.773Z"
     },
     {
       "id": 5,
