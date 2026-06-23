@@ -6,14 +6,18 @@
 const { Router } = require('express');
 const authController = require('../controllers/auth.controller');
 const { authMiddleware } = require('../middlewares/auth');
+const { authLimiter, refreshLimiter } = require('../middlewares/rateLimit');
 
 const router = Router();
 
-// POST - Registrar novo usuário (sem autenticação)
-router.post('/register', authController.register);
+// POST - Registrar novo usuário (sem autenticação, com rate limit)
+router.post('/register', authLimiter, authController.register);
 
-// POST - Fazer login (sem autenticação)
-router.post('/login', authController.login);
+// POST - Fazer login (sem autenticação, com rate limit)
+router.post('/login', authLimiter, authController.login);
+
+// POST - Renovar access token (sem autenticação, com rate limit moderado)
+router.post('/refresh', refreshLimiter, authController.refresh);
 
 // GET - Dados do usuário logado (protegido)
 router.get('/me', authMiddleware, authController.me);

@@ -1,5 +1,6 @@
 import express, { Request, Response } from 'express';
 import cors from 'cors';
+import cookieParser from 'cookie-parser';
 import { createRequire } from 'module';
 import { fileURLToPath } from 'url';
 import path from 'path';
@@ -7,6 +8,9 @@ import path from 'path';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const require = createRequire(import.meta.url);
+
+// Importar rate limiters
+const { generalLimiter } = require('./middlewares/rateLimit');
 
 // Importar rotas
 const authRoutes = require('./routes/auth.routes.js');
@@ -27,6 +31,11 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 /**
+ * Middleware: Cookie Parser
+ */
+app.use(cookieParser());
+
+/**
  * Middleware: CORS
  */
 const corsOrigins = (process.env.CORS_ORIGIN ?? 'http://localhost:3000,http://localhost:8000')
@@ -39,6 +48,12 @@ app.use(cors({
   methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
 }));
+
+/**
+ * Middleware: Rate Limiting Global
+ * Aplicado a todos os endpoints /api
+ */
+app.use('/api', generalLimiter);
 
 /**
  * Rota de Health Check

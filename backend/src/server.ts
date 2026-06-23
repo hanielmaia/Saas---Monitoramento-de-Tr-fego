@@ -1,5 +1,9 @@
 import 'dotenv/config';
 import app from './app.js';
+import { createRequire } from 'module';
+
+const require = createRequire(import.meta.url);
+const tokenRevocationService = require('./services/tokenRevocation.service');
 
 /**
  * Validação de Variáveis de Ambiente Obrigatórias
@@ -27,4 +31,7 @@ app.listen(port, host, () => {
   console.log(`\n✅ Servidor iniciado`);
   console.log(`📡 URL: http://${host}:${port}`);
   console.log(`📝 Ambiente: ${process.env.NODE_ENV ?? 'development'}\n`);
+
+  // Iniciar cleanup automático de tokens revogados (a cada 6 horas)
+  tokenRevocationService.startCleanupInterval(6);
 });
