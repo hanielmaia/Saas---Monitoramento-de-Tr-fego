@@ -2,6 +2,8 @@
  * Data Service - N Eyes
  * Serviço centralizado para chamadas à API do backend
  * Usa apiCall() de api.service.js para garantir autenticação e tratamento de erros
+ * 
+ * ✅ Garantir que api.service.js é carregado ANTES deste script
  */
 
 /**
@@ -42,13 +44,12 @@ function normalizeResponse(response) {
  * Busca todos os dispositivos
  * @returns {Promise<Array>} Lista de dispositivos
  */
-export async function getDevices() {
+async function getDevices() {
     try {
         // ✅ USA apiCall() que inclui Authorization: Bearer <token>
         const result = await apiCall('/devices', {
             method: 'GET'
         });
-
         return normalizeResponse(result);
     } catch (error) {
         console.error('[getDevices] Erro:', error);
@@ -60,7 +61,7 @@ export async function getDevices() {
  * Busca estatísticas de dispositivos
  * @returns {Promise<Object>} Estatísticas
  */
-export async function getDeviceStats() {
+async function getDeviceStats() {
     try {
         // ✅ USA apiCall() que inclui Authorization: Bearer <token>
         const result = await apiCall('/devices/stats', {
@@ -79,7 +80,7 @@ export async function getDeviceStats() {
  * @param {number} id - ID do dispositivo
  * @returns {Promise<Object>} Dispositivo
  */
-export async function getDeviceById(id) {
+async function getDeviceById(id) {
     try {
         // ✅ USA apiCall() que inclui Authorization: Bearer <token>
         const result = await apiCall(`/devices/${id}`, {
@@ -98,7 +99,7 @@ export async function getDeviceById(id) {
  * @param {Object} deviceData - Dados do dispositivo
  * @returns {Promise<Object>} Dispositivo criado
  */
-export async function createDevice(deviceData) {
+async function createDevice(deviceData) {
     try {
         // ✅ USA apiCall() que inclui Authorization: Bearer <token>
         const result = await apiCall('/devices', {
@@ -119,7 +120,7 @@ export async function createDevice(deviceData) {
  * @param {Object} updates - Dados a atualizar
  * @returns {Promise<Object>} Dispositivo atualizado
  */
-export async function updateDevice(id, updates) {
+async function updateDevice(id, updates) {
     try {
         // ✅ USA apiCall() que inclui Authorization: Bearer <token>
         const result = await apiCall(`/devices/${id}`, {
@@ -139,7 +140,7 @@ export async function updateDevice(id, updates) {
  * @param {number} id - ID do dispositivo
  * @returns {Promise<void>}
  */
-export async function deleteDevice(id) {
+async function deleteDevice(id) {
     try {
         // ✅ USA apiCall() que inclui Authorization: Bearer <token>
         const result = await apiCall(`/devices/${id}`, {
@@ -164,7 +165,7 @@ export async function deleteDevice(id) {
  * @param {Object} filters - Filtros (keyword, eventType, device, dateStart, dateEnd)
  * @returns {Promise<Array>} Lista de logs
  */
-export async function getLogs(filters = {}) {
+async function getLogs(filters = {}) {
     try {
         // Construir query string
         let endpoint = '/logs';
@@ -197,7 +198,7 @@ export async function getLogs(filters = {}) {
  * @param {number} id - ID do log
  * @returns {Promise<Object>} Log
  */
-export async function getLogById(id) {
+async function getLogById(id) {
     try {
         // ✅ USA apiCall() que inclui Authorization: Bearer <token>
         const result = await apiCall(`/logs/${id}`, {
@@ -216,7 +217,7 @@ export async function getLogById(id) {
  * @param {Object} logData - Dados do log
  * @returns {Promise<Object>} Log criado
  */
-export async function createLog(logData) {
+async function createLog(logData) {
     try {
         // ✅ USA apiCall() que inclui Authorization: Bearer <token>
         const result = await apiCall('/logs', {
@@ -236,7 +237,7 @@ export async function createLog(logData) {
  * @param {number} id - ID do log
  * @returns {Promise<void>}
  */
-export async function deleteLog(id) {
+async function deleteLog(id) {
     try {
         // ✅ USA apiCall() que inclui Authorization: Bearer <token>
         const result = await apiCall(`/logs/${id}`, {
@@ -260,7 +261,7 @@ export async function deleteLog(id) {
  * Busca configurações
  * @returns {Promise<Object>} Configurações
  */
-export async function getSettings() {
+async function getSettings() {
     try {
         // ✅ USA apiCall() que inclui Authorization: Bearer <token>
         const result = await apiCall('/settings', {
@@ -279,7 +280,7 @@ export async function getSettings() {
  * @param {Object} updates - Dados a atualizar
  * @returns {Promise<Object>} Configurações atualizadas
  */
-export async function updateSettings(updates) {
+async function updateSettings(updates) {
     try {
         // ✅ USA apiCall() que inclui Authorization: Bearer <token>
         const result = await apiCall('/settings', {
@@ -304,7 +305,7 @@ export async function updateSettings(updates) {
  * Busca dados do usuário logado
  * @returns {Promise<Object>} Dados do usuário
  */
-export async function getCurrentUser() {
+async function getCurrentUser() {
     try {
         // ✅ USA apiCall() que inclui Authorization: Bearer <token>
         const result = await apiCall('/auth/me', {
@@ -323,7 +324,7 @@ export async function getCurrentUser() {
  * @param {Object} updates - Dados a atualizar
  * @returns {Promise<Object>} Usuário atualizado
  */
-export async function updateUser(updates) {
+async function updateUser(updates) {
     try {
         // ✅ USA apiCall() que inclui Authorization: Bearer <token>
         const result = await apiCall('/users/me', {
@@ -351,7 +352,7 @@ export async function updateUser(updates) {
  * @param {string} password - Senha do usuário
  * @returns {Promise<Object>} Resposta de login (token, user)
  */
-export async function login(email, password) {
+async function login(email, password) {
     try {
         // ✅ USA apiCall() que inclui Authorization: Bearer <token>
         // Login é a única chamada que NÃO inclui token (ainda não autenticado)
@@ -380,7 +381,7 @@ export async function login(email, password) {
  * @param {string} password - Senha do usuário
  * @returns {Promise<Object>} Resposta de registro
  */
-export async function register(name, email, password) {
+async function register(name, email, password) {
     try {
         // ✅ USA apiCall() que inclui Authorization: Bearer <token>
         // Registro é a única chamada que NÃO inclui token (ainda não autenticado)
@@ -400,7 +401,7 @@ export async function register(name, email, password) {
  * Faz logout
  * @returns {Promise<void>}
  */
-export async function logout() {
+async function logout() {
     try {
         // ✅ USA apiCall() que inclui Authorization: Bearer <token>
         // Tentar notificar servidor
@@ -434,7 +435,7 @@ export async function logout() {
  * Calcula valores baseado nos dispositivos disponíveis
  * @returns {Promise<Object>} Métricas (download, upload, etc)
  */
-export async function getMetrics() {
+async function getMetrics() {
     try {
         // ✅ USA getDevices() que usa apiCall()
         const devices = await getDevices();

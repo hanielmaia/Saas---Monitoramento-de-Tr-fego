@@ -271,7 +271,7 @@ async function updateSettings(data) {
   });
 }
 
-// Exportar para global scope
+// ✅ Exportar para global scope (compatível com HTML scripts)
 if (typeof window !== 'undefined') {
   Object.assign(window, {
     apiCall,

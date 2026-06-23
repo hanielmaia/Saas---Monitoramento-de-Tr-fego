@@ -65,9 +65,10 @@
       "id": 1,
       "ip": "192.168.1.100",
       "hostname": "Laptop-Equipe-01",
-      "status": "Online",
+      "status": "Blocked",
       "bandwidth": 45.2,
-      "lastSeen": "2026-05-03T14:32:00Z"
+      "lastSeen": "2026-06-23T00:37:36.496Z",
+      "updatedAt": "2026-06-23T00:37:36.502Z"
     },
     {
       "id": 2,
