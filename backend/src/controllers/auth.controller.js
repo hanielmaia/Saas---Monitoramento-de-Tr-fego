@@ -40,6 +40,7 @@ async function register(req, res, next) {
 /**
  * POST /api/auth/login
  * Faz login do usuário
+ * Retorna access token e refresh token via httpOnly cookies
  */
 async function login(req, res, next) {
   try {
@@ -58,10 +59,31 @@ async function login(req, res, next) {
     // Fazer login
     const result = await authService.login({ email, password });
 
+    // Configurar cookies httpOnly
+    const isProduction = process.env.NODE_ENV === 'production';
+    const cookieOptions = {
+      httpOnly: true,           // Não acessível via JavaScript (proteção contra XSS)
+      secure: isProduction,     // HTTPS apenas em produção
+      sameSite: 'strict',       // Proteção contra CSRF
+      maxAge: 15 * 60 * 1000    // 15 minutos
+    };
+
+    const refreshCookieOptions = {
+      httpOnly: true,
+      secure: isProduction,
+      sameSite: 'strict',
+      maxAge: 7 * 24 * 60 * 60 * 1000  // 7 dias
+    };
+
+    // Enviar tokens em httpOnly cookies
+    res.cookie('accessToken', result.accessToken, cookieOptions);
+    res.cookie('refreshToken', result.refreshToken, refreshCookieOptions);
+
     return res.status(200).json({
       status: 'success',
       message: 'Login realizado com sucesso',
-      ...result
+      user: result.user
+      // Nota: tokens NÃO são enviados no JSON body, apenas em cookies
     });
   } catch (err) {
     if (err.message === 'Credenciais inválidas') {
@@ -100,10 +122,19 @@ function me(req, res, next) {
 /**
  * POST /api/auth/logout
  * Faz logout do usuário
+ * Revoga tokens e limpa cookies
  */
 function logout(req, res) {
   try {
-    authService.logout();
+    const accessToken = req.cookies.accessToken;
+    const refreshToken = req.cookies.refreshToken;
+
+    // Revogar tokens
+    authService.logout({ accessToken, refreshToken });
+
+    // Limpar cookies
+    res.clearCookie('accessToken');
+    res.clearCookie('refreshToken');
 
     return res.status(200).json({
       status: 'success',
@@ -117,9 +148,63 @@ function logout(req, res) {
   }
 }
 
+/**
+ * POST /api/auth/refresh
+ * Renova o access token usando refresh token
+ */
+function refresh(req, res, next) {
+  try {
+    const refreshToken = req.cookies.refreshToken;
+
+    if (!refreshToken) {
+      return res.status(401).json({
+        status: 'error',
+        message: 'Refresh token não fornecido'
+      });
+    }
+
+    // Renovar access token
+    const result = authService.refreshAccessToken(refreshToken);
+
+    // Configurar novo access token cookie
+    const isProduction = process.env.NODE_ENV === 'production';
+    const cookieOptions = {
+      httpOnly: true,
+      secure: isProduction,
+      sameSite: 'strict',
+      maxAge: 15 * 60 * 1000
+    };
+
+    res.cookie('accessToken', result.accessToken, cookieOptions);
+
+    return res.status(200).json({
+      status: 'success',
+      message: 'Access token renovado com sucesso',
+      user: result.user
+    });
+  } catch (err) {
+    if (err.message.includes('Refresh token foi revogado')) {
+      return res.status(401).json({
+        status: 'error',
+        message: 'Sessão expirada. Faça login novamente.'
+      });
+    }
+
+    if (err.message.includes('Erro ao renovar token')) {
+      return res.status(401).json({
+        status: 'error',
+        message: 'Token de renovação inválido ou expirado'
+      });
+    }
+
+    next(err);
+  }
+}
+
 module.exports = {
   register,
   login,
   me,
-  logout
+  logout,
+  refresh
 };
