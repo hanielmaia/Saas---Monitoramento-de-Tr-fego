@@ -1,9 +1,7 @@
-import express, { Request, Response } from 'express';
+import express, { Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
-import xssClean from 'xss-clean';
-import mongoSanitize from 'express-mongo-sanitize';
 import { createRequire } from 'module';
 import { fileURLToPath } from 'url';
 import path from 'path';
@@ -21,6 +19,44 @@ const usersRoutes = require('./routes/users.routes.js');
 
 const { errorHandler, notFoundHandler } = require('./middlewares/errorHandler.js');
 const logger = require('./utils/logger.cjs');
+const swaggerUiDist = require('swagger-ui-dist');
+const swaggerSpec = require('./utils/swaggerConfig.js');
+
+// --- Funções de Sanitização ---
+function deepSanitizeObject(target: any) {
+  if (Array.isArray(target)) {
+    target.forEach(deepSanitizeObject);
+    return;
+  }
+
+  if (target && typeof target === 'object') {
+    Object.keys(target).forEach((key) => {
+      const value = target[key];
+      const sanitizedKey = key.replace(/^\$|\./g, '');
+
+      if (sanitizedKey !== key) {
+        target[sanitizedKey] = value;
+        delete target[key];
+      }
+
+      if (value && typeof value === 'object') {
+        deepSanitizeObject(value);
+      }
+    });
+  }
+}
+
+function requestSanitizer(req: Request, res: Response, next: NextFunction) {
+  const keys = ['body', 'params'] as const;
+  keys.forEach((key) => {
+    const target = req[key];
+    if (target && typeof target === 'object') {
+      deepSanitizeObject(target);
+    }
+  });
+  next();
+}
+// ------------------------------
 
 const app = express();
 
@@ -28,9 +64,18 @@ const app = express();
 app.use(express.static(path.join(__dirname, '../../public')));
 
 /**
- * Segurança e hardening
+ * Segurança e hardening (Com liberação para o Swagger UI rodar)
  */
-app.use(helmet());
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      ...helmet.contentSecurityPolicy.getDefaultDirectives(),
+      "script-src": ["'self'", "'unsafe-inline'"],
+      "style-src": ["'self'", "'unsafe-inline'"],
+      "img-src": ["'self'", "data:", "validator.swagger.io"],
+    },
+  },
+}));
 
 const apiLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutos
@@ -49,14 +94,13 @@ app.use((req, res, next) => {
 });
 
 app.use(apiLimiter);
-app.use(xssClean());
-app.use(mongoSanitize());
 
 /**
- * Middleware: Body Parser
+ * Middleware: Body Parser & Sanitização
  */
 app.use(express.json({ limit: '10kb' }));
 app.use(express.urlencoded({ extended: true, limit: '10kb' }));
+app.use(requestSanitizer);
 
 /**
  * Middleware: CORS
@@ -96,6 +140,47 @@ app.get('/api/status', (req: Request, res: Response): void => {
 });
 
 /**
+ * Swagger UI
+ */
+const swaggerAssetsPath = swaggerUiDist.getAbsoluteFSPath();
+app.use('/api/docs/assets', express.static(swaggerAssetsPath));
+app.get('/api/docs', (req: Request, res: Response): void => {
+  res.type('html').send(`<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>API Docs - N Eyes</title>
+  <link rel="stylesheet" type="text/css" href="/api/docs/assets/swagger-ui.css" />
+  <style>body { margin: 0; padding: 0; }</style>
+</head>
+<body>
+  <div id="swagger-ui"></div>
+  <script src="/api/docs/assets/swagger-ui-bundle.js"></script>
+  <script src="/api/docs/assets/swagger-ui-standalone-preset.js"></script>
+  <script>
+    window.onload = function() {
+      const ui = SwaggerUIBundle({
+        spec: ${JSON.stringify(swaggerSpec)},
+        dom_id: '#swagger-ui',
+        deepLinking: true,
+        presets: [
+          SwaggerUIBundle.presets.apis,
+          SwaggerUIStandalonePreset
+        ],
+        layout: 'StandaloneLayout'
+      });
+      window.ui = ui;
+    };
+  </script>
+</body>
+</html>`);
+});
+app.get('/api/docs/swagger.json', (req: Request, res: Response): void => {
+  res.json(swaggerSpec);
+});
+
+/**
  * Registrar Rotas
  */
 app.use('/api/auth', authRoutes);
@@ -111,3 +196,5 @@ app.use(notFoundHandler);
 app.use(errorHandler);
 
 export default app;
+
+
