@@ -4,6 +4,7 @@
  */
 
 const { getSettings, updateSettings } = require('../services/settings.service');
+const { APIError } = require('../middlewares/errorHandler');
 
 /**
  * GET /api/settings
@@ -32,10 +33,7 @@ function save(req, res, next) {
 
     // Validações básicas
     if (Object.keys(data).length === 0) {
-      return res.status(400).json({
-        status: 'error',
-        message: 'Nenhum campo para atualizar'
-      });
+      throw new APIError('Nenhum campo para atualizar', 400);
     }
 
     const settings = updateSettings(data);

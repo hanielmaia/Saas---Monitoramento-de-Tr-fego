@@ -4,6 +4,7 @@
  */
 
 const logsService = require('../services/logs.service');
+const { APIError } = require('../middlewares/errorHandler');
 
 /**
  * GET /api/logs
@@ -46,10 +47,7 @@ function getLogById(req, res, next) {
     });
   } catch (err) {
     if (err.message === 'Log não encontrado') {
-      return res.status(404).json({
-        status: 'error',
-        message: err.message
-      });
+      return next(new APIError(err.message, 404));
     }
     next(err);
   }
@@ -63,6 +61,18 @@ function createLog(req, res, next) {
   try {
     const { deviceId, deviceName, message, severity, type } = req.body;
 
+<<<<<<< HEAD
+=======
+    // Validar entrada
+    if (!deviceId || !deviceName || !message) {
+      throw new APIError('Erro de validação', 400, {
+        deviceId: !deviceId ? 'Obrigatório' : null,
+        deviceName: !deviceName ? 'Obrigatório' : null,
+        message: !message ? 'Obrigatório' : null
+      });
+    }
+
+>>>>>>> main
     const log = logsService.createLog({
       deviceId,
       deviceName,
@@ -97,10 +107,7 @@ function deleteLog(req, res, next) {
     });
   } catch (err) {
     if (err.message === 'Log não encontrado') {
-      return res.status(404).json({
-        status: 'error',
-        message: err.message
-      });
+      return next(new APIError(err.message, 404));
     }
     next(err);
   }

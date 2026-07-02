@@ -3,7 +3,11 @@ import app from './app.js';
 import { createRequire } from 'module';
 
 const require = createRequire(import.meta.url);
+<<<<<<< HEAD
 const logger = require('./utils/logger.cjs');
+=======
+const tokenRevocationService = require('./services/tokenRevocation.service');
+>>>>>>> main
 
 /**
  * Validação de Variáveis de Ambiente Obrigatórias
@@ -28,5 +32,14 @@ const port = parseInt(process.env.PORT ?? '3000', 10);
 const host = process.env.HOST ?? 'localhost';
 
 app.listen(port, host, () => {
+<<<<<<< HEAD
   logger.info({ host, port, environment: process.env.NODE_ENV ?? 'development' }, 'Servidor iniciado');
+=======
+  console.log(`\n✅ Servidor iniciado`);
+  console.log(`📡 URL: http://${host}:${port}`);
+  console.log(`📝 Ambiente: ${process.env.NODE_ENV ?? 'development'}\n`);
+
+  // Iniciar cleanup automático de tokens revogados (a cada 6 horas)
+  tokenRevocationService.startCleanupInterval(6);
+>>>>>>> main
 });

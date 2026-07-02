@@ -4,6 +4,11 @@
  */
 
 const { getAllUsers, getUserById, updateProfile, deleteUser } = require('../services/users.service');
+<<<<<<< HEAD
+=======
+const { validateName, validateEmail } = require('../utils/validation');
+const { APIError } = require('../middlewares/errorHandler');
+>>>>>>> main
 
 /**
  * GET /api/users
@@ -38,10 +43,7 @@ function getMe(req, res, next) {
     });
   } catch (err) {
     if (err.message === 'Usuário não encontrado') {
-      return res.status(404).json({
-        status: 'error',
-        message: err.message
-      });
+      return next(new APIError(err.message, 404));
     }
     next(err);
   }
@@ -62,10 +64,7 @@ function getById(req, res, next) {
     });
   } catch (err) {
     if (err.message === 'Usuário não encontrado') {
-      return res.status(404).json({
-        status: 'error',
-        message: err.message
-      });
+      return next(new APIError(err.message, 404));
     }
     next(err);
   }
@@ -79,6 +78,24 @@ async function updateMe(req, res, next) {
   try {
     const { name, email, currentPassword, newPassword } = req.body;
 
+<<<<<<< HEAD
+=======
+    // Validações básicas
+    const errors = {};
+
+    if (name && !validateName(name).valid) {
+      errors.name = 'Nome deve ter mínimo 2 caracteres';
+    }
+
+    if (email && !validateEmail(email)) {
+      errors.email = 'Email inválido';
+    }
+
+    if (Object.keys(errors).length > 0) {
+      throw new APIError('Erro de validação', 400, errors);
+    }
+
+>>>>>>> main
     const user = await updateProfile(req.userId, {
       name,
       email,
@@ -96,10 +113,7 @@ async function updateMe(req, res, next) {
         err.message.includes('Senha atual incorreta') ||
         err.message.includes('Este e-mail já está em uso') ||
         err.message.includes('Informe a senha atual')) {
-      return res.status(400).json({
-        status: 'error',
-        message: err.message
-      });
+      return next(new APIError(err.message, 400));
     }
     next(err);
   }
@@ -121,10 +135,7 @@ function remove(req, res, next) {
     });
   } catch (err) {
     if (err.message === 'Usuário não encontrado') {
-      return res.status(404).json({
-        status: 'error',
-        message: err.message
-      });
+      return next(new APIError(err.message, 404));
     }
     next(err);
   }

@@ -1,24 +1,39 @@
-/**
+﻿/**
  * Auth Controller - N Eyes
- * Endpoints de autenticação (register, login, logout, me)
+ * Endpoints de autenticaÃ§Ã£o (register, login, logout, me)
  */
 
 const authService = require('../services/auth.service');
+<<<<<<< HEAD
+=======
+const { validateRegister, validateLogin } = require('../utils/validation');
+const { APIError } = require('../middlewares/errorHandler');
+>>>>>>> main
 
 /**
  * POST /api/auth/register
- * Registra novo usuário
+ * Registra novo usuÃ¡rio
  */
 async function register(req, res, next) {
   try {
     const { name, email, password } = req.body;
 
+<<<<<<< HEAD
     // Registrar usuário
+=======
+    // Validar entrada
+    const validation = validateRegister({ name, email, password });
+    if (!validation.valid) {
+      throw new APIError('Erro de validação', 400, validation.errors);
+    }
+
+    // Registrar usuÃ¡rio
+>>>>>>> main
     const user = await authService.register({ name, email, password });
 
     return res.status(201).json({
       status: 'success',
-      message: 'Usuário criado com sucesso',
+      message: 'UsuÃ¡rio criado com sucesso',
       user
     });
   } catch (err) {
@@ -28,26 +43,54 @@ async function register(req, res, next) {
 
 /**
  * POST /api/auth/login
- * Faz login do usuário
+ * Faz login do usuÃ¡rio
+ * Retorna access token e refresh token via httpOnly cookies
  */
 async function login(req, res, next) {
   try {
     const { email, password } = req.body;
 
+<<<<<<< HEAD
+=======
+    // Validar entrada
+    const validation = validateLogin({ email, password });
+    if (!validation.valid) {
+      throw new APIError('Erro de validação', 400, validation.errors);
+    }
+
+>>>>>>> main
     // Fazer login
     const result = await authService.login({ email, password });
+
+    // Configurar cookies httpOnly
+    const isProduction = process.env.NODE_ENV === 'production';
+    const cookieOptions = {
+      httpOnly: true,           // NÃ£o acessÃ­vel via JavaScript (proteÃ§Ã£o contra XSS)
+      secure: isProduction,     // HTTPS apenas em produÃ§Ã£o
+      sameSite: 'strict',       // ProteÃ§Ã£o contra CSRF
+      maxAge: 15 * 60 * 1000    // 15 minutos
+    };
+
+    const refreshCookieOptions = {
+      httpOnly: true,
+      secure: isProduction,
+      sameSite: 'strict',
+      maxAge: 7 * 24 * 60 * 60 * 1000  // 7 dias
+    };
+
+    // Enviar tokens em httpOnly cookies
+    res.cookie('accessToken', result.accessToken, cookieOptions);
+    res.cookie('refreshToken', result.refreshToken, refreshCookieOptions);
 
     return res.status(200).json({
       status: 'success',
       message: 'Login realizado com sucesso',
-      ...result
+      user: result.user
+      // Nota: tokens NÃƒO sÃ£o enviados no JSON body, apenas em cookies
     });
   } catch (err) {
-    if (err.message === 'Credenciais inválidas') {
-      return res.status(401).json({
-        status: 'error',
-        message: err.message
-      });
+    if (err.message === 'Credenciais invÃ¡lidas') {
+      return next(new APIError(err.message, 401));
     }
     next(err);
   }
@@ -55,7 +98,7 @@ async function login(req, res, next) {
 
 /**
  * GET /api/auth/me
- * Obtém dados do usuário logado
+ * ObtÃ©m dados do usuÃ¡rio logado
  */
 function me(req, res, next) {
   try {
@@ -66,11 +109,8 @@ function me(req, res, next) {
       user
     });
   } catch (err) {
-    if (err.message === 'Usuário não encontrado') {
-      return res.status(404).json({
-        status: 'error',
-        message: err.message
-      });
+    if (err.message === 'UsuÃ¡rio nÃ£o encontrado') {
+      return next(new APIError(err.message, 404));
     }
     next(err);
   }
@@ -78,21 +118,71 @@ function me(req, res, next) {
 
 /**
  * POST /api/auth/logout
- * Faz logout do usuário
+ * Faz logout do usuÃ¡rio
+ * Revoga tokens e limpa cookies
  */
-function logout(req, res) {
+function logout(req, res, next) {
   try {
-    authService.logout();
+    const accessToken = req.cookies.accessToken;
+    const refreshToken = req.cookies.refreshToken;
+
+    // Revogar tokens
+    authService.logout({ accessToken, refreshToken });
+
+    // Limpar cookies
+    res.clearCookie('accessToken');
+    res.clearCookie('refreshToken');
 
     return res.status(200).json({
       status: 'success',
       message: 'Logout realizado com sucesso'
     });
   } catch (err) {
-    return res.status(500).json({
-      status: 'error',
-      message: 'Erro ao fazer logout'
+    next(err);
+  }
+}
+
+/**
+ * POST /api/auth/refresh
+ * Renova o access token usando refresh token
+ */
+function refresh(req, res, next) {
+  try {
+    const refreshToken = req.cookies.refreshToken;
+
+    if (!refreshToken) {
+      throw new APIError('Refresh token não fornecido', 401);
+    }
+
+    // Renovar access token
+    const result = authService.refreshAccessToken(refreshToken);
+
+    // Configurar novo access token cookie
+    const isProduction = process.env.NODE_ENV === 'production';
+    const cookieOptions = {
+      httpOnly: true,
+      secure: isProduction,
+      sameSite: 'strict',
+      maxAge: 15 * 60 * 1000
+    };
+
+    res.cookie('accessToken', result.accessToken, cookieOptions);
+
+    return res.status(200).json({
+      status: 'success',
+      message: 'Access token renovado com sucesso',
+      user: result.user
     });
+  } catch (err) {
+    if (err.message.includes('Refresh token foi revogado')) {
+      return next(new APIError('Sessão expirada. Faça login novamente.', 401));
+    }
+
+    if (err.message.includes('Erro ao renovar token')) {
+      return next(new APIError('Token de renovação inválido ou expirado', 401));
+    }
+
+    next(err);
   }
 }
 
@@ -100,5 +190,7 @@ module.exports = {
   register,
   login,
   me,
-  logout
+  logout,
+  refresh
 };
+
