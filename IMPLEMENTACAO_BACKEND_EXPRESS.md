@@ -325,7 +325,7 @@ Role: MODERATOR
 ### **1. Iniciar servidor**
 ```bash
 npm install
-npm run dev    # Com nodemon (desenvolvimento)
+npm run dev    # Com hot-reload (desenvolvimento)
 # ou
 npm start      # Produção
 ```

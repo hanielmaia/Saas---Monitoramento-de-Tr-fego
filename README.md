@@ -144,7 +144,7 @@ Se preferir abrir o frontend separadamente sem o backend, utilize a extensão Li
 
 | Script | Descrição |
 |--------|-----------|
-| `npm run dev` | Inicia o servidor com nodemon (hot-reload) |
+| `npm run dev` | Inicia o servidor com hot-reload via Node watch |
 | `npm start` | Inicia o servidor em modo produção |
 | `npm stop` | Encerra o processo na porta 3000 |
 | `npm run status` | Verifica se o servidor está respondendo |
