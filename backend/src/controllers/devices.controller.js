@@ -5,6 +5,7 @@
 
 const devicesService = require('../services/devices.service');
 const { validateDevice } = require('../utils/validation');
+const { APIError } = require('../middlewares/errorHandler');
 
 /**
  * GET /api/devices
@@ -45,10 +46,7 @@ function getDeviceById(req, res, next) {
     });
   } catch (err) {
     if (err.message === 'Dispositivo não encontrado') {
-      return res.status(404).json({
-        status: 'error',
-        message: err.message
-      });
+      return next(new APIError(err.message, 404));
     }
     next(err);
   }
@@ -65,11 +63,7 @@ function createDevice(req, res, next) {
     // Validar entrada
     const validation = validateDevice({ ip, hostname });
     if (!validation.valid) {
-      return res.status(400).json({
-        status: 'error',
-        message: 'Erro de validação',
-        errors: validation.errors
-      });
+      throw new APIError('Erro de validação', 400, validation.errors);
     }
 
     const device = devicesService.createDevice({
@@ -102,11 +96,7 @@ function updateDevice(req, res, next) {
     // Validar entrada
     const validation = validateDevice(data);
     if (!validation.valid) {
-      return res.status(400).json({
-        status: 'error',
-        message: 'Erro de validação',
-        errors: validation.errors
-      });
+      throw new APIError('Erro de validação', 400, validation.errors);
     }
 
     const device = devicesService.updateDevice(parseInt(id), data);
@@ -118,10 +108,7 @@ function updateDevice(req, res, next) {
     });
   } catch (err) {
     if (err.message === 'Dispositivo não encontrado') {
-      return res.status(404).json({
-        status: 'error',
-        message: err.message
-      });
+      return next(new APIError(err.message, 404));
     }
     next(err);
   }
@@ -143,10 +130,7 @@ function deleteDevice(req, res, next) {
     });
   } catch (err) {
     if (err.message === 'Dispositivo não encontrado') {
-      return res.status(404).json({
-        status: 'error',
-        message: err.message
-      });
+      return next(new APIError(err.message, 404));
     }
     next(err);
   }

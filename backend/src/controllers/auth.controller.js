@@ -1,14 +1,15 @@
-/**
+﻿/**
  * Auth Controller - N Eyes
- * Endpoints de autenticação (register, login, logout, me)
+ * Endpoints de autenticaÃ§Ã£o (register, login, logout, me)
  */
 
 const authService = require('../services/auth.service');
 const { validateRegister, validateLogin } = require('../utils/validation');
+const { APIError } = require('../middlewares/errorHandler');
 
 /**
  * POST /api/auth/register
- * Registra novo usuário
+ * Registra novo usuÃ¡rio
  */
 async function register(req, res, next) {
   try {
@@ -17,19 +18,15 @@ async function register(req, res, next) {
     // Validar entrada
     const validation = validateRegister({ name, email, password });
     if (!validation.valid) {
-      return res.status(400).json({
-        status: 'error',
-        message: 'Erro de validação',
-        errors: validation.errors
-      });
+      throw new APIError('Erro de validação', 400, validation.errors);
     }
 
-    // Registrar usuário
+    // Registrar usuÃ¡rio
     const user = await authService.register({ name, email, password });
 
     return res.status(201).json({
       status: 'success',
-      message: 'Usuário criado com sucesso',
+      message: 'UsuÃ¡rio criado com sucesso',
       user
     });
   } catch (err) {
@@ -39,7 +36,7 @@ async function register(req, res, next) {
 
 /**
  * POST /api/auth/login
- * Faz login do usuário
+ * Faz login do usuÃ¡rio
  * Retorna access token e refresh token via httpOnly cookies
  */
 async function login(req, res, next) {
@@ -49,11 +46,7 @@ async function login(req, res, next) {
     // Validar entrada
     const validation = validateLogin({ email, password });
     if (!validation.valid) {
-      return res.status(400).json({
-        status: 'error',
-        message: 'Erro de validação',
-        errors: validation.errors
-      });
+      throw new APIError('Erro de validação', 400, validation.errors);
     }
 
     // Fazer login
@@ -62,9 +55,9 @@ async function login(req, res, next) {
     // Configurar cookies httpOnly
     const isProduction = process.env.NODE_ENV === 'production';
     const cookieOptions = {
-      httpOnly: true,           // Não acessível via JavaScript (proteção contra XSS)
-      secure: isProduction,     // HTTPS apenas em produção
-      sameSite: 'strict',       // Proteção contra CSRF
+      httpOnly: true,           // NÃ£o acessÃ­vel via JavaScript (proteÃ§Ã£o contra XSS)
+      secure: isProduction,     // HTTPS apenas em produÃ§Ã£o
+      sameSite: 'strict',       // ProteÃ§Ã£o contra CSRF
       maxAge: 15 * 60 * 1000    // 15 minutos
     };
 
@@ -83,14 +76,11 @@ async function login(req, res, next) {
       status: 'success',
       message: 'Login realizado com sucesso',
       user: result.user
-      // Nota: tokens NÃO são enviados no JSON body, apenas em cookies
+      // Nota: tokens NÃƒO sÃ£o enviados no JSON body, apenas em cookies
     });
   } catch (err) {
-    if (err.message === 'Credenciais inválidas') {
-      return res.status(401).json({
-        status: 'error',
-        message: err.message
-      });
+    if (err.message === 'Credenciais invÃ¡lidas') {
+      return next(new APIError(err.message, 401));
     }
     next(err);
   }
@@ -98,7 +88,7 @@ async function login(req, res, next) {
 
 /**
  * GET /api/auth/me
- * Obtém dados do usuário logado
+ * ObtÃ©m dados do usuÃ¡rio logado
  */
 function me(req, res, next) {
   try {
@@ -109,11 +99,8 @@ function me(req, res, next) {
       user
     });
   } catch (err) {
-    if (err.message === 'Usuário não encontrado') {
-      return res.status(404).json({
-        status: 'error',
-        message: err.message
-      });
+    if (err.message === 'UsuÃ¡rio nÃ£o encontrado') {
+      return next(new APIError(err.message, 404));
     }
     next(err);
   }
@@ -121,10 +108,10 @@ function me(req, res, next) {
 
 /**
  * POST /api/auth/logout
- * Faz logout do usuário
+ * Faz logout do usuÃ¡rio
  * Revoga tokens e limpa cookies
  */
-function logout(req, res) {
+function logout(req, res, next) {
   try {
     const accessToken = req.cookies.accessToken;
     const refreshToken = req.cookies.refreshToken;
@@ -141,10 +128,7 @@ function logout(req, res) {
       message: 'Logout realizado com sucesso'
     });
   } catch (err) {
-    return res.status(500).json({
-      status: 'error',
-      message: 'Erro ao fazer logout'
-    });
+    next(err);
   }
 }
 
@@ -157,10 +141,7 @@ function refresh(req, res, next) {
     const refreshToken = req.cookies.refreshToken;
 
     if (!refreshToken) {
-      return res.status(401).json({
-        status: 'error',
-        message: 'Refresh token não fornecido'
-      });
+      throw new APIError('Refresh token não fornecido', 401);
     }
 
     // Renovar access token
@@ -184,17 +165,11 @@ function refresh(req, res, next) {
     });
   } catch (err) {
     if (err.message.includes('Refresh token foi revogado')) {
-      return res.status(401).json({
-        status: 'error',
-        message: 'Sessão expirada. Faça login novamente.'
-      });
+      return next(new APIError('Sessão expirada. Faça login novamente.', 401));
     }
 
     if (err.message.includes('Erro ao renovar token')) {
-      return res.status(401).json({
-        status: 'error',
-        message: 'Token de renovação inválido ou expirado'
-      });
+      return next(new APIError('Token de renovação inválido ou expirado', 401));
     }
 
     next(err);
@@ -208,3 +183,4 @@ module.exports = {
   logout,
   refresh
 };
+

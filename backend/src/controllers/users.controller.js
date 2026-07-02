@@ -5,6 +5,7 @@
 
 const { getAllUsers, getUserById, updateProfile, deleteUser } = require('../services/users.service');
 const { validateName, validateEmail } = require('../utils/validation');
+const { APIError } = require('../middlewares/errorHandler');
 
 /**
  * GET /api/users
@@ -39,10 +40,7 @@ function getMe(req, res, next) {
     });
   } catch (err) {
     if (err.message === 'Usuário não encontrado') {
-      return res.status(404).json({
-        status: 'error',
-        message: err.message
-      });
+      return next(new APIError(err.message, 404));
     }
     next(err);
   }
@@ -63,10 +61,7 @@ function getById(req, res, next) {
     });
   } catch (err) {
     if (err.message === 'Usuário não encontrado') {
-      return res.status(404).json({
-        status: 'error',
-        message: err.message
-      });
+      return next(new APIError(err.message, 404));
     }
     next(err);
   }
@@ -92,11 +87,7 @@ async function updateMe(req, res, next) {
     }
 
     if (Object.keys(errors).length > 0) {
-      return res.status(400).json({
-        status: 'error',
-        message: 'Erro de validação',
-        errors
-      });
+      throw new APIError('Erro de validação', 400, errors);
     }
 
     const user = await updateProfile(req.userId, {
@@ -116,10 +107,7 @@ async function updateMe(req, res, next) {
         err.message.includes('Senha atual incorreta') ||
         err.message.includes('Este e-mail já está em uso') ||
         err.message.includes('Informe a senha atual')) {
-      return res.status(400).json({
-        status: 'error',
-        message: err.message
-      });
+      return next(new APIError(err.message, 400));
     }
     next(err);
   }
@@ -141,10 +129,7 @@ function remove(req, res, next) {
     });
   } catch (err) {
     if (err.message === 'Usuário não encontrado') {
-      return res.status(404).json({
-        status: 'error',
-        message: err.message
-      });
+      return next(new APIError(err.message, 404));
     }
     next(err);
   }

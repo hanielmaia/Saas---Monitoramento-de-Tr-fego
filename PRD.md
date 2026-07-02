@@ -249,7 +249,7 @@ A equipe responsável pelo desenvolvimento e entrega deste projeto é composta p
 | Hash de senha | `bcrypt` | ^6.0.0 |
 | Variáveis de ambiente | `dotenv` | ^17.3.1 |
 | CORS | `cors` | ^2.8.6 |
-| Dev server | `nodemon` | ^3.1.14 |
+| Dev server | `tsx` | ^4.7.0 |
 
 ### 8.2 Banco de Dados
 - **PostgreSQL** via Prisma ORM
@@ -266,7 +266,7 @@ A equipe responsável pelo desenvolvimento e entrega deste projeto é composta p
 ### 8.4 Scripts NPM (backend)
 | Script | Comando | Descrição |
 |--------|---------|-----------|
-| `npm run dev` | `nodemon src/server.js` | Servidor com auto-restart |
+| `npm run dev` | `node --watch --import tsx src/server.ts` | Servidor com auto-restart |
 | `npm start` | `node src/server.js` | Servidor em produção |
 | `npm stop` | `npx kill-port 3000` | Encerra a porta 3000 |
 | `npm run status` | HTTP check em `:3000/api/health` | Verifica se o servidor está ativo |
@@ -423,7 +423,7 @@ Express.js (Node.js)
 - `bcrypt` ^6.0.0
 - `dotenv` ^17.3.1
 - `cors` ^2.8.6
-- `nodemon` ^3.1.14 (dev)
+- `tsx` ^4.7.0 (dev)
 
 **Frontend (CDN):**
 - Bootstrap 5.3.2

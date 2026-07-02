@@ -21,55 +21,61 @@ function delay(ms) {
 }
 
 /**
- * Exibe notificação de erro ao usuário
+ * Normaliza a resposta de erro da API
  */
-function showErrorNotification(message, type = 'error') {
-  const notification = document.createElement('div');
-  notification.className = `api-notification api-notification--${type}`;
-  notification.setAttribute('role', 'alert');
-  notification.innerHTML = `
-    <div class="api-notification__container">
-      <span class="api-notification__icon">⚠️</span>
-      <span class="api-notification__message">${message}</span>
-      <button class="api-notification__close" onclick="this.parentElement.parentElement.remove()">✕</button>
-    </div>
-  `;
+function normalizeErrorPayload(response, fallbackMessage) {
+  if (!response) {
+    return fallbackMessage;
+  }
 
-  notification.style.cssText = `
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    background: #f8d7da;
-    border: 1px solid #f5c6cb;
-    color: #721c24;
-    padding: 15px 20px;
-    border-radius: 4px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    z-index: 9999;
-    max-width: 400px;
-    font-family: system-ui, -apple-system, sans-serif;
-  `;
+  if (typeof response === 'string') {
+    return response;
+  }
 
-  document.body.appendChild(notification);
+  if (response.message) {
+    return response.message;
+  }
 
-  setTimeout(() => {
-    notification.style.opacity = '0';
-    notification.style.transition = 'opacity 0.3s ease-out';
-    setTimeout(() => notification.remove(), 300);
-  }, 5000);
+  if (response.error?.message) {
+    return response.error.message;
+  }
+
+  if (response.errors && typeof response.errors === 'object') {
+    const firstError = Object.values(response.errors)[0];
+    if (typeof firstError === 'string') {
+      return firstError;
+    }
+  }
+
+  return fallbackMessage;
 }
 
-/**
- * Redireciona para a página de login
- */
+function showErrorNotification(message, type = 'error') {
+  if (typeof UIService !== 'undefined' && UIService?.showErrorNotification) {
+    return UIService.showErrorNotification(message, type);
+  }
+
+  if (typeof window !== 'undefined' && window.showErrorNotification) {
+    return window.showErrorNotification(message, type);
+  }
+
+  return null;
+}
+
 function redirectToLogin(reason = 'Sessão expirada') {
-  localStorage.removeItem(CONFIG.STORAGE.USER_KEY);
+  if (typeof UIService !== 'undefined' && UIService?.redirectToLogin) {
+    return UIService.redirectToLogin(reason);
+  }
 
-  showErrorNotification(`${reason}. Faça login novamente.`, 'warning');
+  if (typeof window !== 'undefined' && window.redirectToLogin) {
+    return window.redirectToLogin(reason);
+  }
 
-  setTimeout(() => {
-    window.location.href = '/pages/login.html';
-  }, 1500);
+  if (typeof localStorage !== 'undefined') {
+    localStorage.removeItem(CONFIG.STORAGE.USER_KEY);
+  }
+
+  return null;
 }
 
 /**
@@ -146,42 +152,51 @@ async function apiCall(endpoint, options = {}) {
 
     // ===== TRATAMENTO DE STATUS DE ERRO =====
 
+    let errorPayload = null;
+    try {
+      errorPayload = await response.clone().json();
+    } catch (e) {
+      errorPayload = null;
+    }
+
     // 401 - Não Autorizado
     if (response.status === 401) {
-      try {
-        const errorData = await response.json();
-        
-        // Se o token expirou e ainda não tentamos refresh
-        if (errorData.code === 'TOKEN_EXPIRED' && !skipRefresh) {
-          console.log('[Token Expired] Tentando renovar...');
-          const refreshed = await tryRefreshToken();
-          
-          if (refreshed) {
-            // Retry a requisição com o novo token
-            console.log('[Retry After Refresh] Reenviando requisição');
-            return apiCall(endpoint, { ...options, skipRefresh: true });
-          }
+      if (errorPayload?.code === 'TOKEN_EXPIRED' && !skipRefresh) {
+        console.log('[Token Expired] Tentando renovar...');
+        const refreshed = await tryRefreshToken();
+
+        if (refreshed) {
+          console.log('[Retry After Refresh] Reenviando requisição');
+          return apiCall(endpoint, { ...options, skipRefresh: true });
         }
-      } catch (e) {
-        // Ignorar erro de parse, será tratado abaixo
       }
-      
-      console.warn('[API 401]', endpoint, 'Token inválido ou expirado');
-      redirectToLogin('Seu token de autenticação expirou');
-      throw new Error('Não autorizado: token inválido ou expirado');
+
+      const message = normalizeErrorPayload(errorPayload, 'Seu token de autenticação expirou');
+      console.warn('[API 401]', endpoint, message);
+      redirectToLogin(message);
+      throw new Error(message);
     }
 
     // 403 - Proibido
     if (response.status === 403) {
-      console.warn('[API 403]', endpoint, 'Acesso proibido');
-      showErrorNotification('Acesso negado. Você não tem permissão para acessar este recurso.', 'error');
-      throw new Error('Acesso proibido: você não tem permissão');
+      const message = normalizeErrorPayload(errorPayload, 'Acesso negado. Você não tem permissão para acessar este recurso.');
+      console.warn('[API 403]', endpoint, message);
+      showErrorNotification(message, 'error');
+      throw new Error(message);
     }
 
     // 404 - Não Encontrado
     if (response.status === 404) {
-      console.warn('[API 404]', endpoint, 'Recurso não encontrado');
-      throw new Error('Recurso não encontrado');
+      const message = normalizeErrorPayload(errorPayload, 'Recurso não encontrado');
+      console.warn('[API 404]', endpoint, message);
+      throw new Error(message);
+    }
+
+    // 400/422 - Erro de validação
+    if (response.status === 400 || response.status === 422) {
+      const message = normalizeErrorPayload(errorPayload, 'Dados inválidos. Verifique as informações e tente novamente.');
+      showErrorNotification(message, 'error');
+      throw new Error(message);
     }
 
     // 500+ - Erro do Servidor
@@ -193,8 +208,9 @@ async function apiCall(endpoint, options = {}) {
 
     // Outros erros HTTP
     if (!response.ok) {
-      console.error('[API Error]', endpoint, response.status, response.statusText);
-      throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      const message = normalizeErrorPayload(errorPayload, `HTTP ${response.status}: ${response.statusText}`);
+      console.error('[API Error]', endpoint, response.status, message);
+      throw new Error(message);
     }
 
     // ===== PROCESSAR RESPOSTA BEM-SUCEDIDA =====
@@ -211,7 +227,9 @@ async function apiCall(endpoint, options = {}) {
     // ===== RETRY LOGIC =====
 
     const isAuthError = error.message.includes('Não autorizado') ||
-      error.message.includes('Acesso proibido');
+      error.message.includes('Acesso proibido') ||
+      error.message.includes('token') ||
+      error.message.includes('autenticação');
 
     if (!isAuthError && retries < CONFIG.API.RETRY_ATTEMPTS) {
       const delay_time = 500 * Math.pow(2, retries);
