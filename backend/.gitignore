@@ -50,3 +50,4 @@ db.json
 # ===================================
 Thumbs.db
 .DS_Store
+.env.*.local

@@ -11,7 +11,7 @@ const { APIError } = require('../middlewares/errorHandler');
  * GET /api/devices
  * Lista todos os dispositivos com filtros opcionais
  */
-function getAllDevices(req, res, next) {
+async function getAllDevices(req, res, next) {
   try {
     const filters = {
       status: req.query.status,
@@ -19,7 +19,7 @@ function getAllDevices(req, res, next) {
       ip: req.query.ip
     };
 
-    const devices = devicesService.getAllDevices(filters);
+    const devices = await devicesService.getAllDevices(filters);
 
     return res.status(200).json({
       status: 'success',
@@ -35,10 +35,10 @@ function getAllDevices(req, res, next) {
  * GET /api/devices/:id
  * Obtém dispositivo por ID
  */
-function getDeviceById(req, res, next) {
+async function getDeviceById(req, res, next) {
   try {
     const { id } = req.params;
-    const device = devicesService.getDeviceById(parseInt(id));
+    const device = await devicesService.getDeviceById(parseInt(id, 10));
 
     return res.status(200).json({
       status: 'success',
@@ -56,17 +56,16 @@ function getDeviceById(req, res, next) {
  * POST /api/devices
  * Cria novo dispositivo
  */
-function createDevice(req, res, next) {
+async function createDevice(req, res, next) {
   try {
     const { ip, hostname, status, bandwidth, blocked } = req.body;
 
-    // Validar entrada
     const validation = validateDevice({ ip, hostname });
     if (!validation.valid) {
       throw new APIError('Erro de validação', 400, validation.errors);
     }
 
-    const device = devicesService.createDevice({
+    const device = await devicesService.createDevice({
       ip,
       hostname,
       status,
@@ -88,18 +87,17 @@ function createDevice(req, res, next) {
  * PATCH /api/devices/:id
  * Atualiza dispositivo
  */
-function updateDevice(req, res, next) {
+async function updateDevice(req, res, next) {
   try {
     const { id } = req.params;
     const data = req.body;
 
-    // Validar entrada
     const validation = validateDevice(data);
     if (!validation.valid) {
       throw new APIError('Erro de validação', 400, validation.errors);
     }
 
-    const device = devicesService.updateDevice(parseInt(id), data);
+    const device = await devicesService.updateDevice(parseInt(id, 10), data);
 
     return res.status(200).json({
       status: 'success',
@@ -118,10 +116,10 @@ function updateDevice(req, res, next) {
  * DELETE /api/devices/:id
  * Deleta dispositivo
  */
-function deleteDevice(req, res, next) {
+async function deleteDevice(req, res, next) {
   try {
     const { id } = req.params;
-    const result = devicesService.deleteDevice(parseInt(id));
+    const result = await devicesService.deleteDevice(parseInt(id, 10));
 
     return res.status(200).json({
       status: 'success',
@@ -140,9 +138,9 @@ function deleteDevice(req, res, next) {
  * GET /api/devices/stats
  * Obtém estatísticas de dispositivos
  */
-function getDeviceStats(req, res, next) {
+async function getDeviceStats(req, res, next) {
   try {
-    const stats = devicesService.getDeviceStats();
+    const stats = await devicesService.getDeviceStats();
 
     return res.status(200).json({
       status: 'success',

@@ -1,0 +1,70 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           Int      @id @default(autoincrement())
+  name         String
+  email        String   @unique
+  passwordHash String
+  role         Role     @default(USER)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Device {
+  id         Int      @id @default(autoincrement())
+  ip         String   @unique
+  hostname   String
+  status     String   @default("Offline")
+  bandwidth  Float    @default(0)
+  blocked    Boolean  @default(false)
+  lastSeen   DateTime?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  logs Log[]
+}
+
+model Log {
+  id         Int      @id @default(autoincrement())
+  timestamp  DateTime @default(now())
+  deviceId   Int
+  deviceName String
+  message    String
+  severity   String
+  type       String
+
+  device Device @relation(fields: [deviceId], references: [id])
+}
+
+model Settings {
+  id                  Int      @id @default(autoincrement())
+  alertThreshold      Int      @default(80)
+  scanFrequency       Int      @default(30)
+  quarantineEnabled   Boolean  @default(false)
+  allowedIpRange      String   @default("192.168.0.0/16")
+  monitoredPorts      String   @default("80,443,8080")
+  retentionDays       Int      @default(30)
+  autoArchive         Boolean  @default(true)
+  minPasswordLength   Int      @default(6)
+  requireUppercase    Boolean  @default(false)
+  requireNumbers      Boolean  @default(false)
+  requireSpecialChars Boolean  @default(false)
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+}
+
+enum Role {
+  ADMIN
+  MODERATOR
+  USER
+}

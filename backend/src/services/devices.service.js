@@ -1,106 +1,107 @@
-/**
- * Devices Service - N Eyes
- * Lógica de operações com dispositivos
- */
+const prisma = require('../config/prismaClient.cjs');
 
-const DeviceModel = require('../models/Device.model');
+async function getAllDevices(filters = {}) {
+  const where = {};
 
-/**
- * Obtém todos os dispositivos com filtros opcionais
- */
-function getAllDevices(filters = {}) {
-  let devices = DeviceModel.findAll();
-
-  // Aplicar filtros
   if (filters.status) {
-    devices = devices.filter(d => d.status === filters.status);
+    where.status = filters.status;
   }
 
   if (filters.hostname) {
-    devices = devices.filter(d =>
-      d.hostname.toLowerCase().includes(filters.hostname.toLowerCase())
-    );
+    where.hostname = {
+      contains: filters.hostname,
+      mode: 'insensitive'
+    };
   }
 
   if (filters.ip) {
-    devices = devices.filter(d => d.ip.includes(filters.ip));
+    where.ip = {
+      contains: filters.ip
+    };
   }
 
-  return devices;
+  return prisma.device.findMany({ where });
 }
 
-/**
- * Obtém um dispositivo por ID
- */
-function getDeviceById(id) {
-  const device = DeviceModel.findById(id);
+async function getDeviceById(id) {
+  const device = await prisma.device.findUnique({
+    where: { id }
+  });
+
   if (!device) {
     throw new Error('Dispositivo não encontrado');
   }
+
   return device;
 }
 
-/**
- * Cria novo dispositivo
- */
-function createDevice(data) {
-  return DeviceModel.create({
-    ip: data.ip,
-    hostname: data.hostname,
-    status: data.status || 'OFFLINE',
-    bandwidth: data.bandwidth || 0,
-    blocked: data.blocked || false,
-    lastSeen: new Date().toISOString()
+async function createDevice(data) {
+  return prisma.device.create({
+    data: {
+      ip: data.ip,
+      hostname: data.hostname,
+      status: data.status || 'Offline',
+      bandwidth: data.bandwidth ?? 0,
+      blocked: data.blocked ?? false,
+      lastSeen: new Date()
+    }
   });
 }
 
-/**
- * Atualiza dispositivo
- */
-function updateDevice(id, data) {
-  const device = DeviceModel.findById(id);
-  if (!device) {
-    throw new Error('Dispositivo não encontrado');
-  }
-
-  const updated = DeviceModel.update(id, {
-    ...(data.hostname && { hostname: data.hostname }),
-    ...(data.status && { status: data.status }),
-    ...(data.bandwidth !== undefined && { bandwidth: data.bandwidth }),
-    ...(data.blocked !== undefined && { blocked: data.blocked }),
-    lastSeen: new Date().toISOString()
+async function updateDevice(id, data) {
+  const existing = await prisma.device.findUnique({
+    where: { id }
   });
 
-  return updated;
-}
-
-/**
- * Deleta dispositivo
- */
-function deleteDevice(id) {
-  const device = DeviceModel.findById(id);
-  if (!device) {
+  if (!existing) {
     throw new Error('Dispositivo não encontrado');
   }
 
-  DeviceModel.remove(id);
+  return prisma.device.update({
+    where: { id },
+    data: {
+      ...(data.hostname !== undefined && { hostname: data.hostname }),
+      ...(data.status !== undefined && { status: data.status }),
+      ...(data.bandwidth !== undefined && { bandwidth: data.bandwidth }),
+      ...(data.blocked !== undefined && { blocked: data.blocked }),
+      lastSeen: new Date()
+    }
+  });
+}
+
+async function deleteDevice(id) {
+  const existing = await prisma.device.findUnique({
+    where: { id }
+  });
+
+  if (!existing) {
+    throw new Error('Dispositivo não encontrado');
+  }
+
+  await prisma.device.delete({
+    where: { id }
+  });
+
   return { success: true, id };
 }
 
-/**
- * Obtém estatísticas de dispositivos
- */
-function getDeviceStats() {
-  const devices = DeviceModel.findAll();
+async function getDeviceStats() {
+  const devices = await prisma.device.findMany();
+
+  const total = devices.length;
+  const online = devices.filter(d => d.status === 'Online').length;
+  const offline = devices.filter(d => d.status === 'Offline').length;
+  const blocked = devices.filter(d => d.blocked).length;
+  const avgBandwidth = total > 0
+    ? parseFloat((devices.reduce((sum, d) => sum + (d.bandwidth || 0), 0) / total).toFixed(2))
+    : 0;
 
   return {
-    total: devices.length,
-    online: devices.filter(d => d.status === 'ONLINE').length,
-    offline: devices.filter(d => d.status === 'OFFLINE').length,
-    blocked: devices.filter(d => d.blocked).length,
-    avgBandwidth: devices.length > 0
-      ? (devices.reduce((sum, d) => sum + (d.bandwidth || 0), 0) / devices.length).toFixed(2)
-      : 0
+    total,
+    online,
+    offline,
+    blocked,
+    avgBandwidth
   };
 }
 
