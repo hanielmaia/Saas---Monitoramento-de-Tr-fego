@@ -1,19 +1,14 @@
-<<<<<<< HEAD
-import express, { Request, Response, NextFunction } from 'express';
+import express, { Request, Response, NextFunction, RequestHandler } from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
-=======
-﻿import express, { Request, Response } from 'express';
-import cors from 'cors';
-import cookieParser from 'cookie-parser';
 import swaggerUi from 'swagger-ui-express';
->>>>>>> main
 import { createRequire } from 'module';
 import { fileURLToPath } from 'url';
 import path from 'path';
 import { swaggerSpec } from './swagger.js';
 
+// @ts-ignore
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const require = createRequire(import.meta.url);
@@ -24,15 +19,15 @@ const { generalLimiter } = require('./middlewares/rateLimit');
 // Importar rotas
 const authRoutes = require('./routes/auth.routes.js');
 const devicesRoutes = require('./routes/devices.routes.js');
-const { errorHandler, notFoundHandler } = require('./middlewares/errorHandler');
 const logsRoutes = require('./routes/logs.routes.js');
 const settingsRoutes = require('./routes/settings.routes.js');
 const usersRoutes = require('./routes/users.routes.js');
 
+// Importar utilitários e middlewares
 const { errorHandler, notFoundHandler } = require('./middlewares/errorHandler.js');
 const logger = require('./utils/logger.cjs');
 const swaggerUiDist = require('swagger-ui-dist');
-const swaggerSpec = require('./utils/swaggerConfig.js');
+const cookieParser = require('cookie-parser');
 
 // --- Funções de Sanitização ---
 function deepSanitizeObject(target: any) {
@@ -68,11 +63,12 @@ function requestSanitizer(req: Request, res: Response, next: NextFunction) {
   });
   next();
 }
+
 // ------------------------------
 
 const app = express();
 
-// Ensina o Express a ler a pasta public que estÃ¡ dois nÃ­veis para trÃ¡s
+// Ensina o Express a ler a pasta public que está dois níveis para trás
 app.use(express.static(path.join(__dirname, '../../public')));
 
 /**
@@ -139,10 +135,8 @@ app.use(cors({
  */
 app.use('/api', generalLimiter);
 
-/**
- * Swagger Docs
- */
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+ 
+app.use('/api-docs', swaggerUi.serve as unknown as RequestHandler[], swaggerUi.setup(swaggerSpec) as unknown as RequestHandler);
 app.get('/api-docs.json', (_req: Request, res: Response): void => {
   res.json(swaggerSpec);
 });
@@ -153,7 +147,7 @@ app.get('/api-docs.json', (_req: Request, res: Response): void => {
 app.get('/api/health', (req: Request, res: Response): void => {
   res.status(200).json({
     status: 'ok',
-    message: 'Servidor estÃ¡ rodando!',
+    message: 'Servidor está rodando!',
     timestamp: new Date().toISOString(),
     environment: process.env.NODE_ENV ?? 'development',
   });
@@ -203,6 +197,7 @@ app.get('/api/docs', (req: Request, res: Response): void => {
       });
       window.ui = ui;
     };
+
   </script>
 </body>
 </html>`);
@@ -220,19 +215,11 @@ app.use('/api/logs', logsRoutes);
 app.use('/api/settings', settingsRoutes);
 app.use('/api/users', usersRoutes);
 
-<<<<<<< HEAD
 /**
  * Final handlers
  */
-=======
-// Middlewares de tratamento de rotas e erros devem vir por último
->>>>>>> main
 app.use(notFoundHandler);
 app.use(errorHandler);
 
 export default app;
 
-<<<<<<< HEAD
-
-=======
->>>>>>> main

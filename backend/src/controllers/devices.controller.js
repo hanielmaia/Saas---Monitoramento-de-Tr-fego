@@ -4,11 +4,8 @@
  */
 
 const devicesService = require('../services/devices.service');
-<<<<<<< HEAD
-=======
 const { validateDevice } = require('../utils/validation');
 const { APIError } = require('../middlewares/errorHandler');
->>>>>>> main
 
 /**
  * GET /api/devices
@@ -63,15 +60,12 @@ function createDevice(req, res, next) {
   try {
     const { ip, hostname, status, bandwidth, blocked } = req.body;
 
-<<<<<<< HEAD
-=======
     // Validar entrada
     const validation = validateDevice({ ip, hostname });
     if (!validation.valid) {
       throw new APIError('Erro de validação', 400, validation.errors);
     }
 
->>>>>>> main
     const device = devicesService.createDevice({
       ip,
       hostname,
@@ -99,15 +93,12 @@ function updateDevice(req, res, next) {
     const { id } = req.params;
     const data = req.body;
 
-<<<<<<< HEAD
-=======
     // Validar entrada
     const validation = validateDevice(data);
     if (!validation.valid) {
       throw new APIError('Erro de validação', 400, validation.errors);
     }
 
->>>>>>> main
     const device = devicesService.updateDevice(parseInt(id), data);
 
     return res.status(200).json({

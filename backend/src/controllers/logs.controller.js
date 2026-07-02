@@ -61,8 +61,6 @@ function createLog(req, res, next) {
   try {
     const { deviceId, deviceName, message, severity, type } = req.body;
 
-<<<<<<< HEAD
-=======
     // Validar entrada
     if (!deviceId || !deviceName || !message) {
       throw new APIError('Erro de validação', 400, {
@@ -72,7 +70,6 @@ function createLog(req, res, next) {
       });
     }
 
->>>>>>> main
     const log = logsService.createLog({
       deviceId,
       deviceName,

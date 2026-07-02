@@ -4,6 +4,7 @@
  */
 
 const rateLimit = require('express-rate-limit');
+const { ipKeyGenerator } = require('express-rate-limit');
 
 /**
  * Limiter para endpoints de autenticação (login, register)
@@ -22,10 +23,7 @@ const authLimiter = rateLimit({
     // Skip se for ambiente de desenvolvimento
     return process.env.NODE_ENV !== 'production';
   },
-  keyGenerator: (req) => {
-    // Usar IP real mesmo atrás de proxy
-    return req.ip || req.connection.remoteAddress;
-  }
+  keyGenerator: ipKeyGenerator
 });
 
 /**
@@ -44,9 +42,7 @@ const generalLimiter = rateLimit({
   skip: (req) => {
     return process.env.NODE_ENV !== 'production';
   },
-  keyGenerator: (req) => {
-    return req.ip || req.connection.remoteAddress;
-  }
+  keyGenerator: ipKeyGenerator
 });
 
 /**
@@ -66,9 +62,7 @@ const refreshLimiter = rateLimit({
   skip: (req) => {
     return process.env.NODE_ENV !== 'production';
   },
-  keyGenerator: (req) => {
-    return req.ip || req.connection.remoteAddress;
-  }
+  keyGenerator: ipKeyGenerator
 });
 
 module.exports = {

@@ -4,11 +4,8 @@
  */
 
 const { getAllUsers, getUserById, updateProfile, deleteUser } = require('../services/users.service');
-<<<<<<< HEAD
-=======
 const { validateName, validateEmail } = require('../utils/validation');
 const { APIError } = require('../middlewares/errorHandler');
->>>>>>> main
 
 /**
  * GET /api/users
@@ -78,8 +75,6 @@ async function updateMe(req, res, next) {
   try {
     const { name, email, currentPassword, newPassword } = req.body;
 
-<<<<<<< HEAD
-=======
     // Validações básicas
     const errors = {};
 
@@ -95,7 +90,6 @@ async function updateMe(req, res, next) {
       throw new APIError('Erro de validação', 400, errors);
     }
 
->>>>>>> main
     const user = await updateProfile(req.userId, {
       name,
       email,
