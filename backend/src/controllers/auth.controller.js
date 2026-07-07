@@ -21,7 +21,7 @@ async function register(req, res, next) {
       throw new APIError('Erro de validação', 400, validation.errors);
     }
 
-    // Registrar usuÃ¡rio
+    // Registrar usuário
     const user = await authService.register({ name, email, password });
 
     return res.status(201).json({

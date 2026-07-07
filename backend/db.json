@@ -31,6 +31,14 @@
       "passwordHash": "$2b$10$YNdNsK8fx6qcbEGnSO7TUO9AkxCFAEcaF0YW8y3zZxW7yr4UEMRd2",
       "role": "USER",
       "createdAt": "2026-06-21T08:15:00Z"
+    },
+    {
+      "id": 5,
+      "name": "Teste",
+      "email": "teste@teste.com",
+      "passwordHash": "$2b$10$tlCy.uqFfJ7AjSXeVpcFiuhwATdTDilLNglxc5YZKsg8BFV5kpgaS",
+      "role": "USER",
+      "createdAt": "2026-06-22T03:21:14.305Z"
     }
   ],
   "sessions": [
